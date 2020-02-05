@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - "stable"
+before_install:
+  - npm install sequelize-cli -g
+before-script:
+  - npm add sequelize-cli
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database barefoot_test;' -U postgres
+script:
+  - npm test
+after_script:
+  - npm run coveralls
+notifications:
+  email: false
+sudo: false
