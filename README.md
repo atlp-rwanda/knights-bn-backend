@@ -1,3 +1,8 @@
+# Badges.
+
+[![Build Status](https://travis-ci.org/andela/knights-bn-backend.svg?branch=develop)](https://travis-ci.org/andela/knights-bn-backend)
+
+
 Barefoot Nomad - Making company travel and accomodation easy and convinient.
 =======
 
