@@ -15,4 +15,10 @@ const swaggerSpec = swaggerJsDoc(newSwaggerDef);
 
 app.use('/api/v1', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+app.use((req, res) => {
+  res.status(404).send({
+    status: 404,
+    error: 'Not Found!'
+  });
+});
 export default app;
