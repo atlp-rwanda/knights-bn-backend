@@ -3,6 +3,8 @@ node_js:
   - "stable"
 before_install:
   - npm install sequelize-cli -g
+install:
+  - npm install
 before-script:
   - npm add sequelize-cli
 services:
