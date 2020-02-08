@@ -4,15 +4,16 @@ import chaiHttp from 'chai-http';
 import { describe, it } from 'mocha';
 import app from '../app';
 
+
 chai.use(chaiHttp);
 describe('SERVER CONFIG CHECK', () => {
-  it('Should check development error handler', (done) => {
+  it('it should return 404 when the provided route does not exist', (done) => {
     chai
       .request(app)
-      .get('/wrong')
+      .post('/signupdd')
+      .send()
       .end((err, res) => {
-        expect(res).to.have.status(404);
-        expect(res.body).to.have.property('error', 'Not Found!');
+        expect(res.statusCode).to.equal(404);
         done();
       });
   });
