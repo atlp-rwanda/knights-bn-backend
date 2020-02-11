@@ -92,4 +92,10 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
+#vs code config
+.vscode/
+
+#package-lock
+package-lock.json
+
 # End of https://www.gitignore.io/api/node
