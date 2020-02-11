@@ -58,6 +58,7 @@ Open terminal from your computer
 ### API endpoints
 `- POST /auth/signup - Create user account`
 
+`- POST /auth/login - Signing In a registered user`
 ### Raising an issue
 Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create an issue about this app
 
