@@ -73,10 +73,11 @@
 
 import express from 'express';
 import usersController from '../controllers/users';
+import userValidation from '../middlewares/newUser';
 
 
 const router = express.Router();
 const { registerUser } = usersController;
-router.post('/auth/signup', registerUser);
+router.post('/auth/signup', userValidation.signUp, registerUser);
 
 export default router;

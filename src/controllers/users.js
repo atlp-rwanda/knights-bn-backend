@@ -23,7 +23,10 @@ export default class usersController {
       }, process.env.SECRETKEY);
       res.status(201).json({ message: 'user successfully created', token });
     } catch (error) {
-      res.status(400).json({ error });
+      return res.status(409).json({
+        status: 409,
+        error: 'user already exits. Please try again with a different email or passportNumber address',
+      });
     }
   }
 }

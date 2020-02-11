@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js",
-    "test": "NODE_ENV=test && npm run createTables && mocha --require @babel/polyfill --require @babel/register src/**/**test.js",
+    "test": "NODE_ENV=test npm run dropTables && NODE_ENV=test mocha --require @babel/polyfill --require @babel/register ./src/tests/*",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "createTables": "npm run dropTables && node_modules/.bin/sequelize db:migrate && node_modules/.bin/sequelize db:seed:all",
-    "dropTables": "node_modules/.bin/sequelize db:migrate:undo:all"
+    "dropTables": "node_modules/.bin/sequelize db:migrate:undo:all && sequelize db:migrate"
   },
   "author": "Andela code-knights",
   "license": "MIT",
@@ -19,10 +19,12 @@
     "@babel/polyfill": "^7.8.3",
     "@babel/preset-env": "^7.8.4",
     "@babel/register": "^7.8.3",
+    "@hapi/joi": "^17.1.0",
     "bcrypt": "^3.0.8",
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "joi-password-complexity": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.2",
     "nyc": "^15.0.0",
