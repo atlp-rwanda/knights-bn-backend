@@ -99,10 +99,9 @@ typings/
 package-lock.json
 
 # End of https://www.gitignore.io/api/node
+# End of https://www.gitignore.io/api/nodesendgrid.env
+sendgrid.env
 
-#dist
 dist/
-
-#DS_Store
 .DS_Store
 

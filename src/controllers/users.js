@@ -2,11 +2,17 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import localStorage from 'localStorage';
 import environment from 'dotenv';
+import sgMail from '@sendgrid/mail';
 import models from '../db/models';
 import generateToken from '../utils/generateToken';
 import generatePswd from '../utils/randomPswd';
 import usePasswordHashToMakeToken from '../helpers/helpers';
-import { getPasswordResetURL, resetPasswordTemplate } from '../modules/email';
+import {
+  getPasswordResetURL,
+  resetPasswordTemplate,
+} from '../modules/email';
+import sequelize from 'sequelize';
+const {Op} = sequelize;
 
 environment.config();
 
@@ -14,15 +20,56 @@ export default class usersController {
   static async registerUser(req, res) {
     try {
       const {
-        firstName,
-        lastName,
-        gender,
-        passportNumber,
-        email,
-        password
+        firstName, lastName, gender, passportNumber, email, password,
       } = req.body;
+
+      const token = generateToken({
+        firstName, lastName, gender, passportNumber, email, password
+      }, process.env.SECRETKEY);
+
+      let host;
+
+      if (process.env.NODE_ENV === 'development') {
+        host = process.env.LOCAL_HOST;
+      } else {
+        host = process.env.HOST_NAME;
+      }
+      const url = `${host}/api/v1/auth/signup/${token}`;
+      sgMail.setApiKey(process.env.BN_API_KEY);
+      const msg = {
+        to: email,
+        from: 'no-reply@barefootnomad.com',
+        subject: 'Account Verification',
+        html: `<strong> Dear ${firstName}, please open this <a href="${url}">link</a> to verify your account </strong>`,
+      };
+
+      sgMail.send(msg);
+      return res.status(200).json({ message: 'Please go to your email address to verify your account.' })
+
+    } catch (error) {
+      return res.status(500).json({ "Error": error.message })
+    }
+  }
+
+  static async verifyAcccount(req, res) {
+
+    try {
+      const {token : userToken } = req.params;
+      const userInfo = jwt.decode(userToken, process.env.SECRETKEY);
+      const { firstName, lastName, gender, passportNumber, email, password } = userInfo;
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
+      const existingUser = await models.User.findOne({ where: { 
+        [Op.or]: [
+          {email}, 
+          {passport: passportNumber}
+        ]
+      }
+    });
+
+      if (existingUser !== null) {
+        return res.status(409).json({ message: 'Email or Passport number already taken.' })
+      }
 
       const newUser = await models.User.create({
         firstName,
@@ -31,48 +78,26 @@ export default class usersController {
         email,
         password: hashedPassword,
         passport: passportNumber,
-        role: 'requester'
       });
-      const token = generateToken(
-        {
-          id: newUser.id,
-          email: newUser.email,
-          firstName,
-          lastName,
-          role: newUser.role
-        },
-        process.env.SECRETKEY
-      );
+
+      const token = generateToken({
+        id: newUser.id,
+        email: newUser.email,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName
+      }, process.env.SECRETKEY);
 
       localStorage.setItem('token', token);
-
-      return res
-        .status(201)
-        .json({ message: 'user successfully created', token });
+      return res.status(201).json({ message: 'Your account is successfully created.'});
     } catch (error) {
-      if (error.errors[0].message === 'email must be unique') {
-        return res.status(409).json({
-          status: 409,
-          error: `${req.body.email} have already signed up`
-        });
-      } else if (error.errors[0].message === 'passport must be unique') {
-        return res.status(409).json({
-          status: 409,
-          error: 'passportNumber was used before'
-        });
-      } else {
-        return res.status(500).json({
-          status: 500,
-          error: error.message
-        });
-      }
+      return res.status(500).json({ "Error": error.message})
     }
   }
   static async login(req, res) {
-    const { email, password } = req;
-    const existUser = await models.User.findOne({ where: { email } });
-    if (existUser === null)
-      return res.status(404).json({
+    try {
+      const { email, password } = req;
+      const existUser = await models.User.findOne({ where: { email } });
+      if (existUser === null) return res.status(404).json({
         status: 404,
         message: 'Seems you do not have an account! Create it now'
       });
@@ -99,6 +124,9 @@ export default class usersController {
     return res
       .status(200)
       .json({ status: 200, message: 'Successfully login', token });
+    }catch(error){
+      return res.status(500).json({Error: error});
+    }
   }
   static async socialLogin(req, res) {
     try {

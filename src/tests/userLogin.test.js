@@ -13,7 +13,8 @@ const usersignIn = () => {
         .post('/api/v1/auth/signup')
         .send(mockData.userX)
         .end((err, res) => {
-          expect(res.statusCode).to.equal(201);
+          expect(res.statusCode).to.equal(200);
+          expect(res.body.message).to.equal('Please go to your email address to verify your account.');
           done();
         });
     });
@@ -66,8 +67,8 @@ const usersignIn = () => {
         .send(mockData.login1)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
-          done();
         });
+      done();
     });
     it('it should return 200 on successful logout', (done) => {
       chai

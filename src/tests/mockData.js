@@ -8,19 +8,19 @@ const mockData = {
     password: 'Password@1'
   },
   loginX: {
-    email: 'nameless@gmail.com',
-    password: 'Password@1'
+    email: 'brftnomad@gmail.com',
+    password: 'Niyonkuru@1'
   },
   user1: {
     firstName: 'Niyonsenga',
     lastName: 'Eric',
     gender: 'male',
     passportNumber: '78byvttt',
-    email: 'byit@gmail.com',
+    email: 'brftnomad@gmail.com',
     password: 'Niyonkuru@1'
   },
   login1: {
-    email: 'byit@gmail.com',
+    email: 'brftnomad@gmail.com',
     password: 'Niyonkuru@1'
   },
   user5: {
@@ -44,7 +44,7 @@ const mockData = {
     lastName: 'Eric',
     gender: 'male ',
     passportNumber: '12345678',
-    email: 'byit@gmail.com',
+    email: 'brftnomad@gmail.com',
     password: 'Niyonkuru@1'
   },
   incorectFirstName: {
@@ -52,7 +52,7 @@ const mockData = {
     lastName: 'Eric',
     gender: 'male ',
     passportNumber: '1234incofn',
-    email: 'byit@gmail.com',
+    email: 'brftnomad@gmail.com',
     password: 'Niyonkuru@1'
   },
   incorectlastName: {
@@ -60,7 +60,7 @@ const mockData = {
     lastName: 'Eric@',
     gender: 'male ',
     passportNumber: '1bx45x7ii',
-    email: 'byit@gmail.com',
+    email: 'brftnomad@gmail.com',
     password: 'Niyonkuru@1'
   },
   incorectEmail: {
@@ -76,7 +76,7 @@ const mockData = {
     lastName: 'Eric',
     gender: 'male ',
     passportNumber: '1bx',
-    email: 'byit@gmail.com',
+    email: 'brftnomad@gmail.com',
     password: 'Niyonkuru@1'
   },
   newPassword:
@@ -87,6 +87,9 @@ const mockData = {
   token: {
     token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTgyNjQ4ODg4LCJleHAiOjE1ODI2NTI0ODh9.7AMsqKFdwWA08O3jGjjJTLAKR_ShWc7edjuKC9jbBiY',
   },
+  fakeToken: {
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJOaXlvbnNlbmdhIiwibGFzdE5hbWUiOiJFcmljIiwiZ2VuZGVyIjoibWFsZSIsInBhc3Nwb3J0TnVtYmVyIjoiNzhieXZ0dHQiLCJlbWFpbCI6ImJyZnRub21hZEBnbWFpbC5jb20iLCJwYXNzd29yZCI6Ik5peW9ua3VydUAxIiwiaWF0IjoxNTgyNjU5NDU5fQ.I05YSeXG45B4XED9A64oUv5XkQyPrvKJnbJjWKkwe4w'
+  },
   invalidNewPassword1:
   {
     newPassword: 'Budha@1914324235345d',
@@ -94,7 +97,7 @@ const mockData = {
   },
   email:
   {
-    email: 'byit@gmail.com',
+    email: 'brftnomad@gmail.com',
   },
   user2: {
     email: 'kgali@gmail.com',
@@ -113,7 +116,7 @@ const mockData = {
     password: 'Niyonkuru@1'
   },
   invalidCredentials: {
-    email: 'byit@gmail.com',
+    email: 'brftnomad@gmail.com',
     password: 'Niyonkuru',
   },
   youhaveNoAccount: {
@@ -124,7 +127,7 @@ const mockData = {
     email: 'mxx@gmail.com',
   },
   request: {
-    user: 'byit@gmail.com',
+    user: 'brftnomad@gmail.com',
     type: 'one',
     reason: 'partner engagment',
     destination: 'kigali',

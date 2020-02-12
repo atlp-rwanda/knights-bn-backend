@@ -9,13 +9,61 @@ chai.use(chaiHttp);
 chai.should();
 const userSignUp = () => {
   describe('Create a user account.(POST) ', () => {
+    before(() => {
+      sinon.stub(sendGrid, 'send').returns({
+        to: mockData.user1.email,
+        from: 'no-reply@barefootnomad.com',
+        subject: 'Account Verification',
+        html: `<strong> Dear ${mockData.user1.firstName}, please open this <a href="#">link</a> to verify your account </strong>`,
+
+      });
+    });
+    after(() => {
+      sinon.restore();
+    });
+
     it('it should return 201 on successful signup', (done) => {
       chai
         .request(app)
         .post('/api/v1/auth/signup')
         .send(mockData.user1)
         .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body.message).to.equal('Please go to your email address to verify your account.');
+          done();
+        });
+    });
+    it('it should verify  a new user\'s account with a 201 status code', (done) => {
+      const { token } = mockData.fakeToken;
+      chai
+        .request(app)
+        .get(`/api/v1/auth/signup/${token}`)
+        .send()
+        .end((err, res) => {
           expect(res.statusCode).to.equal(201);
+          expect(res.body.message).to.equal('Your account is successfully created.');
+          done();
+        });
+    });
+    it('it should return 201 on successful signup, second user', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/signup')
+        .send(mockData.user10)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body.message).to.equal('Please go to your email address to verify your account.');
+          done();
+        });
+    });
+    it('it should return 201 on successful signup, second user', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/signup')
+        .send(mockData.user5)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body.message).to.equal('Please go to your email address to verify your account.');
           done();
         });
     });
@@ -25,9 +73,8 @@ const userSignUp = () => {
         .post('/api/v1/auth/signup')
         .send(mockData.user1)
         .end((err, res) => {
-          console.log(`signup in signup : ${JSON.stringify(res.body)}`);
-          expect(res.statusCode).to.equal(409);
-          expect(res.body.error).to.equal(`${mockData.user1.email} have already signed up`);
+          expect(res.statusCode).to.equal(200);
+          expect(res.body.message).to.equal('Please go to your email address to verify your account.');
           done();
         });
     });
@@ -71,7 +118,7 @@ const userSignUp = () => {
         .send(mockData.invalidPassport)
         .end((err, res) => {
           expect(res.statusCode).to.equal(422);
-          expect(res.body.error).to.equal('passportNumber should be made of 8 or 9 alphanumeric characters, no symbols allowed and no space inbetween');
+          expect(res.body.error).to.equal(' passportNumber with value "1bx" fails to match the required pattern: /^[a-zA-Z0-9]{8,9}$/');
         });
       done();
     });
