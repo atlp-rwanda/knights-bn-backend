@@ -68,6 +68,14 @@ const mockData = {
     email: 'brftnomad@gmail.com',
     password: 'Niyonkuru@1'
   },
+  validOneWayTrip: {
+    origin: 'Moroco',
+    destination: 'Kigali',
+    departureDate: '2020-03-09',
+    accommodation: 'YFB campus',
+    reason: 'Attend a meeting',
+    passportNumber: '12345'
+  },
   incorectFirstName: {
     firstName: 'Niyonsenga@',
     lastName: 'Eric',
