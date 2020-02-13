@@ -1,17 +1,17 @@
 const mockData = {
   user1: {
-    firstName: 'Niyonsenga',
-    lastName: 'Eric',
-    gender: 'male ',
-    passportNumber: '12345x7ii',
-    email: 'mxx@gmail.com',
-    password: 'Niyonkuru1',
+    firstName: 'code',
+    lastName: 'knights',
+    gender: 'Male',
+    passportNumber: '12345678',
+    email: 'eugenemu57@gmail.com',
+    password: 'Budha@1914324235345d',
   },
   existingPassport: {
     firstName: 'Niyonsenga',
     lastName: 'Eric',
     gender: 'male ',
-    passportNumber: '12345x7ii',
+    passportNumber: '12345678',
     email: 'maa@gmail.com',
     password: 'Niyonkuru1',
   },
@@ -46,32 +46,42 @@ const mockData = {
     passportNumber: '1bx',
     email: 'nn@gmail.com',
     password: 'Niyonkuru@1',
-    firstName: 'code',
-    lastName: 'knights',
-    gender: 'Male',
-    passportNumber: '12345675sfasdf312',
-    email: 'codeknights@gmail.com',
-    password: 'codeknights@wew8',
+  },
+  newPassword:
+  {
+    newPassword: 'Budha@1914324235345d',
+    confirmPassword: 'Budha@1914324235345d',
+  },
+  token: {
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU4MTY4MjQ4NiwiZXhwIjoxNTgxNjg2MDg2fQ.o9LBKfCcoFdh7ivp6hQzBY9Ywd0cExVz_Ljn5aqr8UM'
+  },
+  invalidNewPassword1:
+  {
+    newPassword: 'Budha@1914324235345d',
+    confirmPassword: '',
+  },
+  email:
+  {
+    email: 'eugenemu57@gmail.com',
+
   },
   user2: {
     email: 'kgali@gmail.com',
     password: '12345Six@',
   },
   loginSuccessfully: {
-    email: 'mxx@gmail.com',
-    password: 'Niyonkuru1',
+    email: 'eugenemu57@gmail.com',
+    password: 'Budha@1914324235345d',
   },
   invalidCredentials: {
-    email: 'mxx@gmail.com',
+    email: 'eugenemu57@gmail.com',
     password: 'Niyonkuru',
   },
   youhaveNoAccount: {
     email: 'xx@gmail.com',
     password: 'Niyonkuru1',
   },
-  missingIinformation: {
-    email: 'mxx@gmail.com',
-  },
+  missingIinformation: { email: 'mxx@gmail.com', }
 
 };
 export default mockData;

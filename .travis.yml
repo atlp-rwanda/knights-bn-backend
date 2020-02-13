@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "stable"
 before_install:
-  - npm install sequelize-cli -g
+  # - npm install sequelize-cli -g
 install:
   - npm install
 before-script:

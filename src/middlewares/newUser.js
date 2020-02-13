@@ -41,6 +41,42 @@ class userValidate {
       });
     }
   }
+
+  static reset(req, res, next) {
+    const result = userValidation.resetPassword.validate({
+      newPassword: req.body.newPassword,
+      confirmPassword: req.body.confirmPassword,
+    });
+    if (!result.error) {
+      req.user = result;
+      next();
+    } else if (`${result.error.details[0].path[0]}` === 'newPassword') {
+      return res.status(422).json({
+        status: 422,
+        error: 'password should contain at least one uppercase letter,one small letter, one special character, one number and one  and should be at minimum 6characters',
+      });
+    } else if (`${result.error.details[0].path[0]}` === 'confirmPassword') {
+      return res.status(422).json({
+        status: 422,
+        error: 'password should contain at least one uppercase letter,one small letter, one special character, one number and one  and should be at minimum 6characters',
+      });
+    }
+  }
+
+  static sendEmail(req, res, next) {
+    const result = userValidation.sendEmail.validate({
+      email: req.body.email,
+    });
+    if (!result.error) {
+      req.user = result;
+      next();
+    } else if (`${result.error.details[0].path[0]}` === 'email') {
+      return res.status(422).json({
+        status: 422,
+        error: 'invalid user email',
+      });
+    }
+  }
 }
 
 export default userValidate;

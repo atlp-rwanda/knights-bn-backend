@@ -1,3 +1,15 @@
+import express from 'express';
+import passport from 'passport';
+import usersController from '../controllers/users';
+import userValidation from '../middlewares/newUser';
+import validateLogin from '../middlewares/userLoginValidation';
+import passportConfig from '../config/passport';
+import fakeUser from '../mockData/fakeUser';
+
+const router = express.Router();
+const {
+  registerUser, resetPassword, forgetPassword, login, socialLogin
+} = usersController;
 /**
  * @swagger
  *  "/auth/signup": {
@@ -31,11 +43,10 @@
             "description": ""
           },
           {
-            "name": "PassportNumber",
+            "name": "passportNumber",
             "in": "formData",
             "required": true,
-            "type": "integer",
-            "format": "int64",
+            "type": "string",
             "description": ""
           },
           {
@@ -122,7 +133,7 @@
       }
     }
  */
-
+router.post('/auth/signup', userValidation.signUp, registerUser);
 
 /**
  * @swagger
@@ -133,7 +144,7 @@
         "tags": [
           "User"
         ],
-        "operationId": "Signup",
+        "operationId": "Login",
         "deprecated": false,
         "produces": [
           "application/json"
@@ -166,21 +177,6 @@
       }
     }
  */
-
-
-import express from 'express';
-import passport from 'passport';
-import usersController from '../controllers/users';
-import validateLogin from '../middlewares/userLoginValidation';
-import userValidation from '../middlewares/newUser';
-
-import passportConfig from '../config/passport';
-import fakeUser from '../mockData/fakeUser';
-
-const router = express.Router();
-const { registerUser, login, socialLogin } = usersController;
-
-router.post('/auth/signup', userValidation.signUp, registerUser);
 router.post('/auth/login', validateLogin, login);
 
 router.get('/auth/login/socialLogin', (req, res) => {
@@ -196,4 +192,99 @@ router.get('/auth/login/facebook/redirect', passport.authenticate('facebook'), s
 router.get('/auth/test/google', fakeUser, socialLogin);
 router.get('/auth/test/facebook', fakeUser, socialLogin);
 
+/**
+ * @swagger
+ *  "/reset_pw/user": {
+      "post": {
+        "description": "forget password reset",
+        "summary": "Reset password(email)",
+        "tags": [
+          "User"
+        ],
+        "operationId": "Resetpassword(email)",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+ */
+
+router.post('/reset_pw/user', userValidation.sendEmail, forgetPassword);
+
+/**
+ * @swagger
+ *  "/password/reset/{id}/{token}": {
+      "patch": {
+        "description": "change password",
+        "summary": "New password",
+        "tags": [
+          "User"
+        ],
+        "operationId": "Newpassword",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "newPassword",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "confirmPassword",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+ */
+router.patch('/password/reset/:id/:token', userValidation.reset, resetPassword);
 export default router;
