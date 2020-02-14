@@ -46,6 +46,32 @@ const mockData = {
     passportNumber: '1bx',
     email: 'nn@gmail.com',
     password: 'Niyonkuru@1',
+    firstName: 'code',
+    lastName: 'knights',
+    gender: 'Male',
+    passportNumber: '12345675sfasdf312',
+    email: 'codeknights@gmail.com',
+    password: 'codeknights@wew8',
   },
+  user2: {
+    email: 'kgali@gmail.com',
+    password: '12345Six@',
+  },
+  loginSuccessfully: {
+    email: 'mxx@gmail.com',
+    password: 'Niyonkuru1',
+  },
+  invalidCredentials: {
+    email: 'mxx@gmail.com',
+    password: 'Niyonkuru',
+  },
+  youhaveNoAccount: {
+    email: 'xx@gmail.com',
+    password: 'Niyonkuru1',
+  },
+  missingIinformation: {
+    email: 'mxx@gmail.com',
+  },
+
 };
 export default mockData;

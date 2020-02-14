@@ -1,3 +1,8 @@
+import express from 'express';
+import usersController from '../controllers/users';
+import validateLogin from '../middlewares/userLoginValidation';
+import userValidation from '../middlewares/newUser';
+
 /**
  * @swagger
  *  "/auth/signup": {
@@ -71,13 +76,55 @@
  */
 
 
-import express from 'express';
-import usersController from '../controllers/users';
-import userValidation from '../middlewares/newUser';
+
 
 
 const router = express.Router();
-const { registerUser } = usersController;
+const { registerUser, login } = usersController;
 router.post('/auth/signup', userValidation.signUp, registerUser);
 
+
+/**
+ * @swagger
+ *  "/auth/login": {
+      "post": {
+        "description": "User will be able to get authenticated with registered email and password",
+        "summary": "User login",
+        "tags": [
+          "User"
+        ],
+        "operationId": "Signup",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+ */
+router.post('/auth/login', validateLogin, login);
 export default router;
