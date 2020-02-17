@@ -1,8 +1,3 @@
-import express from 'express';
-import usersController from '../controllers/users';
-import validateLogin from '../middlewares/userLoginValidation';
-import userValidation from '../middlewares/newUser';
-
 /**
  * @swagger
  *  "/auth/signup": {
@@ -74,14 +69,59 @@ import userValidation from '../middlewares/newUser';
       }
     }
  */
+/**
+ * @swagger
+ * "/auth/login/google": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Login with Google",
+        "description": "User can login with his/her google account",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "successfully registered and logged in ",
+          },
+          "200": {
+            "description": "successfully logged in ",
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+ */
 
-
-
-
-
-const router = express.Router();
-const { registerUser, login } = usersController;
-router.post('/auth/signup', userValidation.signUp, registerUser);
+/**
+ * @swagger
+ * "/auth/login/facebook": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Login with Facebook",
+        "description": "User can login with his/her facebook account",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "successfully registered and logged in ",
+          },
+          "200": {
+            "description": "successfully logged in ",
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+ */
 
 
 /**
@@ -126,5 +166,34 @@ router.post('/auth/signup', userValidation.signUp, registerUser);
       }
     }
  */
+
+
+import express from 'express';
+import passport from 'passport';
+import usersController from '../controllers/users';
+import validateLogin from '../middlewares/userLoginValidation';
+import userValidation from '../middlewares/newUser';
+
+import passportConfig from '../config/passport';
+import fakeUser from '../mockData/fakeUser';
+
+const router = express.Router();
+const { registerUser, login, socialLogin } = usersController;
+
+router.post('/auth/signup', userValidation.signUp, registerUser);
 router.post('/auth/login', validateLogin, login);
+
+router.get('/auth/login/socialLogin', (req, res) => {
+  res.sendFile('socialLogin.html', { root: `${__dirname}/../templates/` });
+});
+router.get('/auth/login/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/auth/login/google/redirect', passport.authenticate('google'), socialLogin);
+
+router.get('/auth/login/facebook', passport.authenticate('facebook'));
+router.get('/auth/login/facebook/redirect', passport.authenticate('facebook'), socialLogin);
+
+// test authorization
+router.get('/auth/test/google', fakeUser, socialLogin);
+router.get('/auth/test/facebook', fakeUser, socialLogin);
+
 export default router;
