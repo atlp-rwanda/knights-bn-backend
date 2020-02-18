@@ -22,6 +22,7 @@ describe('Test Google login', () => {
         testResponseBody(err, res);
         done();
       });
+      
   });
   it('should return 200 if user already exists', (done) => {
     chai
@@ -31,6 +32,7 @@ describe('Test Google login', () => {
         testResponseBody(err, res);
         done();
       });
+    
   });
 }),
 describe('Test Facebook login', () => {
@@ -42,6 +44,7 @@ describe('Test Facebook login', () => {
         testResponseBody(err, res);
         done();
       });
+      
   }),
   it('should return 200 if user already exists', (done) => {
     chai
@@ -51,5 +54,6 @@ describe('Test Facebook login', () => {
         testResponseBody(err, res);
         done();
       });
+      
   });
 });

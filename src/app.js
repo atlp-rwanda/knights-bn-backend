@@ -3,6 +3,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 import bodyParser from 'body-parser';
 import passport from 'passport';
+import multer from 'multer';
 import swaggerDefinition from './docs/swaggerDefinition';
 import users from './routes/users';
 import trips from './routes/trips';
@@ -17,6 +18,8 @@ const newSwaggerDef = {
 const swaggerSpec = swaggerJsDoc(newSwaggerDef);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+multer({ dest: 'uploads/' });
+app.use('/uploads', express.static('uploads'));
 app.use(passport.initialize());
 
 app.use(translator);

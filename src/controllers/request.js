@@ -10,7 +10,7 @@ export default class usersController {
     try{                
     const allMyRequest = await models.Request.findAll({
         where: { userId: `${req.user.userId}` },
-      }); 
+      });
     if(allMyRequest.length !== 0){
       return res.status(200).json({ message: 'List of requests', allMyRequest });
     } else{
