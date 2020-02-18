@@ -63,6 +63,9 @@ Open terminal from your computer
 `- POST /reset_pw/user -resetting password`
 
 `- PATCH /password/reset/:id/:token - for new password`
+
+`- PATCH /auth/logout - Logout a user`
+
 ### Raising an issue
 Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create an issue about this app
 

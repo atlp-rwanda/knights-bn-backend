@@ -6,52 +6,43 @@ import generateToken from '../utils/generateToken';
 import generatePswd from '../utils/randomPswd';
 import usePasswordHashToMakeToken from '../helpers/helpers';
 import {
-  transporter,
   getPasswordResetURL,
   resetPasswordTemplate,
 } from '../modules/email';
+import localStorage from 'localStorage'
 
 environment.config();
 
 export default class usersController {
 
   static async registerUser(req, res) {
-    try {
-      const {
-        firstName,
-        lastName,
-        gender,
-        passportNumber,
-        email,
-        password,
-      } = req.body;
+    try{
+    const {
+      firstName, lastName, gender, passportNumber, email, password,
+    } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-
-      const newUser = await models.User.create({
-        firstName,
-        lastName,
-        gender,
-        email,
-        password: hashedPassword,
-        passport: passportNumber,
-      });
-      const token = jwt.sign(
-        {
-          userId: newUser.id,
-          email: newUser.email,
-          firstName,
-          lastName,
-        },
-        process.env.SECRETKEY,
-      );
-      res.status(201).json({ message: 'user successfully created', token });
-    } catch (error) {
-      return res.status(409).json({
-        status: 409,
-        error: 'user already exits. Please try again with a different email or passportNumber address',
-      });
+    const newUser = await models.User.create({
+      firstName, 
+      lastName, 
+      gender, 
+      email, 
+      password: hashedPassword, 
+      passport: passportNumber,
+    });
+   const token = generateToken({
+     userId: newUser.id, 
+     email: newUser.email, 
+     firstName, lastName,
+    });
+    localStorage.setItem('token', token);
+    res.status(201).json({ message: 'user successfully created', token });
+    }catch (error) {
+    return res.status(409).json({
+      status: 409,
+      error: 'user already exits. Please try again with a different email or passportNumber address',
+    });
     }
   }
   static async login(request, response) {
@@ -64,13 +55,13 @@ export default class usersController {
     if (!passwordMatch) return response.status(401).json({ status: 401, 
     message: 'Invalid credentials' });
 
-    const token = jwt.sign({
+    const token = generateToken({
       userId: existUser.id,
       email: existUser.email,
       firstName: existUser.firstName,
       lastName: existUser.lastName,
-    }, process.env.SECRETKEY);
-
+    });
+    localStorage.setItem('token', token);
     return response.status(200).json({ status: 200, 
       message: 'Successfully login', token });
     }
@@ -110,6 +101,7 @@ export default class usersController {
               firstName: user.firstName,
               lastName: user.lastName,
             });
+            localStorage.setItem('token', token);
             const statusCode = (created === true) ? 201 : 200;
             res.json({
               status: statusCode,
@@ -180,20 +172,11 @@ export default class usersController {
       res.status(401).json({ error: 'invalid token' });
     }
   }
+  static async logout(req, res) {
+      localStorage.removeItem('token')
+      return res.status(200).json({
+        status: 200,
+        message: 'Logout successfully',
+      });
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

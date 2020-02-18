@@ -1,14 +1,16 @@
 import express from 'express';
 import passport from 'passport';
 import usersController from '../controllers/users';
-import userValidation from '../middlewares/newUser';
 import validateLogin from '../middlewares/userLoginValidation';
+import userValidation from '../middlewares/newUser';
+
 import passportConfig from '../config/passport';
 import fakeUser from '../mockData/fakeUser';
+import auth from '../middlewares/checkAuth';
 
 const router = express.Router();
 const {
-  registerUser, resetPassword, forgetPassword, login, socialLogin
+  registerUser, resetPassword, forgetPassword, login, socialLogin, logout
 } = usersController;
 /**
  * @swagger
@@ -61,6 +63,7 @@ const {
             "in": "formData",
             "required": true,
             "type": "string",
+            "format": "password",
             "description": ""
           },
           {
@@ -80,6 +83,7 @@ const {
       }
     }
  */
+router.post('/auth/signup', userValidation.signUp, registerUser);
 /**
  * @swagger
  * "/auth/login/google": {
@@ -133,7 +137,30 @@ const {
       }
     }
  */
-router.post('/auth/signup', userValidation.signUp, registerUser);
+
+router.get('/auth/login/socialLogin', (req, res) => {
+  res.sendFile('socialLogin.html', { root: `${__dirname}/../templates/` });
+});
+router.get(
+  '/auth/login/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+router.get(
+  '/auth/login/google/redirect',
+  passport.authenticate('google'),
+  socialLogin
+);
+
+router.get('/auth/login/facebook', passport.authenticate('facebook'));
+router.get(
+  '/auth/login/facebook/redirect',
+  passport.authenticate('facebook'),
+  socialLogin
+);
+
+// test authorization
+router.get('/auth/test/google', fakeUser, socialLogin);
+router.get('/auth/test/facebook', fakeUser, socialLogin);
 
 /**
  * @swagger
@@ -165,6 +192,7 @@ router.post('/auth/signup', userValidation.signUp, registerUser);
             "in": "formData",
             "required": true,
             "type": "string",
+            "format": "password",
             "description": ""
           }
         ],
@@ -177,20 +205,8 @@ router.post('/auth/signup', userValidation.signUp, registerUser);
       }
     }
  */
+
 router.post('/auth/login', validateLogin, login);
-
-router.get('/auth/login/socialLogin', (req, res) => {
-  res.sendFile('socialLogin.html', { root: `${__dirname}/../templates/` });
-});
-router.get('/auth/login/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-router.get('/auth/login/google/redirect', passport.authenticate('google'), socialLogin);
-
-router.get('/auth/login/facebook', passport.authenticate('facebook'));
-router.get('/auth/login/facebook/redirect', passport.authenticate('facebook'), socialLogin);
-
-// test authorization
-router.get('/auth/test/google', fakeUser, socialLogin);
-router.get('/auth/test/facebook', fakeUser, socialLogin);
 
 /**
  * @swagger
@@ -227,9 +243,7 @@ router.get('/auth/test/facebook', fakeUser, socialLogin);
       }
     }
  */
-
 router.post('/reset_pw/user', userValidation.sendEmail, forgetPassword);
-
 /**
  * @swagger
  *  "/password/reset/{id}/{token}": {
@@ -266,6 +280,7 @@ router.post('/reset_pw/user', userValidation.sendEmail, forgetPassword);
             "name": "newPassword",
             "in": "formData",
             "required": true,
+            "format": "password",
             "type": "string",
             "description": ""
           },
@@ -273,6 +288,7 @@ router.post('/reset_pw/user', userValidation.sendEmail, forgetPassword);
             "name": "confirmPassword",
             "in": "formData",
             "required": true,
+            "format": "password",
             "type": "string",
             "description": ""
           }
@@ -287,4 +303,30 @@ router.post('/reset_pw/user', userValidation.sendEmail, forgetPassword);
     }
  */
 router.patch('/password/reset/:id/:token', userValidation.reset, resetPassword);
+/**
+ * @swagger
+ *  "/auth/logout": {
+      "patch": {
+        "description": "When a user clicks on the logout link, they should be signed out of the application with their session ended",
+        "summary": "Logout",
+        "tags": [
+          "User"
+        ],
+        "operationId": "Logout",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+  */
+router.patch('/auth/logout', auth.auth, logout);
+
 export default router;
