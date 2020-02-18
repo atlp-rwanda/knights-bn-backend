@@ -1,8 +1,8 @@
-import userValidation from '../helpers.js/userValidation';
+import {SignUpschema, resetPassword, sendEmail } from '../helpers.js/userValidation';
 
 class userValidate {
   static signUp(req, res, next) {
-    const result = userValidation.SignUpschema.validate({
+    const result = SignUpschema.validate({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
@@ -42,7 +42,7 @@ class userValidate {
   }
 
   static reset(req, res, next) {
-    const result = userValidation.resetPassword.validate({
+    const result = resetPassword.validate({
       newPassword: req.body.newPassword,
       confirmPassword: req.body.confirmPassword,
     });
@@ -63,7 +63,7 @@ class userValidate {
   }
 
   static sendEmail(req, res, next) {
-    const result = userValidation.sendEmail.validate({
+    const result = sendEmail.validate({
       email: req.body.email,
     });
     if (!result.error) {

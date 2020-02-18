@@ -5,7 +5,6 @@ import mockData from './mockData';
 
 chai.use(chaiHttp);
 chai.should();
-
 const usersignIn = () => {
   describe('Athentication.(POST) ', () => {
     it('it should return 200 on successful signIn', (done) => {
@@ -85,5 +84,4 @@ const usersignIn = () => {
     });
   });
 };
-
 export default usersignIn;

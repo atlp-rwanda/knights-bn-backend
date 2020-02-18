@@ -54,7 +54,7 @@ const sendEmail = Joi.object().keys({
     .trim()
     .required()
 });
-export default {
+export {
   SignUpschema,
   sendEmail,
   resetPassword
