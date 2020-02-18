@@ -17,6 +17,26 @@ const userSignUp = () => {
           done();
         });
     });
+    it('it should return 201 on successful signup, second user', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/signup')
+        .send(mockData.user10)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(201);
+          done();
+        });
+    });
+    it('it should return 201 on successful signup, second user', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/signup')
+        .send(mockData.user5)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(201);
+          done();
+        });
+    });
     it('it should return 409 if user exists', (done) => {
       chai
         .request(app)
@@ -24,7 +44,7 @@ const userSignUp = () => {
         .send(mockData.user1)
         .end((err, res) => {
           expect(res.statusCode).to.equal(409);
-          expect(res.body.error).to.equal('user already exits. Please try again with a different email or passportNumber address');
+          expect(res.body.error).to.equal(`${mockData.user1.email} have already signed up`);
           done();
         });
     });

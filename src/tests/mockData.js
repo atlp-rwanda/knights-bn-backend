@@ -1,11 +1,27 @@
 const mockData = {
   user1: {
-    firstName: 'code',
-    lastName: 'knights',
-    gender: 'Male',
-    passportNumber: '12345678',
+    firstName: 'Niyonsenga',
+    lastName: 'Eric',
+    gender: 'male',
+    passportNumber: '78byvttt',
+    email: 'byit@gmail.com',
+    password: 'Niyonkuru@1'
+  },
+  user5: {
+    firstName: 'Niyonsenga',
+    lastName: 'Eric',
+    gender: 'male',
+    passportNumber: '67uh09re',
     email: 'eugenemu57@gmail.com',
-    password: 'Budha@1914324235345d',
+    password: 'Niyonkuru@1'
+  },
+  user10: {
+    firstName: 'Moise',
+    lastName: 'Rwibutso',
+    gender: 'male',
+    passportNumber: '78bh675t',
+    email: 'moiserwi@gmail.com',
+    password: 'Niyonkuru@1'
   },
   existingPassport: {
     firstName: 'Niyonsenga',
@@ -19,8 +35,8 @@ const mockData = {
     firstName: 'Niyonsenga@',
     lastName: 'Eric',
     gender: 'male ',
-    passportNumber: '1bx45x7ii',
-    email: 'mub@gmail.com',
+    passportNumber: '1234incofn',
+    email: 'incorectFirstName@gmail.com',
     password: 'Niyonkuru1',
   },
   incorectlastName: {
@@ -63,25 +79,63 @@ const mockData = {
   email:
   {
     email: 'eugenemu57@gmail.com',
-
   },
   user2: {
     email: 'kgali@gmail.com',
     password: '12345Six@',
   },
   loginSuccessfully: {
-    email: 'eugenemu57@gmail.com',
-    password: 'Budha@1914324235345d',
+    email: 'willishimw@gmail.com',
+    password: 'Niyonkuru@1'
+  },
+  loginSuccessfully2: {
+    email: 'moiserwi@gmail.com',
+    password: 'Niyonkuru@1'
+  },
+  existingUser: {
+    email: 'manzipatr@gmail.com',
+    password: 'Niyonkuru@1'
   },
   invalidCredentials: {
-    email: 'eugenemu57@gmail.com',
+    email: 'byit@gmail.com',
     password: 'Niyonkuru',
   },
   youhaveNoAccount: {
     email: 'xx@gmail.com',
     password: 'Niyonkuru1',
   },
-  missingIinformation: { email: 'mxx@gmail.com', }
-
+  missingIinformation: {
+    email: 'mxx@gmail.com',
+  },
+  request: {
+    user: 'byit@gmail.com',
+    type: 'one',
+    reason: 'partner engagment',
+    destination: 'kigali',
+    status: 'pending',
+    departureDate: '2020-07-01',
+    returnDate: '2020-09-01'
+  },
+  request1: {
+    user: 'rwanda2020@gmail.com',
+    type: 'one',
+    reason: 'partner engagment',
+    destination: 'kigali',
+    status: 'pending',
+    departureDate: '2020-07-01',
+    returnDate: '2020-09-01'
+  },
+  user9: {
+    firstName: 'Niyonsenga',
+    lastName: 'Eric',
+    gender: 'male',
+    passportNumber: '78byvttt',
+    email: 'rwanda2020@gmail.com',
+    password: 'Niyonkuru@1'
+  },
+  invalidToken: {
+    token: 'invalid',
+  }
 };
+
 export default mockData;

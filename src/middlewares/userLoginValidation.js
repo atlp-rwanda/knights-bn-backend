@@ -3,9 +3,9 @@ export default (req, res, next) => {
 
 
   if ((typeof email !== 'undefined') && (typeof password !== 'undefined')) {
-    const userEmail = email.split(' ').join('').trim();
+    const user = email.split(' ').join('').trim();
     const UserPassword = password.split(' ').join('').trim();
-    req.email = userEmail;
+    req.email = user;
     req.password = UserPassword;
     next();
   } else {

@@ -1,10 +1,11 @@
-import express from 'express';
+import express, { request } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import swaggerDefinition from './docs/swaggerDefinition';
 import users from './routes/users';
+import trips from './routes/trips';
 
 const app = express();
 
@@ -20,5 +21,6 @@ app.use(passport.initialize());
 
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/v1', users);
+app.use('/api/v1', trips);
 
 export default app;

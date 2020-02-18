@@ -1,11 +1,8 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../app';
-
-
 chai.use(chaiHttp);
 const { expect } = chai;
-
 const testResponseBody = (err, res) => {
   if (res.body.created === true) expect(res.body).to.have.property('status').that.equals(201);
   else expect(res.body).to.have.property('status').that.equals(200);

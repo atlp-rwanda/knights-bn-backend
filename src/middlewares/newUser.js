@@ -12,7 +12,6 @@ class userValidate {
     });
 
     if (!result.error) {
-      req.user = result;
       next();
     } else {
       if (`${result.error.details[0].path[0]}` === 'firstName') {
