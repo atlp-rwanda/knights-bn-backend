@@ -1,20 +1,24 @@
 import jwt from 'jsonwebtoken';
+import localStorage from 'localStorage';
 
 const auth = (req, res, next) => {
-  const token = !req.headers.token ? req.params.token : req.headers.token;
+  const token = localStorage.getItem('token');
   if (!token) {
-    return res.status(401).json({ error: 'Access denied. no token provided.' });
+    return res.status(401).json({
+      status: 401,
+      error: 'you are not logged in'
+    });
   }
   try {
-    const decoded = jwt.verify(token, process.env.JWT);
+    const decoded = jwt.verify(token, process.env.SECRETKEY);
     req.user = decoded;
 
     next();
   } catch (ex) {
-    return res.status(401).json({ error: 'invalid token.' });
+    return res.status(500).json({ error });
   }
-  return (token);
+  return token;
 };
 export default {
-  auth,
+  auth
 };
