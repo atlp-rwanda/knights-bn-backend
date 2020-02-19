@@ -59,6 +59,10 @@ Open terminal from your computer
 `- POST /auth/signup - Create user account`
 
 `- POST /auth/login - Signing In a registered user`
+
+`- POST /reset_pw/user -resetting password`
+
+`- PATCH /password/reset/:id/:token - for new password`
 ### Raising an issue
 Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create an issue about this app
 
@@ -67,7 +71,7 @@ Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create 
 
  [Ishimwe William](https://github.com/T2Wil)
 
- [Maxime Kagorora](https://github.com/Kagorora)
+[Maxime Kagorora](https://github.com/Kagorora)
 
  [Eugene Munyampundu](https://github.com/EugeneMunya)
 

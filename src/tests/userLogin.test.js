@@ -28,23 +28,23 @@ const usersignIn = () => {
           done();
         });
     });
-    it('it should return 400 for invalid password', (done) => {
+    it('it should return 401 for invalid password', (done) => {
       chai
         .request(app)
         .post('/api/v1/auth/login')
         .send(mockData.invalidCredentials)
         .end((err, res) => {
-          expect(res.statusCode).to.equal(400);
+          expect(res.statusCode).to.equal(401);
           done();
         });
     });
-    it('it should return 400 if no password provided', (done) => {
+    it('it should return 401 if no password provided', (done) => {
       chai
         .request(app)
         .post('/api/v1/auth/login')
         .send(mockData.missingIinformation)
         .end((err, res) => {
-          expect(res.statusCode).to.equal(400);
+          expect(res.statusCode).to.equal(401);
           done();
         });
     });

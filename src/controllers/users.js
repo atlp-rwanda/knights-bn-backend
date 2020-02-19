@@ -4,42 +4,56 @@ import environment from 'dotenv';
 import models from '../db/models';
 import generateToken from '../utils/generateToken';
 import generatePswd from '../utils/randomPswd';
+import usePasswordHashToMakeToken from '../helpers/helpers';
+import {
+  transporter,
+  getPasswordResetURL,
+  resetPasswordTemplate,
+} from '../modules/email';
 
 environment.config();
 
 export default class usersController {
 
   static async registerUser(req, res) {
-    try{
-    const {
-      firstName, lastName, gender, passportNumber, email, password,
-    } = req.body;
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    try {
+      const {
+        firstName,
+        lastName,
+        gender,
+        passportNumber,
+        email,
+        password,
+      } = req.body;
 
-    const newUser = await models.User.create({
-      firstName, 
-      lastName, 
-      gender, 
-      email, 
-      password: hashedPassword, 
-      passport: passportNumber,
-    });
-   const token = jwt.sign({
-     userId: newUser.id, 
-     email: newUser.email, 
-     firstName, lastName,
-    }, process.env.SECRETKEY);
-    res.status(201).json({ message: 'user successfully created', token });
-    }catch (error) {
-    return res.status(409).json({
-      status: 409,
-      error: 'user already exits. Please try again with a different email or passportNumber address',
-    });
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      const newUser = await models.User.create({
+        firstName,
+        lastName,
+        gender,
+        email,
+        password: hashedPassword,
+        passport: passportNumber,
+      });
+      const token = jwt.sign(
+        {
+          userId: newUser.id,
+          email: newUser.email,
+          firstName,
+          lastName,
+        },
+        process.env.SECRETKEY,
+      );
+      res.status(201).json({ message: 'user successfully created', token });
+    } catch (error) {
+      return res.status(409).json({
+        status: 409,
+        error: 'user already exits. Please try again with a different email or passportNumber address',
+      });
     }
   }
-  
-    
   static async login(request, response) {
     const { email, password } = request;
     const existUser = await models.User.findOne({ where: { email } });
@@ -47,7 +61,7 @@ export default class usersController {
     message: 'Seems you do not have an account! Create it now' });
 
     const passwordMatch = await bcrypt.compare(password, existUser.password);
-    if (!passwordMatch) return response.status(400).json({ status: 400, 
+    if (!passwordMatch) return response.status(401).json({ status: 401, 
     message: 'Invalid credentials' });
 
     const token = jwt.sign({
@@ -112,7 +126,58 @@ export default class usersController {
     } catch (error) {
       res.status(500).json({
         error,
+      });}
+    }
+
+  static async forgetPassword(req, res) {
+    const { email } = req.body;
+    const user = await models.User.findOne({ where: { email } });
+    if (!user) {
+      res.status(404).json({ error: 'email is not registered! Please check the entered email' });
+    } else {
+      const token = usePasswordHashToMakeToken(user);
+      const url = getPasswordResetURL(user, token);
+      try {
+        resetPasswordTemplate(user, url);
+        return res.status(200).json({ message: `verify throughout your email: ${user.email} before 1 hour` });
+      } catch (error) {
+        res.status(500).json({ error: 'error sending email' });
+      }
+    }
+  }
+
+  static async resetPassword(req, res) {
+    try {
+      const { id, token } = req.params;
+      if(isNaN(id)){
+        return res.status(401).json({ error: 'invalid token' });
+
+      }
+      const { newPassword, confirmPassword } = req.body;
+      models.User.findOne({ where: { id } }).then((user) => {
+        const secret = `${user.password}`;
+        const payload = jwt.decode(token, secret);
+        if (!payload) {
+          return res.status(401).json({ error: 'invalid token' });
+        }
+        if (payload.userId === user.id) {
+          if (newPassword === confirmPassword) {
+            bcrypt.genSalt(10, (err, salt) => {
+              if (err) return;
+              bcrypt.hash(newPassword, salt, (err, hash) => {
+                if (err) return;
+                models.User.update({ password: hash }, { where: { id } })
+                  .then(() => res.status(202).json({ message: 'Password changed successfully ' }))
+                  .catch((err) => res.status(500).json(err));
+              });
+            });
+          } else {
+            res.status(401).json({ error: 'password does not match' });
+          }
+        }
       });
+    } catch (error) {
+      res.status(401).json({ error: 'invalid token' });
     }
   }
 }

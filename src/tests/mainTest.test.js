@@ -1,4 +1,4 @@
-import signUpTest from './userSingUp.test';
+import signUpTest from './user.test';
 import userLoginTest from './userLogin.test';
 
 signUpTest();

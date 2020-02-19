@@ -7,7 +7,7 @@ const complexityOptions = {
   lowerCase: 1,
   upperCase: 1,
   numeric: 1,
-  requirementCount: 2,
+  requirementCount: 1
 };
 
 const SignUpschema = Joi.object().keys({
@@ -36,9 +36,25 @@ const SignUpschema = Joi.object().keys({
     .lowercase()
     .trim()
     .regex(/^[a-zA-Z0-9]{8,9}$/)
-    .required(),
+    .required()
 });
-
+const resetPassword = Joi.object().keys({
+  newPassword: PasswordComplexity(complexityOptions)
+    .trim()
+    .required(),
+  confirmPassword: PasswordComplexity(complexityOptions)
+    .trim()
+    .required()
+});
+const sendEmail = Joi.object().keys({
+  email: Joi.string()
+    .lowercase()
+    .email()
+    .trim()
+    .required()
+});
 export default {
   SignUpschema,
+  sendEmail,
+  resetPassword
 };

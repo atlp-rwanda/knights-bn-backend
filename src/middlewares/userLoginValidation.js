@@ -9,8 +9,8 @@ export default (req, res, next) => {
     req.password = UserPassword;
     next();
   } else {
-    res.status(400).json({
-      status: 400,
+    res.status(401).json({
+      status: 401,
       message: 'One of your credentials is missing'
     });
   }
