@@ -1,10 +1,14 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const swaggerDefinition = {
   info: {
     title: 'Barefoot Nomad',
     version: '1.0.0',
     description: 'Barefoot Nomad - Making travel and accomodation easy and convenient.',
   },
-  host: 'localhost:4000',
+  host: process.env.HOST_NAME,
   basePath: '/api/v1',
   securityDefinitions: {
     bearerAuth: {
