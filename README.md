@@ -66,6 +66,7 @@ Open terminal from your computer
 
 `- PATCH /auth/logout - Logout a user`
 
+`- GET /trips/myRequest - view all my request history`
 ### Raising an issue
 Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create an issue about this app
 

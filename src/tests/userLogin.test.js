@@ -12,7 +12,7 @@ const usersignIn = () => {
       chai
         .request(app)
         .post('/api/v1/auth/login')
-        .send(mockData.loginSuccessfully)
+        .send(mockData.user1)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           done();

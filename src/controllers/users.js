@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import localStorage from 'localStorage';
 import environment from 'dotenv';
 import models from '../db/models';
 import generateToken from '../utils/generateToken';
@@ -9,7 +10,6 @@ import {
   getPasswordResetURL,
   resetPasswordTemplate,
 } from '../modules/email';
-import localStorage from 'localStorage'
 
 environment.config();
 
@@ -35,14 +35,28 @@ export default class usersController {
      userId: newUser.id, 
      email: newUser.email, 
      firstName, lastName,
-    });
+    }, process.env.SECRETKEY);
+
     localStorage.setItem('token', token);
-    res.status(201).json({ message: 'user successfully created', token });
+
+    return res.status(201).json({ message: 'user successfully created', token });
     }catch (error) {
-    return res.status(409).json({
-      status: 409,
-      error: 'user already exits. Please try again with a different email or passportNumber address',
-    });
+    if(error.errors[0].message === 'email must be unique'){
+      return res.status(409).json({
+        status: 409,
+        error: `${req.body.email} have already signed up`
+      })
+    } else if(error.errors[0].message === 'passport must be unique'){
+      return res.status(409).json({
+        status: 409,
+        error: 'passportNumber was used before'
+      })
+    } else{
+      return res.status(500).json({
+        status: 500,
+        error: error.message
+      });
+    }
     }
   }
   static async login(request, response) {
@@ -60,8 +74,10 @@ export default class usersController {
       email: existUser.email,
       firstName: existUser.firstName,
       lastName: existUser.lastName,
-    });
+    }, process.env.SECRETKEY);
+
     localStorage.setItem('token', token);
+
     return response.status(200).json({ status: 200, 
       message: 'Successfully login', token });
     }
@@ -117,7 +133,7 @@ export default class usersController {
         });
     } catch (error) {
       res.status(500).json({
-        error,
+        error: error.message,
       });}
     }
 
