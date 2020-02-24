@@ -66,7 +66,10 @@ Open terminal from your computer
 
 `- PATCH /auth/logout - Logout a user`
 
-`- GET /trips/myRequest - view all my request history`
+`- GET /trips/myRequest - View all my request history`
+
+`- POST /trips/returnTrip - Create a two way trip.`
+
 ### Raising an issue
 Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create an issue about this app
 

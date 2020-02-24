@@ -22,7 +22,6 @@ app.use(passport.initialize());
 app.use(translator);
 app.get('/', (req, res) => res.json(res.__('Welcome to Barefoot Nomad')));
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use('/api/v1', users);
-app.use('/api/v1', trips);
+app.use('/api/v1', [users, trips]);
 
 export default app;

@@ -1,7 +1,7 @@
 
 module.exports = {
   up: (queryInterface) => queryInterface.bulkInsert('Requests', [{
-    userId: 1,
+    requesterId: 4,
     type: 'one',
     reason: 'partner engagment',
     destination: 'Lagos',
@@ -11,7 +11,7 @@ module.exports = {
     createdAt: new Date(),
     updatedAt: new Date()
   }, {
-    userId: 2,
+    requesterId: 4,
     type: 'two',
     reason: 'partner engagment',
     destination: 'Kampala',

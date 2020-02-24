@@ -1,6 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import jwt from 'jsonwebtoken';
+import localStorage from 'localStorage';
 import app from '../app';
 import mockData from './mockData';
 

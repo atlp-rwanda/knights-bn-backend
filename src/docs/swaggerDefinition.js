@@ -4,7 +4,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'Barefoot Nomad - Making travel and accomodation easy and convenient.',
   },
-  host: 'localhost:4000',
+  host: 'https://knights-bn-backend-staging.herokuapp.com',
   basePath: '/api/v1',
   securityDefinitions: {
     bearerAuth: {
