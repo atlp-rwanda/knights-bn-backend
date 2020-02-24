@@ -1,0 +1,44 @@
+{
+  "name": "knights-bn-backend-staging",
+  "scripts": {},
+  "env": {
+    "SECRETKEY": {
+      "required": true
+    },
+    "sendgridKey": {
+      "required": true
+    },
+    "GOOGLE_CLIENT_ID": {
+      "required": true
+    },
+    "GOOGLE_CLIENT_SECRET": {
+      "required": true
+    },
+    "GOOGLE_CALLBACK_URL": {
+      "required": true
+    },
+    "FCBK_CLIENT_ID": {
+      "required": true
+    },
+    "FCBK_CLIENT_SECRET": {
+      "required": true
+    },
+    "FCBK_CALLBACK_URL": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "stack": "heroku-18"
+}

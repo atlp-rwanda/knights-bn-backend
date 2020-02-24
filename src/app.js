@@ -6,9 +6,9 @@ import passport from 'passport';
 import swaggerDefinition from './docs/swaggerDefinition';
 import users from './routes/users';
 import trips from './routes/trips';
+import translator from './translator';
 
 const app = express();
-
 const newSwaggerDef = {
   swaggerDefinition,
   apis: [`${__dirname}/models/*.js`, `${__dirname}/routes/*.js`],
@@ -19,6 +19,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 
+app.use(translator);
+app.get('/', (req, res) => res.json(res.__('Welcome to Barefoot Nomad')));
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/v1', users);
 app.use('/api/v1', trips);

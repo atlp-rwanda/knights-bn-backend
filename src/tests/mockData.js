@@ -137,5 +137,4 @@ const mockData = {
     token: 'invalid',
   }
 };
-
 export default mockData;
