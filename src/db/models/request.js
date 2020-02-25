@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     destination: DataTypes.STRING,
     status: DataTypes.STRING,
     departureDate: DataTypes.DATE,
-    returnDate: DataTypes.DATE
+    returnDate: DataTypes.DATE,
+    cities: DataTypes.ARRAY(DataTypes.JSON),
   }, {});
   Request.associate = (models) => {
   };

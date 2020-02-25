@@ -5,11 +5,13 @@ import userProfileInformation from './getUserAnEditProfileInfo.test';
 import twoWayTrip from './twoWayTrip.test';
 import rejectRequest from './rejectRequest.test';
 import socialLogin from './socialLogin.test';
+import muliltiRequest from './multicityRequest.test';
 
 signUpTest();
 userLoginTest();
 userProfileInformation();
 twoWayTrip();
+muliltiRequest();
 allRequestTest();
 rejectRequest();
 socialLogin();

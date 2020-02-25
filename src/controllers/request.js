@@ -187,4 +187,22 @@ export default class usersController {
             })
         }
     }
+
+  static async createMultiCityRequest(req,res){
+   try{
+    const requester = await models.User.findOne({where:{id:req.user.id}});
+    if(requester.lineManager === null) return res.status(400).json({status:404, error:'Update your profile to include your line manager email'})
+    const {lineManager} = requester;
+    const manager = await models.User.findOne({where:{email:lineManager}});
+    if(manager === 'null') return res.status(404).json({status:404, error:'It seems your manager is not avilable in the system'})
+    req.body.requesterId = req.user.id;
+    req.body.managerId = manager.id;
+    req.body.status = 'pending';
+    const multiCity = await models.Request.create(req.body);
+    return res.status(201).json({status:201, message:'Your request has successfully created', data:multiCity});
+   }catch(error){
+    return res.status(500).json({status:500, error});
+   }
+  }
+  
 }

@@ -35,7 +35,8 @@ module.exports = {
     clientId: null,
     createdAt: new Date(),
     updatedAt: new Date()
-  }, {
+  },
+  {
     firstName: 'William',
     lastName: 'Ishimwe',
     gender: 'male',
@@ -44,6 +45,20 @@ module.exports = {
     password: '$2b$10$l05Anqm8ZkiTZiJPzDtjouorkUjPkzX1MqKau28V2nRHiiX3qpW2e',
     role: 'requester',
     method: 'standard',
+    clientId: null,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    firstName: 'david',
+    lastName: 'Himbara',
+    gender: 'male',
+    email: 'multi-city@gmail.com',
+    passport: 'ml846531',
+    password: '$2b$10$l05Anqm8ZkiTZiJPzDtjouorkUjPkzX1MqKau28V2nRHiiX3qpW2e',
+    role: 'requester',
+    method: 'standard',
+    lineManager: 'eugene.munyampundu@gmail.com',
     clientId: null,
     createdAt: new Date(),
     updatedAt: new Date()

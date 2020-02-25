@@ -7,6 +7,10 @@ const mockData = {
     email: 'nameless@gmail.com',
     password: 'Password@1'
   },
+  loginNewUser: {
+    email: 'multi-city@gmail.com',
+    password: 'Niyonkuru@1'
+  },
   loginX: {
     email: 'brftnomad@gmail.com',
     password: 'Niyonkuru@1'
@@ -186,25 +190,47 @@ const mockData = {
   },
   wrongPerson: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzLCJlbWFpbCI6ImV1Z2VuZW11MjIzQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6Ik5peW9uc2VuZ2EiLCJsYXN0TmFtZSI6IkVyaWMiLCJpYXQiOjE1ODI0MDU5NDd9.C8IPYyods5ApXxm-Q5fGOT4s7pMsSjw82Pm--zKaL3g',
   multiCityRequest: {
-    user: 'rwanda2020@gmail.com',
-    type: 'multcity',
-    reason: 'partner engagment',
-    destination: 'kigali',
-    status: 'pending',
-    departureDate: '2020-07-01',
-    returnDate: '2020-09-02',
+    origin: 'New york',
+    destination: 'East Africa',
+    departureDate: '2020-04-28',
+    returnDate: '2022-09-30',
+    accommodation: 'XYZ campus',
+    type: 'multi_way',
+    reason: 'Reaseach',
+    passportNumber: '12345677',
     cities: [
       {
-        nane: 'kigali',
-        from: '2020-2-20',
-        to: '2020-2-23'
+        name: 'kigali',
+        from: '2020-05-02',
+        to: '2020-08-31'
       },
       {
-        nane: 'Nairobi',
-        from: '2020-2-23',
-        to: '2020-2-26'
+        name: 'kigali',
+        from: '2020-06-02',
+        to: '2020-09-08'
       }
     ]
   },
+  wrongMultiCityRequest: {
+    destination: 'East Africa',
+    departureDate: '2020-02-28',
+    returnDate: '2020-03-30',
+    accommodation: 'XYZ campus',
+    type: 'mult',
+    reason: 'Having fun',
+    passportNumber: '12345677',
+    cities: [
+      {
+        name: 'kigali',
+        from: '2020-7-2',
+        to: '2020-7-30'
+      },
+      {
+        name: 'Nairobi',
+        from: '2020-8-1',
+        to: '2020-8-31'
+      }
+    ]
+  }
 };
 export default mockData;
