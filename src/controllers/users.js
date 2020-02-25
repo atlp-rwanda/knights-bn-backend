@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import localStorage from 'localStorage';
 import environment from 'dotenv';
 import models from '../db/models';
-import generateToken from '../utils/generateToken';
+import generateTokens from '../utils/generateToken';
 import generatePswd from '../utils/randomPswd';
 import usePasswordHashToMakeToken from '../helpers/helpers';
 import {
@@ -31,7 +31,7 @@ export default class usersController {
       password: hashedPassword, 
       passport: passportNumber,
     });
-   const token = generateToken({
+   const token = generateTokens({
      userId: newUser.id, 
      email: newUser.email, 
      firstName, lastName,
@@ -59,28 +59,33 @@ export default class usersController {
     }
     }
   }
-  static async login(request, response) {
-    const { email, password } = request;
-    const existUser = await models.User.findOne({ where: { email } });
-    if (existUser === null) return response.status(404).json({ status: 404, 
-    message: 'Seems you do not have an account! Create it now' });
+  static async login(req, res) {
+    try{
+      const { email, password } = req;
+      const existUser = await models.User.findOne({ where: { email } });
+      if (existUser === null) return res.status(404).json({ status: 404, 
+      message: 'Seems you do not have an account! Create it now' });
+  
+      const passwordMatch = await bcrypt.compare(password, existUser.password);
+      if (!passwordMatch) return res.status(401).json({ status: 401, 
+      message: 'Invalid credentials' });
+  
+      const token = generateTokens({
+        userId: existUser.id,
+        email: existUser.email,
+        firstName: existUser.firstName,
+        lastName: existUser.lastName,
+      }, process.env.SECRETKEY);
+  
+      localStorage.setItem('token', token);
+  
+      return res.status(200).json({ status: 200, 
+        message: 'Successfully login', token });
 
-    const passwordMatch = await bcrypt.compare(password, existUser.password);
-    if (!passwordMatch) return response.status(401).json({ status: 401, 
-    message: 'Invalid credentials' });
-
-    const token = generateToken({
-      userId: existUser.id,
-      email: existUser.email,
-      firstName: existUser.firstName,
-      lastName: existUser.lastName,
-    }, process.env.SECRETKEY);
-
-    localStorage.setItem('token', token);
-
-    return response.status(200).json({ status: 200, 
-      message: 'Successfully login', token });
-    }
+    }catch(err){
+      return res.status(500).json({ error: err });
+      }
+  }
   static async socialLogin(req, res) {
     try {
       const { User } = models;
@@ -111,7 +116,7 @@ export default class usersController {
       })
         .spread((user, created) => {
           if (user) {
-            const token = generateToken({
+            const token = generateTokens({
               userId: user.id,
               email: user.email,
               firstName: user.firstName,

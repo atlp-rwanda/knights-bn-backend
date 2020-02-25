@@ -1,8 +1,10 @@
 import sgMail from '@sendgrid/mail';
+import dotenv from 'dotenv';
 
+dotenv.config();
 
-sgMail.setApiKey(process.env.BN_API_KEY);
-export const getPasswordResetURL = (user, token) => `localhost:4000/api/v1/password/reset/${user.id}/${token}`;
+sgMail.setApiKey(process.env.sendgridKey);
+export const getPasswordResetURL = (user, token) => `${process.env.HOST_NAME}/api/v1/password/reset/${user.id}/${token}`;
 
 export const resetPasswordTemplate = (user, url) => {
   const msg = {

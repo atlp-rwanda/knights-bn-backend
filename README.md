@@ -52,9 +52,9 @@ Open terminal from your computer
 3. Run `npm run createTables` to create your database tables.
 4. Run `npm test` to test automatically if the is functioning properly as expected
 5. Run `npm start` to run the app in development environment. 
-6. copy URL`localhost:4000/api/v1/docs` to the browser for the API Documentation.
+6. copy URL`https://knights-bn-backend-staging.herokuapp.com/api/v1/docs` to the browser for the API Documentation.
 
-7. copy URL`localhost:4000/api/v1/` to postman to start testing the endpoints.
+7. copy URL`https://knights-bn-backend-staging.herokuapp.com/api/v1/` to postman to start testing the endpoints.
 ### API endpoints
 `- POST /auth/signup - Create user account`
 
