@@ -1,7 +1,10 @@
+
+import { config } from 'dotenv';
+
+config();
+
 export default (req, res, next) => {
   const { email, password } = req.body;
-
-
   if ((typeof email !== 'undefined') && (typeof password !== 'undefined')) {
     const user = email.split(' ').join('').trim();
     const UserPassword = password.split(' ').join('').trim();

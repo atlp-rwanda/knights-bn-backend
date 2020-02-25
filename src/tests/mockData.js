@@ -28,24 +28,24 @@ const mockData = {
     lastName: 'Eric',
     gender: 'male ',
     passportNumber: '12345678',
-    email: 'maa@gmail.com',
-    password: 'Niyonkuru1',
+    email: 'byit@gmail.com',
+    password: 'Niyonkuru@1'
   },
   incorectFirstName: {
     firstName: 'Niyonsenga@',
     lastName: 'Eric',
     gender: 'male ',
     passportNumber: '1234incofn',
-    email: 'incorectFirstName@gmail.com',
-    password: 'Niyonkuru1',
+    email: 'byit@gmail.com',
+    password: 'Niyonkuru@1'
   },
   incorectlastName: {
     firstName: 'Niyonsenga',
     lastName: 'Eric@',
     gender: 'male ',
     passportNumber: '1bx45x7ii',
-    email: 'mub@gmail.com',
-    password: 'Niyonkuru1',
+    email: 'byit@gmail.com',
+    password: 'Niyonkuru@1'
   },
   incorectEmail: {
     firstName: 'Niyonsenga',
@@ -60,8 +60,8 @@ const mockData = {
     lastName: 'Eric',
     gender: 'male ',
     passportNumber: '1bx',
-    email: 'nn@gmail.com',
-    password: 'Niyonkuru@1',
+    email: 'byit@gmail.com',
+    password: 'Niyonkuru@1'
   },
   newPassword:
   {
@@ -69,7 +69,7 @@ const mockData = {
     confirmPassword: 'Budha@1914324235345d',
   },
   token: {
-    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU4MTY4MjQ4NiwiZXhwIjoxNTgxNjg2MDg2fQ.o9LBKfCcoFdh7ivp6hQzBY9Ywd0cExVz_Ljn5aqr8UM'
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZXVnZW5lbXU1N0BnbWFpbC5jb20iLCJmaXJzdE5hbWUiOiJOaXlvbnNlbmdhIiwibGFzdE5hbWUiOiJFcmljIiwiaWF0IjoxNTgyMzY1MjkwfQ.bKydmQLZ0dZiqdc9rMLtKjdSCrmNJ7dB9GUmHt2J1Gc',
   },
   invalidNewPassword1:
   {
@@ -135,6 +135,38 @@ const mockData = {
   },
   invalidToken: {
     token: 'invalid',
-  }
+  },
+
+  updateProfile: {
+    language: 'English',
+    birthDay: '12/5/067',
+    currency: '£uro',
+    homeTown: 'kigali',
+    department: 'IT',
+    lineManager: 'Reporter',
+    biography: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+  },
+  wrongPerson: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzLCJlbWFpbCI6ImV1Z2VuZW11MjIzQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6Ik5peW9uc2VuZ2EiLCJsYXN0TmFtZSI6IkVyaWMiLCJpYXQiOjE1ODI0MDU5NDd9.C8IPYyods5ApXxm-Q5fGOT4s7pMsSjw82Pm--zKaL3g',
+  multiCityRequest: {
+    user: 'rwanda2020@gmail.com',
+    type: 'multcity',
+    reason: 'partner engagment',
+    destination: 'kigali',
+    status: 'pending',
+    departureDate: '2020-07-01',
+    returnDate: '2020-09-02',
+    cities: [
+      {
+        nane: 'kigali',
+        from: '2020-2-20',
+        to: '2020-2-23'
+      },
+      {
+        nane: 'Nairobi',
+        from: '2020-2-23',
+        to: '2020-2-26'
+      }
+    ]
+  },
 };
 export default mockData;
