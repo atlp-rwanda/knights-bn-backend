@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-expressions */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../app';
+
 chai.use(chaiHttp);
 const { expect } = chai;
 const testResponseBody = (err, res) => {
@@ -20,8 +22,8 @@ describe('Test Google login', () => {
       .get('/api/v1/auth/test/google')
       .end((err, res) => {
         testResponseBody(err, res);
-        done();
       });
+    done();
   });
   it('should return 200 if user already exists', (done) => {
     chai
@@ -29,10 +31,10 @@ describe('Test Google login', () => {
       .get('/api/v1/auth/test/google')
       .end((err, res) => {
         testResponseBody(err, res);
-        done();
       });
+    done();
   });
-}),
+});
 describe('Test Facebook login', () => {
   it('should return 201 if a new user', (done) => {
     chai
@@ -40,16 +42,16 @@ describe('Test Facebook login', () => {
       .get('/api/v1/auth/test/facebook')
       .end((err, res) => {
         testResponseBody(err, res);
-        done();
       });
-  }),
+    done();
+  });
   it('should return 200 if user already exists', (done) => {
     chai
       .request(app)
       .get('/api/v1/auth/test/facebook')
       .end((err, res) => {
         testResponseBody(err, res);
-        done();
       });
+    done();
   });
 });

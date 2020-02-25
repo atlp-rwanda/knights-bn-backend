@@ -185,12 +185,12 @@ export default class usersController {
               });
             });
           } else {
-            res.status(401).json({ error: 'password does not match' });
+            return res.status(401).json({ error: 'password does not match' });
           }
         }
       });
     } catch (error) {
-      res.status(401).json({ error: 'invalid token' });
+      return res.status(401).json({ error: 'invalid token' });
     }
   }
   static async logout(req, res) {

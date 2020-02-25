@@ -1,12 +1,15 @@
 import express from 'express';
 import passport from 'passport';
 import usersController from '../controllers/users';
-import validateLogin from '../middlewares/userLoginValidation';
+import userLoginValidation from '../middlewares/userLoginValidation';
 import userValidation from '../middlewares/newUser';
-
 import passportConfig from '../config/passport';
 import fakeUser from '../mockData/fakeUser';
 import auth from '../middlewares/checkAuth';
+
+
+import userProfile from '../controllers/userProfile';
+import imageMiddleware from '../middlewares/imageUpload';
 
 const router = express.Router();
 const {
@@ -171,7 +174,6 @@ router.get('/auth/test/facebook', fakeUser, socialLogin);
         "tags": [
           "User"
         ],
-        "operationId": "Login",
         "deprecated": false,
         "produces": [
           "application/json"
@@ -206,7 +208,137 @@ router.get('/auth/test/facebook', fakeUser, socialLogin);
     }
  */
 
-router.post('/auth/login', validateLogin, login);
+/**
+ * @swagger
+ *  "/user/profile": {
+      "get": {
+        "description": "Let user view his/her profile information",
+        "summary": "user profile",
+        "tags": [
+          "User"
+        ],
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+ */
+/**
+ * @swagger
+ *  "/edit/user/profile": {
+      "patch": {
+        "description": "Let user to edit his/her own profile information",
+        "summary": "edit profile information",
+        "tags": [
+          "User"
+        ],
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+           {
+            "name": "firstName",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "lastName",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": ""
+          },
+           {
+            "name": "passportNumber",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": ""
+          },
+           {
+            "name": "gender",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "language",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "birthDay",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": "yyy-mm-dd"
+          },
+          {
+            "name": "currency",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "homeTown",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "department",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "lineManager",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+           {
+            "name": "biography",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+           {
+            "name": "profileImage",
+            "in": "formData",
+            "required": false,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+ */
+router.post('/auth/signup', userValidation.signUp, registerUser);
+router.post('/auth/login', userLoginValidation, login);
+router.get('/user/profile', auth.auth, userProfile.getProfileInformation);
+router.patch('/edit/user/profile', auth.auth, imageMiddleware.single('profileImage'), userProfile.changeMyProfileInfo);
+
 
 /**
  * @swagger
@@ -328,5 +460,6 @@ router.patch('/password/reset/:id/:token', userValidation.reset, resetPassword);
     }
   */
 router.patch('/auth/logout', auth.auth, logout);
+
 
 export default router;

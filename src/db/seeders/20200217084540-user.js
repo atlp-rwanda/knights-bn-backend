@@ -6,7 +6,7 @@ module.exports = {
     email: 'manzipatr@gmail.com',
     passport: '12345ohc',
     password: '$2b$10$l05Anqm8ZkiTZiJPzDtjouorkUjPkzX1MqKau28V2nRHiiX3qpW2e',
-    method: null,
+    method: 'standard',
     clientId: null,
     createdAt: new Date(),
     updatedAt: new Date()
@@ -17,7 +17,7 @@ module.exports = {
     email: 'willishimw@gmail.com',
     passport: 'nkhydf65',
     password: '$2b$10$l05Anqm8ZkiTZiJPzDtjouorkUjPkzX1MqKau28V2nRHiiX3qpW2e',
-    method: null,
+    method: 'standard',
     clientId: null,
     createdAt: new Date(),
     updatedAt: new Date()

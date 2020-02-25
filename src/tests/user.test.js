@@ -17,32 +17,13 @@ const userSignUp = () => {
           done();
         });
     });
-    it('it should return 201 on successful signup, second user', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/auth/signup')
-        .send(mockData.user10)
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(201);
-          done();
-        });
-    });
-    it('it should return 201 on successful signup, second user', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/auth/signup')
-        .send(mockData.user5)
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(201);
-          done();
-        });
-    });
     it('it should return 409 if user exists', (done) => {
       chai
         .request(app)
         .post('/api/v1/auth/signup')
         .send(mockData.user1)
         .end((err, res) => {
+          console.log(`signup in signup : ${JSON.stringify(res.body)}`);
           expect(res.statusCode).to.equal(409);
           expect(res.body.error).to.equal(`${mockData.user1.email} have already signed up`);
           done();
@@ -56,8 +37,8 @@ const userSignUp = () => {
         .end((err, res) => {
           expect(res.statusCode).to.equal(422);
           expect(res.body.error).to.equal('firstName should have a minimum of 3 characters, no symbols allowed and no space inbetween');
-          done();
         });
+      done();
     });
     it('it should return 422 for invalid lastName', (done) => {
       chai
@@ -67,8 +48,8 @@ const userSignUp = () => {
         .end((err, res) => {
           expect(res.statusCode).to.equal(422);
           expect(res.body.error).to.equal('lastName should have a minimum of 3 characters, no symbols allowed and no space inbetween');
-          done();
         });
+      done();
     });
     it('it should return 422 for invalid email', (done) => {
       chai
@@ -78,8 +59,8 @@ const userSignUp = () => {
         .end((err, res) => {
           expect(res.statusCode).to.equal(422);
           expect(res.body.error).to.equal(' email must be a valid email');
-          done();
         });
+      done();
     });
     it('it should return 422 for invalid email', (done) => {
       chai
@@ -89,8 +70,8 @@ const userSignUp = () => {
         .end((err, res) => {
           expect(res.statusCode).to.equal(422);
           expect(res.body.error).to.equal('passportNumber should be made of 8 or 9 alphanumeric characters, no symbols allowed and no space inbetween');
-          done();
         });
+      done();
     });
   });
   describe('reset user password via email.(POST) ', () => {
@@ -101,8 +82,8 @@ const userSignUp = () => {
         .send()
         .end((err, res) => {
           expect(res.statusCode).to.equal(422);
-          done();
         });
+      done();
     });
     it('it should return 422 for invalid new email password input', (done) => {
       chai
@@ -111,8 +92,8 @@ const userSignUp = () => {
         .send()
         .end((err, res) => {
           expect(res.statusCode).to.equal(422);
-          done();
         });
+      done();
     });
     it('it should return 401 for invalid password', (done) => {
       chai
@@ -121,8 +102,8 @@ const userSignUp = () => {
         .send(mockData.newPassword)
         .end((err, res) => {
           expect(res.statusCode).to.equal(401);
-          done();
         });
+      done();
     });
     it('it should return 422 for invalid new email confirmationPassword input', (done) => {
       chai
@@ -131,8 +112,8 @@ const userSignUp = () => {
         .send(mockData.invalidNewPassword1)
         .end((err, res) => {
           expect(res.statusCode).to.equal(422);
-          done();
         });
+      done();
     });
     it('it should return 200 when the email is send', (done) => {
       chai
@@ -141,8 +122,8 @@ const userSignUp = () => {
         .send(mockData.email)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
-          done();
         });
+      done();
     });
     it('it should return 404 when the user does not exist in the system', (done) => {
       chai
@@ -151,8 +132,8 @@ const userSignUp = () => {
         .send({ email: 'codenightt@gmail.com' })
         .end((err, res) => {
           expect(res.statusCode).to.equal(404);
-          done();
         });
+      done();
     });
     it('it should return 401 for the invalid token', (done) => {
       chai
@@ -161,8 +142,8 @@ const userSignUp = () => {
         .send(mockData.newPassword)
         .end((err, res) => {
           expect(res.statusCode).to.equal(401);
-          done();
         });
+      done();
     });
     it('it should return 202 when password is successfully ', (done) => {
       const { token } = mockData.token;
@@ -172,8 +153,8 @@ const userSignUp = () => {
         .send(mockData.newPassword)
         .end((err, res) => {
           expect(res.statusCode).to.equal(202);
-          done();
         });
+      done();
     });
   });
 };
