@@ -28,7 +28,7 @@ const mockData = {
     lastName: 'Eric',
     gender: 'male',
     passportNumber: '67uh09re',
-    email: 'eugenemu57@gmail.com',
+    email: 'niyeric11@gmail.com',
     password: 'Niyonkuru@1'
   },
   user10: {
@@ -85,7 +85,7 @@ const mockData = {
     confirmPassword: 'Budha@1914324235345d',
   },
   token: {
-    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZXVnZW5lbXU1N0BnbWFpbC5jb20iLCJmaXJzdE5hbWUiOiJOaXlvbnNlbmdhIiwibGFzdE5hbWUiOiJFcmljIiwiaWF0IjoxNTgyMzY1MjkwfQ.bKydmQLZ0dZiqdc9rMLtKjdSCrmNJ7dB9GUmHt2J1Gc',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTgyNjQ4ODg4LCJleHAiOjE1ODI2NTI0ODh9.7AMsqKFdwWA08O3jGjjJTLAKR_ShWc7edjuKC9jbBiY',
   },
   invalidNewPassword1:
   {
@@ -94,7 +94,7 @@ const mockData = {
   },
   email:
   {
-    email: 'willishimw@gmail.com',
+    email: 'byit@gmail.com',
   },
   user2: {
     email: 'kgali@gmail.com',
@@ -152,7 +152,14 @@ const mockData = {
   invalidToken: {
     token: 'invalid',
   },
-
+  managerLogin: {
+    email: 'eugene.munyampundu@gmail.com',
+    password: 'Niyonkuru@1'
+  },
+  managerLogin2: {
+    email: 'knights@gmail.com',
+    password: 'Niyonkuru@1'
+  },
   updateProfile: {
     language: 'English',
     birthDay: '12/5/067',

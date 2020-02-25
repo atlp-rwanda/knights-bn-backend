@@ -1,5 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
+import sinon from 'sinon';
+import sendGrid from '@sendgrid/mail';
 import app from '../app';
 import mockData from './mockData';
 
@@ -115,6 +117,19 @@ const userSignUp = () => {
         });
       done();
     });
+    before(() => {
+      sinon.stub(sendGrid, 'send').returns({
+        to: mockData.email,
+        from: 'no-reply@barefootnomad.com',
+        subject: 'Barefoot Nomad Confirmation email',
+        text: 'Verify Your Email',
+        html: 'emailTemplate'
+      });
+    });
+    after(() => {
+      sinon.restore();
+    });
+
     it('it should return 200 when the email is send', (done) => {
       chai
         .request(app)

@@ -7,7 +7,7 @@ export default async (req, res, next) => {
 try{
     
   const {
-    userId, origin, destination, departureDate, returnDate, reason, accommodation
+    id, origin, destination, departureDate, returnDate, reason, accommodation
   } = req.body;
 
   const Joi = JoiBase.extend(JoiDate);
@@ -34,7 +34,7 @@ try{
         //check whether travelDate is set after the prev requested trip.
         const latestRequest = await models.Request.findAll({
           where : {
-            requesterId: userId
+            requesterId: id
           },
           limit: 1,
           order: [ [ 'returnDate', 'DESC' ]] ,    

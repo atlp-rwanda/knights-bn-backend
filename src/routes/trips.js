@@ -75,7 +75,6 @@
     }
  */
 /**
-/**
  * @swagger
  *   "/trips/myRequest": {
       "get": {
@@ -112,8 +111,37 @@ import verifyToken from '../middlewares/verifyToken';
 
 const router = express.Router();
 
-const { createTwoWayTrip } = requestControllers;
+const { createTwoWayTrip, pendingApproval } = requestControllers;
 router.get('/trips/myRequest', authCheck.auth, request.findAllMyRequest);
 router.post('/trips/returnTrip', verifyToken, validateInputs, createTwoWayTrip);
+
+/**
+ * @swagger
+ *   "/trips/pendingApproval": {
+      "get": {
+        "summary": "Pending_Requests",
+        "tags": [
+          "Trips"
+        ],
+        "operationId": "Pending_Requests",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+ */
+router.get('/trips/pendingApproval', authCheck.auth, pendingApproval);
 
 export default router;
