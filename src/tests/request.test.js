@@ -1,9 +1,10 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
-import jwt from 'jsonwebtoken';
 import app from '../app';
 import mockData from './mockData';
+import returnTripMock from '../mockData/twoWayTrip';
 
+const { validTrip2 } = returnTripMock;
 chai.use(chaiHttp);
 chai.should();
 
@@ -13,12 +14,25 @@ const userSignUp = () => {
       chai
         .request(app)
         .post('/api/v1/auth/login')
-        .send(mockData.loginSuccessfully)
+        .send(mockData.user1)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           done();
         });
     });
+    it('should return 200 on successful created request ', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/trips/returnTrip')
+        .send(validTrip2)
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body).to.have.property('message').that.equals('request created on success!');
+          expect(res.body).to.have.property('status').that.equals('pending');
+          done();
+        });
+    });
+
     it('it should return 200 if requests exists', (done) => {
       chai
         .request(app)
@@ -26,6 +40,16 @@ const userSignUp = () => {
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           expect(res.body.message).to.equal('List of requests');
+        });
+      done();
+    });
+    it('it should return 201 if user exists', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/signup')
+        .send(mockData.user10)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(201);
           done();
         });
     });
@@ -46,8 +70,8 @@ const userSignUp = () => {
         .end((err, res) => {
           expect(res.statusCode).to.equal(404);
           expect(res.body.message).to.equal('No request found');
-          done();
         });
+      done();
     });
   });
 };

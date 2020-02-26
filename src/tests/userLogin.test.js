@@ -7,11 +7,21 @@ chai.use(chaiHttp);
 chai.should();
 const usersignIn = () => {
   describe('Athentication.(POST) ', () => {
+    it('it should return 201 on successful signup', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/signup')
+        .send(mockData.userX)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(201);
+          done();
+        });
+    });
     it('it should return 200 on successful signIn', (done) => {
       chai
         .request(app)
         .post('/api/v1/auth/login')
-        .send(mockData.user1)
+        .send(mockData.loginX)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           done();
@@ -49,6 +59,16 @@ const usersignIn = () => {
     });
   });
   describe('User Logout', () => {
+    it('it should return 200 on successful signIn', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/login')
+        .send(mockData.login1)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          done();
+        });
+    });
     it('it should return 200 on successful logout', (done) => {
       chai
         .request(app)
@@ -75,7 +95,7 @@ const usersignIn = () => {
       chai
         .request(app)
         .post('/api/v1/auth/login')
-        .send(mockData.loginSuccessfully)
+        .send(mockData.user1)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           expect(res.body.message).to.equal('Successfully login');
