@@ -17,8 +17,8 @@ const userProfile = () => {
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           expect(res.body.user).to.be.an('object');
-          done();
         });
+      done();
     });
 
     it('it should return 200 and object of user object for updated successfully ', (done) => {
@@ -29,8 +29,8 @@ const userProfile = () => {
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           expect(res.body.user).to.be.an('object');
-          done();
         });
+      done();
     });
 
     it('it should return 200 and object of user object for updated successfully ', (done) => {
@@ -41,8 +41,8 @@ const userProfile = () => {
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           expect(res.body.user).to.be.an('object');
-          done();
         });
+      done();
     });
 
     it('it should return 200 when successfully profile image uploaded ', (done) => {
@@ -53,8 +53,8 @@ const userProfile = () => {
         .attach('profileImage', fs.readFileSync('src/tests/mockImages/test.png'), 'test.png')
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
-          done();
         });
+      done();
     });
 
     it('it should return 500 when wrong format image is uploaded ', (done) => {
@@ -65,8 +65,8 @@ const userProfile = () => {
         .attach('profileImage', fs.readFileSync('src/tests/mockImages/fakeimage.txt'), 'fakeimage.txt')
         .end((err, res) => {
           expect(res.statusCode).to.equal(500);
-          done();
         });
+      done();
     });
 
     it('it should return 500 when is not a right person to update profile ', (done) => {

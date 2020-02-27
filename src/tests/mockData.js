@@ -1,9 +1,25 @@
 const mockData = {
+  userX: {
+    firstName: 'nameless',
+    lastName: 'nobobody',
+    gender: 'male',
+    passportNumber: '12348234',
+    email: 'nameless@gmail.com',
+    password: 'Password@1'
+  },
+  loginX: {
+    email: 'nameless@gmail.com',
+    password: 'Password@1'
+  },
   user1: {
     firstName: 'Niyonsenga',
     lastName: 'Eric',
     gender: 'male',
     passportNumber: '78byvttt',
+    email: 'byit@gmail.com',
+    password: 'Niyonkuru@1'
+  },
+  login1: {
     email: 'byit@gmail.com',
     password: 'Niyonkuru@1'
   },
@@ -78,7 +94,7 @@ const mockData = {
   },
   email:
   {
-    email: 'eugenemu57@gmail.com',
+    email: 'willishimw@gmail.com',
   },
   user2: {
     email: 'kgali@gmail.com',
