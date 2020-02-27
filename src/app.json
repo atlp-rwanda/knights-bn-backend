@@ -5,7 +5,7 @@
     "SECRETKEY": {
       "required": true
     },
-    "sendgridKey": {
+    "BN_API_KEY": {
       "required": true
     },
     "GOOGLE_CLIENT_ID": {

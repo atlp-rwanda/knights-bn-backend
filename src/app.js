@@ -4,12 +4,50 @@ import swaggerJsDoc from 'swagger-jsdoc';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import multer from 'multer';
+import socketIo from 'socket.io';
+import dotenv from 'dotenv';
 import swaggerDefinition from './docs/swaggerDefinition';
 import users from './routes/users';
 import trips from './routes/trips';
 import translator from './translator';
+import jwt from './utils/jwt';
 
+dotenv.config();
+
+
+// server
+const port = process.env.PORT || 4000;
 const app = express();
+const server = app.listen(port, () => {
+  console.log(`listening on port ${port} ...`);
+});
+
+const io = socketIo(server);
+
+const connectedClients = {};
+io.use(async (socket, next) => {
+  const { token } = socket.handshake.query;
+  const userData = await jwt.decodeToken(token);
+  if (!userData.error) {
+    const clientKey = Number.parseInt(userData.userId, 10);
+    connectedClients[clientKey] = connectedClients[clientKey] || [];
+    connectedClients[clientKey].push(socket.id);
+  }
+  next();
+});
+app.use((req, res, next) => {
+  req.io = io;
+  req.connectedClients = connectedClients;
+  next();
+});
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+});
+
 const newSwaggerDef = {
   swaggerDefinition,
   apis: [`${__dirname}/models/*.js`, `${__dirname}/routes/*.js`],
@@ -27,5 +65,12 @@ app.get('/', (req, res) => res.json(res.__('Welcome to Barefoot Nomad')));
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/v1', users);
 app.use('/api/v1', trips);
+
+app.use((req, res) => {
+  res.status(404).send({
+    status: 404,
+    error: 'Not Found!',
+  });
+});
 
 export default app;

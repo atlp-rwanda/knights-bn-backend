@@ -6,7 +6,7 @@ module.exports = {
     firstName: 'William',
     lastName: 'Ishimwe',
     gender: 'male',
-    email: 'william.ishimwe@andela.com',
+    email: 'kagororamaxime@gmail.com',
     passport: 'null',
     password: process.env.MANAGER_PSWD,
     role: 'manager',

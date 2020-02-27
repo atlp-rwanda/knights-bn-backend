@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     origin: DataTypes.STRING,
     destination: DataTypes.STRING,
     status: DataTypes.STRING,
+    accommodation: DataTypes.STRING,
     departureDate: DataTypes.DATE,
     returnDate: DataTypes.DATE
   }, {});

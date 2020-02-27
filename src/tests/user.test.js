@@ -23,7 +23,6 @@ const userSignUp = () => {
         .post('/api/v1/auth/signup')
         .send(mockData.user1)
         .end((err, res) => {
-          console.log(`signup in signup : ${JSON.stringify(res.body)}`);
           expect(res.statusCode).to.equal(409);
           expect(res.body.error).to.equal(`${mockData.user1.email} have already signed up`);
           done();

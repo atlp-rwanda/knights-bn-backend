@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-sgMail.setApiKey(process.env.sendgridKey);
+sgMail.setApiKey(process.env.BN_API_KEY);
 export const getPasswordResetURL = (user, token) => `${process.env.HOST_NAME}/api/v1/password/reset/${user.id}/${token}`;
 
 export const resetPasswordTemplate = (user, url) => {
@@ -21,5 +21,9 @@ export const resetPasswordTemplate = (user, url) => {
     <p>–Your friends at Barefoot.</p>
     `,
   };
-  sgMail.send(msg);
+  try {
+    sgMail.send(msg);
+  } catch (error) {
+    console.log(error);
+  }
 };
