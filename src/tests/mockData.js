@@ -152,6 +152,18 @@ const mockData = {
     email: 'rwanda2020@gmail.com',
     password: 'Niyonkuru@1'
   },
+  user11: {
+    firstName: 'Jacques',
+    lastName: 'Ikuzwe',
+    gender: 'male',
+    email: 'jacques@gmail.com',
+    passportNumber: '784567v4',
+    password: 'Password@1',
+  },
+  loginUser11: {
+    email: 'ishimwe@gmail.com',
+    password: 'Password@1',
+  },
   invalidToken: {
     token: 'invalid',
   },

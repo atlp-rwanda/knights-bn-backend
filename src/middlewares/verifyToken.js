@@ -3,7 +3,6 @@ import localStorage from 'localStorage';
 
 const verifyToken = async (req, res, next) => {
   try {  
-      
     const token = localStorage.getItem('token');
    
     if (!token) {
@@ -20,7 +19,7 @@ const verifyToken = async (req, res, next) => {
         error: 'Unauthorized Access',
       });
     }
-    req.body.id = decoded.id;   
+    req.body.id = decoded.id;
     next();
   } catch (err) {
     res.status(401).json({

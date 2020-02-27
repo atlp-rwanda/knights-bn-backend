@@ -60,11 +60,17 @@ Open terminal from your computer
 
 `- POST /auth/login - Signing In a registered user`
 
+`- POST /auth/login/google - Sign-in with Google`
+
+`- POST /auth/login/facebook - Sign-in with Facebook`
+
 `- POST /reset_pw/user -resetting password`
 
 `- PATCH /password/reset/:id/:token - for new password`
 
 `- PATCH /auth/logout - Logout a user`
+
+`- POST /trips/returnTrip - create a two-way trip request`
 
 `- GET /trips/myRequest - view all my request history`
 
@@ -73,6 +79,9 @@ Open terminal from your computer
 `- PATCH /edit/user/profile - For editing user profile`
 
 `- GET /trips/pendingApproval - view Avail Requests for Approval`
+
+`- PATCH /trips/reject/?requestId - view all my request history`
+
 
 ### Raising an issue
 Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create an issue about this app
