@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import environment from 'dotenv';
 import models from '../db/models';
 
@@ -9,7 +8,7 @@ export default class usersController {
   static async createTwoWayTrip(req,res) {
     try{
         const {
-            userId, origin, destination, departureDate, returnDate, reason, accommodation, passportNumber
+            id, origin, destination, departureDate, returnDate, reason, accommodation, passportNumber
           } = req.body;
           
         const managerId = await models.User.findOne({
@@ -18,15 +17,16 @@ export default class usersController {
           if(passportNumber){
             await models.User.update(
                 {passport: passportNumber},
-                {where : { id: userId}}
+                {where : { id}}
               )
         }
           
       const request = await models.Request.create({
         managerId,
-        requesterId: userId,
+        requesterId: id,
         origin,
         destination,
+        status:'pending',
         type: 'two_way',
         departureDate,
         returnDate,
@@ -52,12 +52,12 @@ export default class usersController {
             error: error.errors[0],
             })
         }
-      }
+  }
 
   static async findAllMyRequest(req, res) {
     try{                
     const allMyRequest = await models.Request.findAll({
-        where: { requesterId: `${req.user.userId}` },
+        where: { requesterId: `${req.user.id}` },
       });
     if(allMyRequest.length !== 0){
       return res.status(200).json({ message: 'List of requests', allMyRequest });
@@ -68,6 +68,30 @@ export default class usersController {
     return res.status(500).json({
       status: 500,
       error: error.message
+    });
+    }
+  }
+  static async pendingApproval(req, res) {
+    if (req.user.role !== 'manager')
+    {
+      return res.status(403).json({ error: 'access denied'});
+
+    }
+    try{          
+    const pendingRequests = await models.Request.findAll({
+        where: { managerId: req.user.id,
+      status:'pending'
+      },
+      });       
+    if(pendingRequests.length !== 0){
+      return res.status(200).json({ message: 'Pending requests', pendingRequests });
+    } else{
+      return res.status(404).json({ message: 'No Pending request available'});
+    }    
+    }catch (error) {
+    res.status(500).json({
+      status: 500,
+      error: error
     });
     }
   }

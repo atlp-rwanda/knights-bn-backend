@@ -74,6 +74,58 @@ const userSignUp = () => {
       done();
     });
   });
+  describe('view pending request', () => {
+    it('it should return 403 when a normal user try to access the link', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/trips/pendingApproval')
+        .send()
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(403);
+          done();
+        });
+    });
+    it('it should return 200 on successful signIn', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/login')
+        .send(mockData.managerLogin)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          done();
+        });
+    });
+    it('it should return 200 on successful retrieving pendingApproval', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/trips/pendingApproval')
+        .send()
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          done();
+        });
+    });
+    it('it should return 200 on successful signIn', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/login')
+        .send(mockData.managerLogin2)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          done();
+        });
+    });
+    it('it should return 404 when there is no pendingApproval', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/trips/pendingApproval')
+        .send()
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(404);
+          done();
+        });
+    });
+  });
 };
 
 export default userSignUp;

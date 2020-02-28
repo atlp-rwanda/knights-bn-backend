@@ -20,7 +20,7 @@ const verifyToken = async (req, res, next) => {
         error: 'Unauthorized Access',
       });
     }
-    req.body.userId = decoded.userId;   
+    req.body.id = decoded.id;   
     next();
   } catch (err) {
     res.status(401).json({

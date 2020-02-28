@@ -39,30 +39,11 @@ module.exports = {
       }
     ),
     queryInterface.removeColumn('Requests', 'status'),
-
-    queryInterface.addColumn(
-      'Requests',
-      'status',
-      {
-        type: Sequelize.ENUM('pending', 'approved', 'rejected'),
-        defaultValue: 'pending'
-      }
-    ),
     queryInterface.removeColumn('Requests', 'type'),
-    queryInterface.addColumn(
-      'Requests',
-      'type',
-      {
-        type: Sequelize.ENUM('one_way', 'two_way', 'multi_way'),
-      }
-    ),
-
   ]),
   down: (queryInterface, Sequelize) => Promise.all([
     queryInterface.removeColumn('Requests', 'origin'),
     queryInterface.removeColumn('Requests', 'managerId'),
     queryInterface.removeColumn('Requests', 'requesterId'),
-    queryInterface.removeColumn('Requests', 'status'),
-    queryInterface.removeColumn('Requests', 'type'),
   ])
 };
