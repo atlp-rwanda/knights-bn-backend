@@ -21,4 +21,15 @@ export default class changeUserProfile {
         response.status(200).json({ status: 200, user: returnProfile(user) });
       });
   }
+
+  static async rememberMe(req, res) {
+    try{
+   const userInfo = await models.User.findOne({ where: { id: req.user.id } })
+   const {password, ...rest} = userInfo.dataValues;
+   req.session.profileInfo = rest
+    return res.status(200).send({status:200, message:'Your profile information is saved successfully', data:req.session.profileInfo})
+    } catch(error){
+      return res.status(500).json({status:500, error})
+    }   
+  }
 }

@@ -211,6 +211,30 @@ router.get('/auth/test/facebook', fakeUser, socialLogin);
     }
  */
 
+ /**
+ * @swagger
+ *  "/remembered": {
+      "get": {
+        "description": "Click remember me to be remembered next time",
+        "summary": "remember me button",
+        "tags": [
+          "User"
+        ],
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+ */
+/**
+
 /**
  * @swagger
  *  "/user/profile": {
@@ -341,6 +365,7 @@ router.post('/auth/signup', userValidation.signUp, registerUser);
 router.post('/auth/login', userLoginValidation, login);
 router.get('/user/profile', auth.auth, userProfile.getProfileInformation);
 router.patch('/edit/user/profile', auth.auth, imageMiddleware.single('profileImage'), userProfile.changeMyProfileInfo);
+router.get('/remembered', auth.auth, userProfile.rememberMe);
 
 
 /**
