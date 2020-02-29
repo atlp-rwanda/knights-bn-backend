@@ -35,7 +35,8 @@ const SignUpschema = Joi.object().keys({
   passportNumber: Joi.string()
     .lowercase()
     .trim()
-    .regex(/^[a-zA-Z0-9]{8,9}$/)
+    .min(8)
+    .max(9)
     .required()
 });
 const resetPassword = Joi.object().keys({

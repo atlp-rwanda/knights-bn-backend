@@ -1,4 +1,5 @@
 const returnTrip = {
+
   validTrip: {
     origin: 'Kigali',
     destination: 'Kampala',
@@ -6,7 +7,6 @@ const returnTrip = {
     returnDate: '2021-03-30',
     accommodation: 'XYZ campus',
     reason: 'Having fun',
-    passportNumber: '12345677'
   },
 
   validTrip2: {
@@ -16,7 +16,6 @@ const returnTrip = {
     returnDate: '2022-03-30',
     accommodation: 'XYZ campus',
     reason: 'Having fun',
-    passportNumber: '12345677'
   },
 
   invalidTrip: {
@@ -26,8 +25,25 @@ const returnTrip = {
     returnDate: '2020-03-30',
     accommodation: 'XYZ campus',
     reason: 'Having fun',
-    passportNumber: '12345677'
-  }
+  },
+
+  sameDirection: {
+    origin: 'Rwanda',
+    destination: 'Rwanda',
+    departureDate: '2038-07-20',
+    returnDate: '2039-08-20',
+    accommodation: 'XYZ campus',
+    reason: 'Having fun'
+  },
+
+  invalidDateTrip: {
+    origin: 'Rwanda',
+    destination: 'Rwanda',
+    departureDate: '2038-07-20',
+    returnDate: '2039-08-20',
+    accommodation: 'XYZ campus',
+    reason: 'Having fun'
+  },
 
 };
 

@@ -2,15 +2,16 @@
   "name": "barefoot-nomad",
   "version": "1.0.0",
   "description": "Make travel and accommodation easy and convenient.",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "NODE_ENV=test npm run dropTables && NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all && NODE_ENV=test mocha --require @babel/polyfill --require @babel/register ./src/tests/mainTest.test.js --timeout 10000 --exit",
-    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "test": "NODE_ENV=test npm run migrate && NODE_ENV=test nyc --reporter=html --reporter=text mocha --require @babel/register --timeout 3000 ./src/tests/mainTest.test.js --exit",
+    "coverage": "npm run test  && nyc report --reporter=text-lcov | coveralls",
+    "migrate": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all",
     "dropTables": "sequelize db:migrate:undo:all",
     "createTables": "sequelize db:migrate && sequelize db:seed:all",
     "build": "babel src --out-dir dist --source-maps inline --copy-files",
-    "start": "nodemon dist/index.js",
-    "dev-start": "nodemon --exec babel-node src/index.js"
+    "start": "nodemon dist/app.js",
+    "dev-start": "nodemon --exec babel-node src/app.js"
   },
   "author": "Andela code-knights",
   "license": "MIT",
@@ -40,6 +41,7 @@
     "jsonwebtoken": "^8.5.1",
     "localStorage": "^1.0.4",
     "mailgen": "^2.0.10",
+    "mock-req": "^0.2.0",
     "moment": "^2.24.0",
     "multer": "^1.4.2",
     "nodemon": "^2.0.2",
@@ -54,6 +56,7 @@
     "sequelize": "^5.21.3",
     "sequelize-cli": "^5.5.1",
     "sinon": "^9.0.0",
+    "socket.io": "^2.3.0",
     "swagger-jsdoc": "^3.5.0",
     "swagger-ui-express": "^4.1.3"
   },

@@ -7,11 +7,9 @@ import validateDate from '../helpers/validateDate';
 dotEnv.config();
 
 export default class changeUserProfile {
-  static getProfileInformation(request, response) {
-    models.User.findOne({ where: { id: request.user.id } })
-      .then((myProfile) => {
-        response.status(200).json({ status: 200, user: returnProfile(myProfile) });
-      }).catch((error) => response.status(500).json({ status: 500, error }));
+  static async getProfileInformation(request, response) {
+    const myProfile = await models.User.findOne({ where: { id: request.user.id } })
+        return response.status(200).json({ status: 200, user: returnProfile(myProfile) });
   }
 
   static changeMyProfileInfo(request, response) {
@@ -21,6 +19,6 @@ export default class changeUserProfile {
       .then(() => models.User.findOne({ where: { id: request.user.id } }))
       .then((user) => {
         response.status(200).json({ status: 200, user: returnProfile(user) });
-      }).catch((dbError) => response.status(500).json({ error: 'Database issues', dbError }));
+      });
   }
 }
