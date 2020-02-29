@@ -1,3 +1,5 @@
+import html from './returnNotification';
+
 export default (profileInfo) => ({
   firstName: profileInfo.firstName,
   lastName: profileInfo.lastName,
@@ -16,3 +18,11 @@ export default (profileInfo) => ({
   createdAt: profileInfo.createdAt,
   updatedAt: profileInfo.updatedAt,
 });
+
+export const returnNotification = (allNotifications, newnotification, url) => ({
+  status: 200,
+  badge: allNotifications.length,
+  newnotification: html(newnotification, url),
+  allNotifications: allNotifications.map((notify) => html(notify, url)),
+});
+

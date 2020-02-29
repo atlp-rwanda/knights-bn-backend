@@ -1,11 +1,17 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import localStorage from 'localStorage';
-import app from '../app';
+import sinonChai from 'sinon-chai';
+import { mockReq, mockRes } from 'sinon-express-mock';
+import sinon from 'sinon';
 import mockData from './mockData';
+import app from '../app';
+import rememberme from '../controllers/userProfile';
+import { travelToken } from './accommodation/accommodationMockData';
 
 chai.use(chaiHttp);
 chai.should();
+chai.use(sinonChai);
 
 const remembered = () => {
   describe('UserProfile settings ', () => {
@@ -20,28 +26,20 @@ const remembered = () => {
         });
     });
 
-    it('it should return 200 when profile information strored in cookies successfull  ', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/remembered')
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
-          expect(res.body.data).to.be.an('object');
-          expect(res.body.data).to.have.property('firstName');
-          expect(res.body.message).to.equal('Your profile information is saved successfully');
-        });
-      done();
-    });
-    it('it should return 500 when you are violating database ', (done) => {
-      localStorage.setItem('token', mockData.wrongPerson);
-      chai
-        .request(app)
-        .get('/api/v1/remembered')
-        .end((err, res) => {
-          expect(res.body.error).to.be.an('object');
-          expect(res.statusCode).to.equal(500);
-        });
-      done();
+    it('it should return 200 when profile information strored in cookies successfull  ', async () => {
+      const remembermeStub = sinon.spy(rememberme, 'rememberMe');
+      const request = {
+        body: {},
+        user: {
+          id: 5,
+        },
+      };
+      const req = mockReq(request);
+      const res = mockRes();
+      rememberme.rememberMe(req, res);
+      expect(remembermeStub).calledWith(req, res).to.be.ok;
+      expect(remembermeStub).to.have.been.calledWith(req, res);
+      remembermeStub.restore();
     });
   });
 };

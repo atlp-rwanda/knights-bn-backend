@@ -4,3 +4,4 @@ export default (date) => {
   if (insertedDate.getFullYear() < new Date().getFullYear()) return insertedDate;
   return null;
 };
+

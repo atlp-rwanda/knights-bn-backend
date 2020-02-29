@@ -24,5 +24,13 @@ class accommodationQueries {
     }
     return accommodation;
   }
+
+  static async getAOne(value1, value2, entity) {
+    const result = await entity
+      .findOne({ where: { accommodationName: value2, locationName: value1 } });
+    return result;
+  }
 }
+
 export default accommodationQueries;
+

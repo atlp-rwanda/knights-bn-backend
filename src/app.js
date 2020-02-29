@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-underscore-dangle */
 
 import express from 'express';
@@ -6,7 +7,6 @@ import swaggerJsDoc from 'swagger-jsdoc';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import passport from 'passport';
-import multer from 'multer';
 import cookieParser from 'cookie-parser';
 import sessions from 'express-session';
 import swaggerDefinition from './docs/swaggerDefinition';
@@ -38,12 +38,12 @@ io.use(async (socket, next) => {
 });
 app.use((req, res, next) => {
   req.io = io;
-
   req.connectedClients = connectedClients;
   next();
 });
 
 io.on('connection', (socket) => {
+  global.connect = socket;
   console.log('a user connected');
   socket.on('disconnect', () => {
     console.log('user disconnected');
@@ -58,8 +58,7 @@ const newSwaggerDef = {
 const swaggerSpec = swaggerJsDoc(newSwaggerDef);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-multer({ dest: 'uploads/' });
-app.use('/uploads', express.static('uploads'));
+app.use(express.static('public'));
 app.use(cookieParser());
 app.use(sessions({
   secret: process.env.SECRETKEY,
@@ -70,6 +69,7 @@ app.use(sessions({
     sameSite: true,
   },
 }));
+
 app.use(passport.initialize());
 
 app.use(translator);
@@ -85,5 +85,4 @@ app.use((req, res) => res.status(404).send({
   status: 404,
   error: 'Not Found!',
 }));
-
 export default app;

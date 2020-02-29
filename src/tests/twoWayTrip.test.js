@@ -54,6 +54,7 @@ const testTwoWayTrip = () => {
         .post('/api/v1/auth/login')
         .send(mockData.loginUserWithLineManager2)
         .end((err, res) => {
+          localStorage.setItem('token', res.body.token);
           expect(res.statusCode).to.equal(200);
           done();
         });
@@ -136,8 +137,8 @@ const testTwoWayTrip = () => {
         .end((err, res) => {
           expect(res.status).to.equal(422);
           expect(res.body).to.have.property('error').that.equals('conflicting trip request.');
+          done();
         });
-      done();
     });
     it('should return 401 if no token ', (done) => {
       localStorage.removeItem('token', 0);

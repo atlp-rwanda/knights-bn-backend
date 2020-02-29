@@ -47,6 +47,7 @@ const userSignUp = () => {
         .post('/api/v1/trips/returnTrip')
         .send(validTrip2)
         .end((err, res) => {
+
           expect(res.status).to.equal(201);
           expect(res.body).to.have.property('message').that.equals('request created with success!');
           expect(res.body.data).to.have.property('status').that.equals('pending');

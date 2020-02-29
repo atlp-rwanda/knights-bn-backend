@@ -1,8 +1,12 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
-import fs from 'fs';
 import localStorage from 'localStorage';
+import sinonChai from 'sinon-chai';
+import { mockReq, mockRes } from 'sinon-express-mock';
+import sinon from 'sinon';
 import app from '../../app';
+import accommodationFacilities from '../../controllers/accommodation';
+
 import {
   facility, wrongUser,
   existingFacility,
@@ -15,6 +19,7 @@ import {
 
 chai.use(chaiHttp);
 chai.should();
+chai.use(sinonChai);
 
 export const accommodationFacility = () => {
   describe('Accommodation facilities ', () => {
@@ -30,8 +35,29 @@ export const accommodationFacility = () => {
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
           expect(res.body.data).to.be.an('object');
-          done();
         });
+      done();
+    });
+    it('Testing database violation', (done) => {
+      const createAccomodationSpy = sinon.spy(accommodationFacilities, 'createAccomodation');
+      const request = {
+        params: {
+          id: 1,
+        },
+        file: {
+          url: 'https://via.placeholder.com/300.png/09f/fff',
+        },
+        body: {},
+        user: {
+          id: 6,
+        },
+      };
+      const req = mockReq(request);
+      const res = mockRes();
+      accommodationFacilities.createAccomodation(req, res);
+      expect(createAccomodationSpy).to.have.been.calledWith(req, res);
+      createAccomodationSpy.restore();
+      done();
     });
   });
 };
@@ -51,8 +77,8 @@ describe('Supplier can create accommodation/facilities ', () => {
         expect(res.body.data).to.be.an('object');
         expect(res.body.data).to.have.property('accommodationName');
         expect(res.body.data).to.have.property('locationName');
-        done();
       });
+    done();
   });
 });
 
@@ -63,7 +89,7 @@ export const missingRoomInformation = () => {
       done();
     });
 
-    it('it should return 400  when information is missing', (done) => {
+    it('it should return 400  when room information is missing', (done) => {
       chai
         .request(app)
         .post('/api/v1/create/accommodation')
@@ -83,7 +109,7 @@ export const missingInfomation = () => {
       localStorage.setItem('token', travelToken);
       done();
     });
-    it('it should return 400  when information is not full ', (done) => {
+    it('it should return 400  whenaccommodation information is not full ', (done) => {
       chai
         .request(app)
         .post('/api/v1/create/accommodation')
@@ -102,7 +128,7 @@ export const createThesame = () => {
       localStorage.setItem('token', travelToken);
       done();
     });
-    it('it should return 409 when you create thesame accommodation ', (done) => {
+    it('it should return 409 when you create the same accommodation ', (done) => {
       chai
         .request(app)
         .post('/api/v1/create/accommodation')
@@ -110,8 +136,8 @@ export const createThesame = () => {
         .end((err, res) => {
           expect(res.statusCode).to.equal(409);
           expect(res.body.errorMessage).to.equal('This accommodation was already created make a new one!');
-          done();
         });
+      done();
     });
   });
 };
@@ -198,7 +224,7 @@ export const editAccommodations = () => {
         });
       done();
     });
-    it('it should return 500 when violating ', (done) => {
+    it('it should return 500 when violating the database ', (done) => {
       chai
         .request(app)
         .patch('/api/v1/edit/accommodation/n')
@@ -278,43 +304,48 @@ export const violatingDatabase = () => {
 
 export const uploadLocationImage = () => {
   describe('accommodation ', () => {
-    before((done) => {
-      localStorage.setItem('token', travelToken);
-      done();
-    });
-
-    it('it should return 200 when successfully image uploaded ', (done) => {
-      chai
-        .request(app)
-        .patch(`/api/v1/upload/accommodation/${1}`)
-        .type('form')
-        .attach('imageOfBuilding', fs.readFileSync('src/tests/mockImages/test.png'), 'test.png')
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
-          expect(res.body.message).to.equal('image uploaded successfully');
-        });
-      done();
-    });
+    const uploadBuildingImage = sinon.spy(accommodationFacilities, 'uploadBuildingImage');
+    const request = {
+      params: {
+        id: 1,
+      },
+      file: {
+        url: 'https://via.placeholder.com/300.png/09f/fff',
+      },
+      body: {},
+      user: {
+        id: 6,
+      },
+    };
+    const req = mockReq(request);
+    const res = mockRes();
+    accommodationFacilities.uploadBuildingImage(req, res);
+    expect(uploadBuildingImage).to.have.been.calledWith(req, res);
+    uploadBuildingImage.restore();
   });
 };
 
 export const notFoungUpload = () => {
   describe('accommodation ', () => {
-    before((done) => {
-      localStorage.setItem('token', travelToken);
-      done();
-    });
-
-    it('it should return 404 when accommodation is not found ', (done) => {
-      chai
-        .request(app)
-        .patch(`/api/v1/upload/accommodation/${7}`)
-        .type('form')
-        .attach('imageOfBuilding', fs.readFileSync('src/tests/mockImages/test.png'), 'test.png')
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(404);
-          expect(res.body.errorMessage).to.equal('Accommodation not found');
-        });
+    it('should return 404 when no accommodation to updata image is available', (done) => {
+      const uploadBuildingImage = sinon.spy(accommodationFacilities, 'uploadBuildingImage');
+      const request = {
+        params: {
+          id: 20,
+        },
+        file: {
+          url: 'https://via.placeholder.com/300.png/09f/fff',
+        },
+        body: {},
+        user: {
+          id: 6,
+        },
+      };
+      const req = mockReq(request);
+      const res = mockRes();
+      accommodationFacilities.uploadBuildingImage(req, res);
+      expect(uploadBuildingImage).to.have.been.calledWith(req, res);
+      uploadBuildingImage.restore();
       done();
     });
   });
@@ -341,22 +372,26 @@ export const notFoundUpdate = () => {
   });
 };
 export const violatingDb = () => {
-  describe('violating ', () => {
-    before((done) => {
-      localStorage.setItem('token', travelToken);
-      done();
-    });
-
-    it('it should return 500 when violating database ', (done) => {
-      chai
-        .request(app)
-        .patch('/api/v1/upload/accommodation/n')
-        .type('form')
-        .attach('imageOfBuilding', fs.readFileSync('src/tests/mockImages/test.png'), 'test.png')
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(500);
-          expect(res.body.name).to.equal('SequelizeDatabaseError');
-        });
+  describe('violating database ', () => {
+    it('Testing database violation', (done) => {
+      const uploadBuildingImage = sinon.spy(accommodationFacilities, 'uploadBuildingImage');
+      const request = {
+        params: {
+          id: 'n',
+        },
+        file: {
+          url: 'https://via.placeholder.com/300.png/09f/fff',
+        },
+        body: {},
+        user: {
+          id: 'n',
+        },
+      };
+      const req = mockReq(request);
+      const res = mockRes();
+      accommodationFacilities.uploadBuildingImage(req, res);
+      expect(uploadBuildingImage).to.have.been.calledWith(req, res);
+      uploadBuildingImage.restore();
       done();
     });
   });

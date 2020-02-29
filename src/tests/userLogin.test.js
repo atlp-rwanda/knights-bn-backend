@@ -25,6 +25,7 @@ const usersignIn = () => {
         .send(mockData.loginX)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
+          expect(res.body).to.be.an('object');
           done();
         });
     });

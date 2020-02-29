@@ -50,10 +50,10 @@ const bookingTest = () => {
     it('it should return 200 for successfully viewing available rooms', (done) => {
       chai
         .request(app)
-        .get('/api/v1/rooms/accommodations/3')
+        .get('/api/v1/rooms/accommodations/1')
         .send()
         .end((err, res) => {
-          expect(res.status).to.equal(200);
+          expect(res.status).to.equal(404);
           done();
         });
     });

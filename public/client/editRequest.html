@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <style>
+    form{
+      background-color: bisque;
+      margin-left: 30%;
+      width: 60%;
+      position: absolute;
+    }
+   input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+input[type=submit] {
+  width: 100%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  font-size: 12pt;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+a{
+  color: red;
+  text-decoration: underline;
+}
+#new{
+  font-size: 16pt;
+  background-color: darkorchid;
+  color: white;
+
+}
+
+#response{
+  background-color:darkslateblue;
+  font-size: 16pt;
+  margin-top: 10%;
+   margin-left: 30%;
+  color: white;
+  position:absolute;
+}
+    </style>
+
+    </head>
+    
+    <body>
+      <ul id="notification"></ul>
+      <div id="response">
+      </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.0/socket.io.js"></script>
+        <script src="./notification.js"></script>
+      <script src="./main.js"></script>
+      <script src="./editEvent.js"></script>
+    </body>
+</html>
+
+
