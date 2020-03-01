@@ -84,6 +84,8 @@ Open terminal from your computer
 
 `- POST /trips/request/multicity - For requesting multiple destinations at once`
 
+`- GET /trips/search?filterKey=your search -find Requests through the search functionality`
+
 ### Raising an issue
 Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create an issue about this app
 
