@@ -13,13 +13,15 @@ import imageMiddleware from '../middlewares/imageUpload';
 
 const router = express.Router();
 const {
-  registerUser, resetPassword, forgetPassword, login, socialLogin, logout
+  registerUser, verifyAcccount, resetPassword, forgetPassword, login, socialLogin, logout
 } = usersController;
 /**
  * @swagger
  *  "/auth/signup": {
       "post": {
-        "description": "Users once registered via the registration endpoint, should receive a JWT to be required on all subsequent calls to all other endpoints that require authentication.",
+        "description": "Users once registered via the registration endpoint,
+        they should receive a JWT to be required on all subsequent calls to all other endpoints that require authentication.
+        Also, they should receving an email verification link to their email address they used to sign up. ",
         "summary": "Signup",
         "tags": [
           "User"
@@ -87,6 +89,7 @@ const {
     }
  */
 router.post('/auth/signup', userValidation.signUp, registerUser);
+router.get('/auth/signup/:token', verifyAcccount);
 /**
  * @swagger
  * "/auth/login/google": {

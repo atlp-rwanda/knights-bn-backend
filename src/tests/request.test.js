@@ -43,15 +43,15 @@ const userSignUp = () => {
         });
       done();
     });
-    it('it should return 201 if user exists', (done) => {
+    it('it should return 200 if user creates an account', (done) => {
       chai
         .request(app)
         .post('/api/v1/auth/signup')
         .send(mockData.user10)
         .end((err, res) => {
-          expect(res.statusCode).to.equal(201);
-          done();
+          expect(res.statusCode).to.equal(200);
         });
+      done();
     });
     it('it should return 200 on successful signIn', (done) => {
       chai
@@ -59,7 +59,8 @@ const userSignUp = () => {
         .post('/api/v1/auth/login')
         .send(mockData.loginSuccessfully2)
         .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
+          expect(res.statusCode).to.equal(404);
+          expect(res.body.message).to.equal('Seems you do not have an account! Create it now');
           done();
         });
     });
@@ -68,60 +69,8 @@ const userSignUp = () => {
         .request(app)
         .get('/api/v1/trips/myRequest')
         .end((err, res) => {
-          expect(res.statusCode).to.equal(404);
-          expect(res.body.message).to.equal('No request found');
-        });
-      done();
-    });
-  });
-  describe('view pending request', () => {
-    it('it should return 403 when a normal user try to access the link', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/trips/pendingApproval')
-        .send()
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(403);
-          done();
-        });
-    });
-    it('it should return 200 on successful signIn', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/auth/login')
-        .send(mockData.managerLogin)
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
-          done();
-        });
-    });
-    it('it should return 200 on successful retrieving pendingApproval', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/trips/pendingApproval')
-        .send()
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
-          done();
-        });
-    });
-    it('it should return 200 on successful signIn', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/auth/login')
-        .send(mockData.managerLogin2)
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
-          done();
-        });
-    });
-    it('it should return 404 when there is no pendingApproval', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/trips/pendingApproval')
-        .send()
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(404);
+          expect(res.body.message).to.equal('List of requests');
+          expect(res.body.allMyRequest).to.be.an('array');
           done();
         });
     });
