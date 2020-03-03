@@ -1,7 +1,10 @@
 
+import dotEnv from 'dotenv';
 import models from '../db/models';
 import returnProfile from '../helpers/returnProfileInformation';
 import validateDate from '../helpers/validateDate';
+
+dotEnv.config();
 
 export default class changeUserProfile {
   static getProfileInformation(request, response) {
@@ -13,7 +16,7 @@ export default class changeUserProfile {
 
   static changeMyProfileInfo(request, response) {
     request.body.birthDay = validateDate(request.body.birthDay);
-    request.body.profileImage = (typeof request.file === 'undefined') ? null : `http://localhost:4000/${request.file.path}`;
+    request.body.profileImage = (typeof request.file === 'undefined') ? null : `${process.env.HOST_NAME}/${request.file.path}`;
     models.User.update(request.body, { where: { id: request.user.id } })
       .then(() => models.User.findOne({ where: { id: request.user.id } }))
       .then((user) => {

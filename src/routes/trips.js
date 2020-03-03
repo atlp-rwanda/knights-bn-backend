@@ -74,6 +74,36 @@
       }
     }
  */
+
+/**
+ * @swagger
+ *  "/trips/request/multicity": {
+      "post": {
+        "description": "A user can request to travel to multiple lacations at once",
+        "summary": "multicity request",
+        "tags": [
+          "Trips"
+        ],
+        "operationId": "Trip",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "multicity request",
+            "in": "body",
+            "description": "Create multicity request",
+          }
+        ],
+        "responses": {
+        }
+      }
+    }
+ */
+
 /**
  * @swagger
  *   "/trips/myRequest": {
@@ -102,7 +132,7 @@
     }
  */
 
- /**
+/**
  * @swagger
  *  "/trips/reject/": {
       "patch": {
@@ -179,15 +209,19 @@ import authCheck from '../middlewares/checkAuth';
 import requestControllers from '../controllers/request';
 import validateInputs from '../middlewares/validateReturnTrip';
 import verifyToken from '../middlewares/verifyToken';
+import {
+  validateRequestDate, validateCityDate, tripInformation, multicity, checkIfRequestExists
+} from '../middlewares/validateDate';
 
 
 const router = express.Router();
 
-const { createTwoWayTrip, pendingApproval, rejectRequest } = requestControllers;
+const { createTwoWayTrip, pendingApproval, rejectRequest, createMultiCityRequest } = requestControllers;
 
 router.get('/trips/myRequest', authCheck.auth, request.findAllMyRequest);
 router.post('/trips/returnTrip', verifyToken, validateInputs, createTwoWayTrip);
 router.get('/trips/pendingApproval', authCheck.auth, pendingApproval);
 router.patch('/trips/reject', verifyToken, rejectRequest);
+router.post('/trips/request/multicity', authCheck.auth, validateRequestDate, validateCityDate, tripInformation, multicity, checkIfRequestExists, createMultiCityRequest);
 
 export default router;

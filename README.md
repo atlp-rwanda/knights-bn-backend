@@ -82,6 +82,7 @@ Open terminal from your computer
 
 `- PATCH /trips/reject/?requestId - view all my request history`
 
+`- POST /trips/request/multicity - For requesting multiple destinations at once`
 
 ### Raising an issue
 Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create an issue about this app
