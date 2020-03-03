@@ -2,6 +2,10 @@ import environment from 'dotenv';
 import models from '../db/models';
 import getTodayDate from '../utils/getTodayDate';
 import isObjectEmpty from '../utils/isObjectEmpty';
+import Sequelize from 'sequelize';
+const {
+  Op, where, cast, col
+} = Sequelize;
 
 environment.config();
 

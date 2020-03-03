@@ -207,6 +207,7 @@ import express from 'express';
 import request from '../controllers/request';
 import authCheck from '../middlewares/checkAuth';
 import requestControllers from '../controllers/request';
+import requestsController from '../controllers/searchRequest';
 import validateInputs from '../middlewares/validateReturnTrip';
 import verifyToken from '../middlewares/verifyToken';
 import {
@@ -216,12 +217,60 @@ import {
 
 const router = express.Router();
 
-const { createTwoWayTrip, pendingApproval, rejectRequest, createMultiCityRequest } = requestControllers;
+const {
+  createTwoWayTrip, pendingApproval, rejectRequest, createMultiCityRequest
+} = requestControllers;
+
+const {
+  filterTrips
+} = requestsController;
 
 router.get('/trips/myRequest', authCheck.auth, request.findAllMyRequest);
 router.post('/trips/returnTrip', verifyToken, validateInputs, createTwoWayTrip);
 router.get('/trips/pendingApproval', authCheck.auth, pendingApproval);
 router.patch('/trips/reject', verifyToken, rejectRequest);
 router.post('/trips/request/multicity', authCheck.auth, validateRequestDate, validateCityDate, tripInformation, multicity, checkIfRequestExists, createMultiCityRequest);
+
+/**
+ * @swagger
+ *   "/trips/search?{targetKey}={filterKey}": {
+      "get": {
+        "description": "As a user, I should be able to use the search component\nSo that, I can easily retrieve records from both the request and approval table",
+        "summary": "Search Functionality",
+        "tags": [
+          "Trips"
+        ],
+        "operationId": "SearchFunctionality",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+                    {
+            "name": "targetKey",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "your desired search"
+          },
+                              {
+            "name": "filterKey",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "target key"
+          },
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+ */
+
+router.get('/trips/search', authCheck.auth, filterTrips);
 
 export default router;
