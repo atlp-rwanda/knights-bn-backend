@@ -15,43 +15,46 @@ const testResponseBody = (err, res) => {
   expect(res.body).to.have.property('email').that.is.a('string');
   expect(res.body).to.have.property('token').that.is.a('string');
 };
-describe('Test Google login', () => {
-  it('should return 201 if a new user', (done) => {
-    chai
-      .request(app)
-      .get('/api/v1/auth/test/google')
-      .end((err, res) => {
-        testResponseBody(err, res);
-      });
-    done();
+const testSocialLogin = () => {
+  describe('Test Google login', () => {
+    it('should return 201 if a new user', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/auth/test/google')
+        .end((err, res) => {
+          testResponseBody(err, res);
+        });
+      done();
+    });
+    it('should return 200 if user already exists', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/auth/test/google')
+        .end((err, res) => {
+          testResponseBody(err, res);
+        });
+      done();
+    });
   });
-  it('should return 200 if user already exists', (done) => {
-    chai
-      .request(app)
-      .get('/api/v1/auth/test/google')
-      .end((err, res) => {
-        testResponseBody(err, res);
-      });
-    done();
+  describe('Test Facebook login', () => {
+    it('should return 201 if a new user', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/auth/test/facebook')
+        .end((err, res) => {
+          testResponseBody(err, res);
+        });
+      done();
+    });
+    it('should return 200 if user already exists', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/auth/test/facebook')
+        .end((err, res) => {
+          testResponseBody(err, res);
+        });
+      done();
+    });
   });
-});
-describe('Test Facebook login', () => {
-  it('should return 201 if a new user', (done) => {
-    chai
-      .request(app)
-      .get('/api/v1/auth/test/facebook')
-      .end((err, res) => {
-        testResponseBody(err, res);
-      });
-    done();
-  });
-  it('should return 200 if user already exists', (done) => {
-    chai
-      .request(app)
-      .get('/api/v1/auth/test/facebook')
-      .end((err, res) => {
-        testResponseBody(err, res);
-      });
-    done();
-  });
-});
+};
+export default testSocialLogin;

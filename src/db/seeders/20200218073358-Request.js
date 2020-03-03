@@ -28,6 +28,19 @@ module.exports = {
           returnDate: '2020-07-01',
           createdAt: new Date(),
           updatedAt: new Date()
+        },
+        {
+          requesterId: 3,
+          managerId: 2,
+          type: 'one_way',
+          reason: 'partner engagment',
+          origin: 'Kigali',
+          destination: 'Lagos',
+          status: 'approved',
+          departureDate: '2020-02-01',
+          returnDate: '2020-06-01',
+          createdAt: new Date(),
+          updatedAt: new Date()
         }
       ],
       {}

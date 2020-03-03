@@ -4,7 +4,7 @@
   "description": "Make travel and accommodation easy and convenient.",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test npm run dropTables && NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all && NODE_ENV=test mocha --require @babel/polyfill --require @babel/register ./src/tests/mainTest.test.js",
+    "test": "NODE_ENV=test npm run dropTables && NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all && NODE_ENV=test mocha --require @babel/polyfill --require @babel/register ./src/tests/mainTest.test.js --timeout 10000 --exit",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "dropTables": "sequelize db:migrate:undo:all",
     "createTables": "sequelize db:migrate && sequelize db:seed:all",
