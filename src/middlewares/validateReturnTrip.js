@@ -7,8 +7,10 @@ export default async (req, res, next) => {
 try{
     
   const {
-    id, origin, destination, departureDate, returnDate, reason, accommodation
+     origin, destination, departureDate, returnDate, reason, accommodation
   } = req.body;
+
+  const id = req.user.id;
 
   const Joi = JoiBase.extend(JoiDate);
   let schema = Joi.object({

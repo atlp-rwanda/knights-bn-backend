@@ -86,6 +86,16 @@ const testRejectRequest = () => {
           done();
         });
     });
+    it('returns 500 on a request with invalid id', (done) => {
+      chai
+        .request(app)
+        .patch(`/api/v1/trips/reject?requestId=${'x'}`)
+        .end((error, response) => {
+          expect(response.status).to.equal(500);
+          expect(response.body).to.have.property('error');
+          done();
+        });
+    });
   });
 };
 export default testRejectRequest;

@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     cities: DataTypes.ARRAY(DataTypes.JSON),
   }, {});
   Request.associate = (models) => {
+    Request.hasMany(models.Comment, {
+      foreignKey: 'requestId',
+      onDelete: 'CASCADE',
+    });
   };
   return Request;
 };

@@ -1,4 +1,21 @@
 const mockData = {
+  userWithLineManager: {
+    firstName: 'mugisha',
+    lastName: 'desire',
+    gender: 'male',
+    passportNumber: 'dear38bh',
+    email: 'mugishadesire@gmail.com',
+    password: 'Niyonkuru@1',
+    lineManager: 'william.ishimwe@andela.com'
+  },
+  loginUserWithLineManager: {
+    email: 'mugishadesire@gmail.com',
+    password: 'Niyonkuru@1'
+  },
+  loginUserWithLineManager2: {
+    email: 'murenzijames@gmail.com',
+    password: 'Niyonkuru@1',
+  },
   userX: {
     firstName: 'nameless',
     lastName: 'nobobody',
@@ -13,6 +30,10 @@ const mockData = {
   },
   loginX: {
     email: 'brftnomad@gmail.com',
+    password: 'Niyonkuru@1'
+  },
+  loginM: {
+    email: 'multi-city@gmail.com',
     password: 'Niyonkuru@1'
   },
   user1: {
@@ -81,6 +102,14 @@ const mockData = {
     gender: 'male ',
     passportNumber: '1bx',
     email: 'brftnomad@gmail.com',
+    password: 'Niyonkuru@1'
+  },
+  tooManyPassportNumber: {
+    firstName: 'Niyonsenga',
+    lastName: 'Eric',
+    gender: 'male ',
+    passportNumber: '@!11111111111111111111111',
+    email: 'manyNumber@gmail.com',
     password: 'Niyonkuru@1'
   },
   newPassword:
@@ -171,6 +200,12 @@ const mockData = {
   invalidToken: {
     token: 'invalid',
   },
+  comment: {
+    comment: 'Holy'
+  },
+  InvalidComment: {
+    comment: 'p'
+  },
   managerLogin: {
     email: 'eugene.munyampundu@gmail.com',
     password: 'Niyonkuru@1'
@@ -229,6 +264,28 @@ const mockData = {
         name: 'Nairobi',
         from: '2020-8-1',
         to: '2020-8-31'
+      }
+    ]
+  },
+  missingCities: {
+    origin: 'New york',
+    destination: 'East Africa',
+    departureDate: '2020-04-28',
+    returnDate: '2020-09-30',
+    accommodation: 'XYZ campus',
+    type: 'multi_way',
+    reason: 'Reaseach',
+    passportNumber: '12345677',
+    cities: [
+      {
+        name: '',
+        from: '2020-07-02',
+        to: '2020-07-30'
+      },
+      {
+        name: '',
+        from: '2010-08-01',
+        to: '2010-08-31'
       }
     ]
   }

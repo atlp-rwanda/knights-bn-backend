@@ -6,12 +6,16 @@ import twoWayTrip from './twoWayTrip.test';
 import rejectRequest from './rejectRequest.test';
 import socialLogin from './socialLogin.test';
 import muliltiRequest from './multicityRequest.test';
+import routeExistance from './app.test';
+import commentTest from './comment.test';
 
+routeExistance();
 signUpTest();
 userLoginTest();
 userProfileInformation();
 twoWayTrip();
 muliltiRequest();
 allRequestTest();
+commentTest();
 rejectRequest();
 socialLogin();

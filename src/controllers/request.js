@@ -1,8 +1,11 @@
 import environment from 'dotenv';
+import sgMail from '@sendgrid/mail';
 import models from '../db/models';
 import getTodayDate from '../utils/getTodayDate';
 import isObjectEmpty from '../utils/isObjectEmpty';
 import Sequelize from 'sequelize';
+import { echoNotification } from '../helpers/notificationSender';
+
 const {
   Op, where, cast, col
 } = Sequelize;
@@ -12,22 +15,32 @@ environment.config();
 export default class usersController {
 
   static async createTwoWayTrip(req,res) {
-    try{        
-        const {
-            id, origin, destination, departureDate, returnDate, reason, accommodation, passportNumber
-          } = req.body;
+    try{
+      const { id } = req.user; 
+      const {
+        origin, destination, departureDate, returnDate, reason, accommodation,
+      } = req.body;
+      
+        const UserData = await models.User.findOne({
+            where : { id: `${id}`,
+          }
+        });
           
-        const managerId = await models.User.findOne({
-            where : { role: 'manager'}
-        }).then((manager) => manager.id);  
 
-          if(passportNumber){
-            await models.User.update(
-                {passport: passportNumber},
-                {where : { id}}
-              )
+        if(UserData.lineManager == null){
+          return res.status(422).json({
+            status: 422,
+            error: 'you currently have no lineManager, please go to update your profile'
+          });
         }
-          
+
+        const manager = await models.User.findOne({
+          where : { email: `${UserData.lineManager}`,
+        }
+      });
+
+      const managerId = manager.dataValues.id;
+
       const request = await models.Request.create({
         managerId,
         requesterId: id,
@@ -39,8 +52,48 @@ export default class usersController {
         returnDate,
         accommodation,
         reason}).then((request) => request);
-        
-        if(request.length != 0){
+
+
+        if(request){
+
+          const IntendedManager = await models.User.findAll({
+            where: { id: `${request.dataValues.managerId}` },
+          }); 
+          const User = await models.User.findAll({
+            where: { id: `${request.dataValues.requesterId}` },
+          }); 
+
+          sgMail.setApiKey(process.env.BN_API_KEY);
+          const msg = {
+            to: `${manager.dataValues.email}`,
+            from: 'no-reply@brftnomad.com',
+            subject: 'Barefoot Travel Request',
+            text: `${request.dataValues.reason}`,
+            html: `<p><strong>Dear ${manager.dataValues.firstName}<strong>
+            <br><br>
+            <p>This is to inform you that a new request was made by:<p>
+            <br>Name of the requester: ${UserData.FirstName} ${UserData.lastName}
+            <br>Reason: ${request.dataValues.reason}
+            <br>Request Type: ${request.dataValues.type}
+            <br>Destination: ${request.dataValues.destination}
+            <br>DepartureDate: ${request.dataValues.departureDate}
+            <br>ReturnDate: ${request.dataValues.returnDate}
+            <br>Barefoot Nomad Team<br>
+            <br>Thank you<br>
+            </p>`,
+         }
+
+         sgMail.send(msg);
+
+        const newNotification = await models.Notification.create({
+          requesterId: id,
+          managerId,
+          status: 'non_read',
+          message: 'a new request was made',
+          type: 'new_request'});
+
+           echoNotification(req, newNotification, 'new_request', managerId);
+            
           return res.status(200).json({
             message: 'request created on success!',
             origin,
@@ -51,13 +104,13 @@ export default class usersController {
             requestId: request.id,
             requestType: request.type,
             status: request.status,
-                })
+                });
         }
-    } 
+    }
     catch(error){
         return res.status(500).json({
-            error: error.message
-            })
+            error: error,
+            });
         }
   }
 
@@ -65,7 +118,11 @@ export default class usersController {
     try{                
     const allMyRequest = await models.Request.findAll({
         where: { requesterId: `${req.user.id}` },
+        include: [{
+          model: models.Comment
+        }]
       });
+      
     if(allMyRequest.length !== 0){
       return res.status(200).json({ message: 'List of requests', allMyRequest });
     } else{
@@ -105,7 +162,7 @@ export default class usersController {
   static async rejectRequest(req, res) {
     try{
         const { requestId } = req.query;
-        const managerId = req.body.id;
+        const managerId = req.user.id;
                 
         const manager = await models.User.findOne(
             { 

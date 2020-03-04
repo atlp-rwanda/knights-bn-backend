@@ -8,7 +8,7 @@ import mockData from './mockData';
 chai.use(chaiHttp);
 
 const { expect } = chai;
-const { validTrip, invalidTrip } = returnTripMock;
+const { validTrip, invalidTrip, sameDirection } = returnTripMock;
 
 const testTwoWayTrip = () => {
   describe('Test /trips/returnTrip', () => {
@@ -16,10 +16,9 @@ const testTwoWayTrip = () => {
       chai
         .request(app)
         .post('/api/v1/auth/login')
-        .send(mockData.user1)
+        .send(mockData.loginUserWithLineManager2)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
-          expect(res.body.message).to.equal('Successfully login');
           done();
         });
     });
@@ -32,6 +31,17 @@ const testTwoWayTrip = () => {
           expect(res.status).to.equal(200);
           expect(res.body).to.have.property('message').that.equals('request created on success!');
           expect(res.body).to.have.property('status').that.equals('pending');
+        });
+      done();
+    });
+    it('should return 422 on successful created request ', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/trips/returnTrip')
+        .send(sameDirection)
+        .end((err, res) => {
+          expect(res.status).to.equal(422);
+          expect(res.body).to.have.property('error');
         });
       done();
     });
@@ -94,7 +104,7 @@ const testTwoWayTrip = () => {
         .send(mockData.user1)
         .end((err, res) => {
           expect(res.body).to.have.property('status').equals(401);
-          expect(res.body).to.have.property('error').equals('no token provided!');
+          expect(res.body).to.have.property('error').equals('you are not logged in');
         });
       done();
     });

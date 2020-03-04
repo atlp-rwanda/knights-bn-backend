@@ -25,12 +25,6 @@ class userValidate {
           error: 'lastName should have a minimum of 3 characters, no symbols allowed and no space inbetween',
         });
       }
-      if (`${result.error.details[0].path[0]}` === 'passport') {
-        return res.status(422).json({
-          status: 422,
-          error: 'passport number should be made of 8 or 9 alphanumeric characters, no symbols allowed and no space inbetween',
-        });
-      }
       const wrongInput = result.error.details[0].message
         .replace('"', ' ')
         .replace('"', '');
