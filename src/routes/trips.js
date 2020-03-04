@@ -203,13 +203,14 @@
     }
  */
 
+
 import express from 'express';
 import request from '../controllers/request';
 import authCheck from '../middlewares/checkAuth';
 import requestControllers from '../controllers/request';
 import requestsController from '../controllers/searchRequest';
 import validateInputs from '../middlewares/validateReturnTrip';
-import verifyToken from '../middlewares/verifyToken';
+
 import {
   validateRequestDate, validateCityDate, tripInformation, multicity, checkIfRequestExists
 } from '../middlewares/validateDate';
@@ -226,9 +227,9 @@ const {
 } = requestsController;
 
 router.get('/trips/myRequest', authCheck.auth, request.findAllMyRequest);
-router.post('/trips/returnTrip', verifyToken, validateInputs, createTwoWayTrip);
+router.post('/trips/returnTrip', authCheck.auth, validateInputs, createTwoWayTrip);
 router.get('/trips/pendingApproval', authCheck.auth, pendingApproval);
-router.patch('/trips/reject', verifyToken, rejectRequest);
+router.patch('/trips/reject', authCheck.auth, rejectRequest);
 router.post('/trips/request/multicity', authCheck.auth, validateRequestDate, validateCityDate, tripInformation, multicity, checkIfRequestExists, createMultiCityRequest);
 
 /**

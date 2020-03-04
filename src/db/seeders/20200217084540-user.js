@@ -62,6 +62,19 @@ module.exports = {
     clientId: null,
     createdAt: new Date(),
     updatedAt: new Date()
+  }, {
+    firstName: 'murenzi',
+    lastName: 'james',
+    gender: 'male',
+    passport: 'dear78bh',
+    email: 'murenzijames@gmail.com',
+    password: '$2b$10$l05Anqm8ZkiTZiJPzDtjouorkUjPkzX1MqKau28V2nRHiiX3qpW2e',
+    role: 'requester',
+    method: 'standard',
+    clientId: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    lineManager: 'william.ishimwe@andela.com'
   }], {}),
 
   down: (queryInterface) => queryInterface.bulkDelete('Users', null, {}),

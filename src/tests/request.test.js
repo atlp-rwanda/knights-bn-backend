@@ -1,20 +1,37 @@
 import chai, { expect } from 'chai';
+import express from 'express';
 import chaiHttp from 'chai-http';
+import socketIo from 'socket.io';
 import app from '../app';
 import mockData from './mockData';
 import returnTripMock from '../mockData/twoWayTrip';
+import { sendNotification } from '../helpers/notificationSender';
+
 
 const { validTrip2 } = returnTripMock;
 chai.use(chaiHttp);
 chai.should();
 
+const port = process.env.PORT || 4008;
+const appp = express();
+const server = appp.listen(port);
+
+const io = socketIo(server);
+
 const userSignUp = () => {
-  describe('View all my Requests.(GET) ', () => {
+  describe('View all my Requests.(GET)', () => {
+    it('should not send notification when requesterId is not provided ', () => {
+      sendNotification(null, {}, {}, io, 'new_request');
+    });
+    it('should send notification if all information are filled', () => {
+      sendNotification(1, {}, { 1: ['jashgfe'] }, io, 'new_request');
+    });
+
     it('it should return 200 on successful signIn', (done) => {
       chai
         .request(app)
         .post('/api/v1/auth/login')
-        .send(mockData.user1)
+        .send(mockData.loginUserWithLineManager2)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           done();

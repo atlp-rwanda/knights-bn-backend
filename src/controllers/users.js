@@ -20,7 +20,7 @@ export default class usersController {
   static async registerUser(req, res) {
     try {
       const {
-        firstName, lastName, gender, passportNumber, email, password,
+        firstName, lastName, gender, passportNumber, email, password, lineManager
       } = req.body;
 
       const token = generateToken({
