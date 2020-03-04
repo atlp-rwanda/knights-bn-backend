@@ -128,8 +128,8 @@ const mockData = {
   },
   newPassword:
   {
-    newPassword: 'Budha@1914324235345d',
-    confirmPassword: 'Budha@1914324235345d',
+    newPassword: 'Niyonkuru@1',
+    confirmPassword: 'Niyonkuru@1',
   },
   token: {
     token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTgyNjQ4ODg4LCJleHAiOjE1ODI2NTI0ODh9.7AMsqKFdwWA08O3jGjjJTLAKR_ShWc7edjuKC9jbBiY',
@@ -156,6 +156,10 @@ const mockData = {
   },
   loginSuccessfully2: {
     email: 'moiserwi@gmail.com',
+    password: 'Niyonkuru@1'
+  },
+  loginSuccessfully3: {
+    email: 'alain.maxime@gmail.com',
     password: 'Niyonkuru@1'
   },
   existingUser: {
@@ -217,6 +221,10 @@ const mockData = {
   managerLogin: {
     email: 'eugene.munyampundu@gmail.com',
     password: 'Niyonkuru@1'
+  },
+  managerLogin3: {
+    email: 'william.ishimwe@andela.com',
+    password: 'Password@1'
   },
   managerLogin2: {
     email: 'knights@gmail.com',
