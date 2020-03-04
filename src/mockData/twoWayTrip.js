@@ -45,6 +45,15 @@ const returnTrip = {
     reason: 'Having fun'
   },
 
+  validTrip3: {
+    origin: 'Rwanda',
+    destination: 'Thailand',
+    departureDate: '2028-02-28',
+    returnDate: '2029-03-30',
+    accommodation: 'XYZ campus',
+    reason: 'Having fun',
+  },
+
 };
 
 export default returnTrip;
