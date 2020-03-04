@@ -7,7 +7,7 @@ static async createComment(req,res) {
         
         const commenterId = req.user.id; 
         const { comment } = req.body;
-        const { requestId } = req.params;
+        const { requestId } = req.query;
 
         if(isNaN(requestId)){
           return res.status(422).json({

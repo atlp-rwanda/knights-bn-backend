@@ -40,7 +40,7 @@ const testRejectRequest = () => {
     it('should return 201 on successful comment on a request ', (done) => {
       chai
         .request(app)
-        .post('/api/v1/trips/6/comment')
+        .post('/api/v1/trips/comment/?requestId=6')
         .send(mockData.comment)
         .end((err, res) => {
           expect(res.status).to.equal(201);
@@ -51,7 +51,7 @@ const testRejectRequest = () => {
     it('should return 201 on successful comment on a request ', (done) => {
       chai
         .request(app)
-        .post('/api/v1/trips/1/comment')
+        .post('/api/v1/trips/comment/?requestId=1')
         .send(mockData.InvalidComment)
         .end((err, res) => {
           expect(res.status).to.equal(422);
@@ -72,10 +72,7 @@ const testRejectRequest = () => {
     it('should return 201 on successful comment on a request ', (done) => {
       chai
         .request(app)
-        .post('/api/v1/trips/6
-        
-        
-        /comment')
+        .post('/api/v1/trips/comment/?requestId=6')
         .send(mockData.comment)
         .end((err, res) => {
           expect(res.status).to.equal(403);

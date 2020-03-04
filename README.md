@@ -106,5 +106,7 @@ Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create 
  ### TTL
 
  [David Muhanguzi](https://github.com/MuhanguziDavid)
+
+ [Kagabo Faustin](https://github.com/kagabof)
  
  
