@@ -8,10 +8,46 @@ import mockData from './mockData';
 chai.use(chaiHttp);
 
 const { expect } = chai;
-const { validTrip, invalidTrip, sameDirection } = returnTripMock;
+const {
+  validRequest, requestDateSetInThePast,
+  requestWithDepartureDateSetAfterReturnDate, repeatedRequest,
+  requestWithMissedComponent, requestWithSimilarOriginAndDestination,
+  invalidTrip, sameDirection
+} = returnTripMock;
 
 const testTwoWayTrip = () => {
-  describe('Test /trips/returnTrip', () => {
+  describe('Create a two-way-trip request', () => {
+    it('it should return 200 on successful signIn', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/login')
+        .send({
+          email: 'knights@gmail.com',
+          password: 'Niyonkuru@1'
+        })
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          done();
+        });
+    });
+    it('should return 422 if user has no manager ', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/trips/returnTrip')
+        .send({
+          origin: 'Kigali',
+          destination: 'Kampala',
+          departureDate: '2023-01-11',
+          returnDate: '2023-01-15',
+          reason: 'Having fun',
+          accommodation: 'Z campus'
+        })
+        .end((err, res) => {
+          expect(res.status).to.equal(422);
+          expect(res.body).to.have.property('error').that.equals('you currently have no lineManager, please go to update your profile');
+          done();
+        });
+    });
     it('it should return 200 on successful signIn', (done) => {
       chai
         .request(app)
@@ -22,77 +58,84 @@ const testTwoWayTrip = () => {
           done();
         });
     });
-    it('should return 200 on successful created request ', (done) => {
+    it('should return 201 on successful created request ', (done) => {
       chai
         .request(app)
         .post('/api/v1/trips/returnTrip')
-        .send(validTrip)
+        .send({
+          origin: 'Kigali',
+          destination: 'Kampala',
+          departureDate: '2023-01-11',
+          returnDate: '2023-01-15',
+          reason: 'Having fun',
+          accommodation: 'Z campus'
+        })
         .end((err, res) => {
-          expect(res.status).to.equal(200);
-          expect(res.body).to.have.property('message').that.equals('request created on success!');
-          expect(res.body).to.have.property('status').that.equals('pending');
+          expect(res.status).to.equal(201);
+          expect(res.body).to.have.property('message').that.equals('request created with success!');
+          expect(res.body.data).to.have.property('status').that.equals('pending');
+          done();
         });
-      done();
     });
-    it('should return 422 on successful created request ', (done) => {
+    it('should return 422 on invalid request body', (done) => {
       chai
         .request(app)
         .post('/api/v1/trips/returnTrip')
-        .send(sameDirection)
+        .send(requestWithMissedComponent)
         .end((err, res) => {
           expect(res.status).to.equal(422);
           expect(res.body).to.have.property('error');
         });
       done();
     });
-    it('should return 422 on invalid trip', (done) => {
+    it('should return 422 when similar origin and destination', (done) => {
       chai
         .request(app)
         .post('/api/v1/trips/returnTrip')
-        .send(invalidTrip)
+        .send(requestWithSimilarOriginAndDestination)
         .end((err, res) => {
           expect(res.status).to.equal(422);
-          expect(res.body).to.have.property('error').which.is.not.empty;
+          expect(res.body).to.have.property('error').that.equals('Origin has to differ from destination.');
         });
       done();
     });
-    it('should return 422 if selected date collides with the previous requested trip', (done) => {
-      const tripRequest = {
-        origin: 'Kigali',
-        destination: 'Kampala',
-        departureDate: '2020-02-20',
-        returnDate: '2020-03-20',
-        accommodation: 'XYZ campus',
-        reason: 'Having fun',
-        passportNumber: '12345677'
-      };
+    it('should return 422 if departure date > return date', (done) => {
       chai
         .request(app)
         .post('/api/v1/trips/returnTrip')
-        .send(tripRequest)
-        .end((err, res) => {
-          expect(res.status).to.equal(422);
-          expect(res.body).to.have.property('error').that.equals("Departure date should be chosen from today's date and has to not collide with your previous requested trip!");
-        });
-      done();
-    });
-    it('should return 422 if return date set is before the departure date', (done) => {
-      const tripRequest = {
-        origin: 'Kigali',
-        destination: 'Kampala',
-        returnDate: '2020-02-20',
-        departureDate: '2020-03-20',
-        accommodation: 'XYZ campus',
-        reason: 'Having fun',
-        passportNumber: '12345677'
-      };
-      chai
-        .request(app)
-        .post('/api/v1/trips/returnTrip')
-        .send(tripRequest)
+        .send(requestWithDepartureDateSetAfterReturnDate)
         .end((err, res) => {
           expect(res.status).to.equal(422);
           expect(res.body).to.have.property('error').that.equals("Returning date has to be the day after your departure's date!");
+        });
+      done();
+    });
+    it('should return 422 when departureDate is set in the past', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/trips/returnTrip')
+        .send(requestDateSetInThePast)
+        .end((err, res) => {
+          expect(res.status).to.equal(422);
+          expect(res.body).to.have.property('error').that.equals('Please select travel date starting from today.');
+        });
+      done();
+    });
+    it('should return 422 on a conflicting trip request', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/trips/returnTrip')
+        .send({
+          origin: 'Kigali',
+          destination: 'Kampala',
+          departureDate: '2023-01-11',
+          returnDate: '2023-01-15',
+          reason: 'Having fun',
+          accommodation: 'Z campus'
+        })
+        .end((err, res) => {
+          expect(res.status).to.equal(422);
+          expect(res.body).to.have.property('error').that.equals('conflicting trip request.');
         });
       done();
     });

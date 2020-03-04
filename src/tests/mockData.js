@@ -348,6 +348,13 @@ const mockData = {
         to: '2010-08-31'
       }
     ]
+  },
+  editRequest: {
+    origin: 'Nyamata',
+    destination: 'Huye',
+    departureDate: '2025-02-20',
+    returnDate: '2025-03-20',
+    reason: 'Test update feature.'
   }
 };
 export default mockData;

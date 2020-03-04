@@ -37,15 +37,15 @@ const userSignUp = () => {
           done();
         });
     });
-    it('should return 200 on successful created request ', (done) => {
+    it('should return 201 on successful created request ', (done) => {
       chai
         .request(app)
         .post('/api/v1/trips/returnTrip')
         .send(validTrip2)
         .end((err, res) => {
-          expect(res.status).to.equal(200);
-          expect(res.body).to.have.property('message').that.equals('request created on success!');
-          expect(res.body).to.have.property('status').that.equals('pending');
+          expect(res.status).to.equal(201);
+          expect(res.body).to.have.property('message').that.equals('request created with success!');
+          expect(res.body.data).to.have.property('status').that.equals('pending');
           done();
         });
     });
