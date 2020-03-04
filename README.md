@@ -79,6 +79,7 @@ Open terminal from your computer
 `- PATCH /edit/user/profile - For editing user profile`
 
 `- GET /trips/pendingApproval - view Avail Requests for Approval`
+`- GET /remembered - For editing user profile`
 
 `- PATCH /trips/reject/?requestId - view all my request history`
 

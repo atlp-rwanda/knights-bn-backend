@@ -1,4 +1,4 @@
-import express, { request } from 'express';
+import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 import bodyParser from 'body-parser';
@@ -6,6 +6,8 @@ import socketIo from 'socket.io';
 import dotenv from 'dotenv';
 import passport from 'passport';
 import multer from 'multer';
+import cookieParser from 'cookie-parser';
+import sessions from 'express-session';
 import swaggerDefinition from './docs/swaggerDefinition';
 import users from './routes/users';
 import trips from './routes/trips';
@@ -60,6 +62,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 multer({ dest: 'uploads/' });
 app.use('/uploads', express.static('uploads'));
+app.use(cookieParser());
+app.use(sessions({
+  secret: process.env.SECRETKEY,
+  resave: true,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 14 * 24 * 3600 * 1000,
+    sameSite: true
+  }
+}));
 app.use(passport.initialize());
 
 app.use(translator);

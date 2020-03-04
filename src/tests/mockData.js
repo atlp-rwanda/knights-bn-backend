@@ -213,7 +213,7 @@ const mockData = {
     lineManager: 'Reporter',
     biography: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'
   },
-  wrongPerson: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzLCJlbWFpbCI6ImV1Z2VuZW11MjIzQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6Ik5peW9uc2VuZ2EiLCJsYXN0TmFtZSI6IkVyaWMiLCJpYXQiOjE1ODI0MDU5NDd9.C8IPYyods5ApXxm-Q5fGOT4s7pMsSjw82Pm--zKaL3g',
+  wrongPerson: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImVtYWlsIjoiZXVnZW5lbXUyMjNAZ21haWwuY29tIiwiZmlyc3ROYW1lIjoiTml5b25zZW5nYSIsImxhc3ROYW1lIjoiRXJpYyIsImlhdCI6MTU4MjQwNTk0N30.xzc9O9rKH13j4kuqjLALmBeDNWtF1zlQAnpoRLD9FG4',
   multiCityRequest: {
     origin: 'New york',
     destination: 'East Africa',
@@ -271,6 +271,50 @@ const mockData = {
         name: '',
         from: '2020-07-02',
         to: '2020-07-30'
+      },
+      {
+        name: '',
+        from: '2010-08-01',
+        to: '2010-08-31'
+      }
+    ]
+  },
+  validateDate1: {
+    origin: 'New york',
+    destination: 'East Africa',
+    departureDate: '2050-04-28',
+    returnDate: '2070-09-30',
+    accommodation: 'XYZ campus',
+    type: 'multi_way',
+    reason: 'Reaseach',
+    passportNumber: '12345677',
+    cities: [
+      {
+        name: '',
+        from: '2020-07-02',
+        to: '2020-07-30'
+      },
+      {
+        name: '',
+        from: '2010-08-01',
+        to: '2010-08-31'
+      }
+    ]
+  },
+  validateDate2: {
+    origin: 'New york',
+    destination: 'East Africa',
+    departureDate: '2020-04-28',
+    returnDate: '2020-09-30',
+    accommodation: 'XYZ campus',
+    type: 'multi_way',
+    reason: 'Reaseach',
+    passportNumber: '12345677',
+    cities: [
+      {
+        name: '',
+        from: '2020-07-02',
+        to: '2020-10-30'
       },
       {
         name: '',
