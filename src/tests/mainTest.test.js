@@ -8,6 +8,7 @@ import socialLogin from './socialLogin.test';
 import muliltiRequest from './multicityRequest.test';
 import routeExistance from './app.test';
 import rememberMe from './rememberMe.test';
+import commentTest from './comment.test';
 
 routeExistance();
 signUpTest();
@@ -16,6 +17,7 @@ userProfileInformation();
 twoWayTrip();
 muliltiRequest();
 allRequestTest();
+commentTest();
 rejectRequest();
 rememberMe();
 socialLogin();

@@ -206,7 +206,6 @@
 import express from 'express';
 import authCheck from '../middlewares/checkAuth';
 import requestControllers from '../controllers/request';
-import validateInputs from '../middlewares/validateReturnTrip';
 import validateOneWayTrip from '../middlewares/validateOneWay';
 
 /**
@@ -280,8 +279,57 @@ import validateOneWayTrip from '../middlewares/validateOneWay';
     }
  */
 
+ /**
+ * @swagger
+ *  "/trips/comment/": {
+      "post": {
+        "description": "Manager or requester can comment on their requests.",
+        "summary": "comment on a request.",
+        "tags": [
+          "Trips"
+        ],
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+              "name": "requestId",
+              "in": "query",
+              "description": "ID of request to be commented on",
+              "required": true,
+              "type": "integer",
+              "format": "int64"
+          },
+          {
+            "name": "comment",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": "write comment to be added on the request",
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "comment successfully added",
+          },
+          "422": {
+            "description": "Invalid comment",
+          }
+        }
+      }
+    }
+ */
+
 
 import requestsController from '../controllers/searchRequest';
+import validateInputs from '../middlewares/validateReturnTrip';
+import comment from '../controllers/comment.controller';
+import commentValidate from '../middlewares/newComment';
+import checkCommenterValidation from '../middlewares/commenter';
 
 import {
   validateRequestDate, validateCityDate, tripInformation, multicity, checkIfRequestExists
@@ -299,7 +347,7 @@ router.get('/trips/myRequest', authCheck.auth, requestControllers.findAllMyReque
 router.get('/trips/pendingApproval', authCheck.auth, requestControllers.pendingApproval);
 router.patch('/trips/reject', authCheck.auth, requestControllers.rejectRequest);
 router.post('/trips/request/multicity', authCheck.auth, validateRequestDate, validateCityDate, tripInformation, multicity, checkIfRequestExists, requestControllers.createMultiCityRequest);
-
+router.post('/trips/comment', authCheck.auth, commentValidate.comment, checkCommenterValidation, comment.createComment);
 /**
  * @swagger
  *   "/trips/search?{targetKey}={filterKey}": {

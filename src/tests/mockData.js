@@ -100,6 +100,16 @@ const mockData = {
     email: 'mubgmail.com',
     password: 'Niyonkuru1',
   },
+  loginM: {
+    email: 'multi-city@gmail.com',
+    password: 'Niyonkuru@1'
+  },
+  comment: {
+    comment: 'Holy'
+  },
+  InvalidComment: {
+    comment: 'p'
+  },
   invalidPassport: {
     firstName: 'Niyonsenga',
     lastName: 'Eric',

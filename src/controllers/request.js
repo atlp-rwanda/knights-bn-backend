@@ -158,6 +158,9 @@ export default class usersController {
     try {
       const allMyRequest = await models.Request.findAll({
         where: { requesterId: `${req.user.id}` },
+        include: [{
+          model: models.Comment
+        }]
       });
       if (allMyRequest.length !== 0) {
         return res.status(200).json({ message: 'List of requests', allMyRequest });
@@ -176,23 +179,25 @@ export default class usersController {
       return res.status(403).json({ error: 'access denied' });
 
     }
-    try {
-      const pendingRequests = await models.Request.findAll({
-        where: {
-          managerId: req.user.id,
-          status: 'pending'
-        },
-      });
-      if (pendingRequests.length !== 0) {
-        return res.status(200).json({ message: 'Pending requests', pendingRequests });
-      } else {
-        return res.status(404).json({ message: 'No Pending request available' });
-      }
-    } catch (error) {
-      res.status(500).json({
-        status: 500,
-        error: error
-      });
+    try{          
+    const pendingRequests = await models.Request.findAll({
+        where: { managerId: req.user.id,
+      status:'pending'
+      },
+      include: [{
+        model: models.Comment
+      }]
+      });       
+    if(pendingRequests.length !== 0){
+      return res.status(200).json({ message: 'Pending requests', pendingRequests });
+    } else{
+      return res.status(404).json({ message: 'No Pending request available'});
+    }    
+    }catch (error) {
+    res.status(500).json({
+      status: 500,
+      error: error
+    });
     }
   }
   static async rejectRequest(req, res) {
