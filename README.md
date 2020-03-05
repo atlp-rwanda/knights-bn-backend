@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/andela/knights-bn-backend.svg?branch=develop)](https://travis-ci.org/andela/knights-bn-backend)
 [![Coverage Status](https://coveralls.io/repos/github/andela/knights-bn-backend/badge.svg?branch=develop)](https://coveralls.io/github/andela/knights-bn-backend?branch=develop)
+[![Maintainability](https://api.codeclimate.com/v1/badges/2161d99938676b0b14eb/maintainability)](https://codeclimate.com/github/andela/knights-bn-backend/maintainability)
 [![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)
 
 ## Vision
@@ -79,6 +80,7 @@ Open terminal from your computer
 `- PATCH /edit/user/profile - For editing user profile`
 
 `- GET /trips/pendingApproval - view Avail Requests for Approval`
+
 `- GET /remembered - For editing user profile`
 
 `- PATCH /trips/reject/?requestId - view all my request history`
@@ -86,6 +88,10 @@ Open terminal from your computer
 `- POST /trips/request/multicity - For requesting multiple destinations at once`
 
 `- GET /trips/search?filterKey=your search -find Requests through the search functionality`
+
+`- GET /notifications -For checking new notifications`
+
+`- PATCH /notifications -For marking all notification as read`
 
 ### Raising an issue
 Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create an issue about this app
@@ -107,5 +113,6 @@ Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create 
  ### TTL
 
  [David Muhanguzi](https://github.com/MuhanguziDavid)
- 
+
+ [Kagabo Faustin](https://github.com/kagabof)
  

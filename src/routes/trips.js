@@ -330,6 +330,7 @@ import validateInputs from '../middlewares/validateReturnTrip';
 import comment from '../controllers/comment.controller';
 import commentValidate from '../middlewares/newComment';
 import checkCommenterValidation from '../middlewares/commenter';
+import requestStatusController from '../controllers/notifications';
 
 import {
   validateRequestDate, validateCityDate, tripInformation, multicity, checkIfRequestExists
@@ -340,7 +341,9 @@ const router = express.Router();
 const {
   filterTrips
 } = requestsController;
-
+const {
+  getRequestStatus, markAsRead
+} = requestStatusController;
 router.post('/trips/oneWayTrip', authCheck.auth, validateOneWayTrip, requestControllers.createOneWayTrip);
 router.post('/trips/returnTrip', authCheck.auth, validateInputs, requestControllers.createTwoWayTrip);
 router.get('/trips/myRequest', authCheck.auth, requestControllers.findAllMyRequest);
@@ -389,5 +392,52 @@ router.post('/trips/comment', authCheck.auth, commentValidate.comment, checkComm
  */
 
 router.get('/trips/search', authCheck.auth, filterTrips);
+
+
+/**
+ * @swagger
+ *   "/notifications": {
+      "get": {
+        "description": "Get unleady notification",
+        "summary": "Notifications",
+        "tags": [
+          "Notifications"
+        ],
+        "operationId": "Notifications",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      },
+      "patch": {
+        "description": " Mark all as read, the notification icon count should change to the bell component with no number attached to it",
+        "summary": "Mark All as Read",
+        "tags": [
+          "Notifications"
+        ],
+        "operationId": "MarkAllRead",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+ */
+router.get('/notifications', authCheck.auth, getRequestStatus);
+router.patch('/notifications', authCheck.auth, markAsRead);
 
 export default router;

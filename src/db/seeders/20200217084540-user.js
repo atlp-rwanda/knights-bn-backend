@@ -10,7 +10,8 @@ module.exports = {
     method: 'standard',
     clientId: null,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    lineManager: 'william.ishimwe@andela.com'
   }, {
     firstName: 'Eugene',
     lastName: 'Munyampundu',

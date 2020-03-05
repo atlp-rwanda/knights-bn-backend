@@ -130,7 +130,9 @@ export default class usersController {
           managerId,
           status: 'non_read',
           message: 'a new request was made',
-          type: 'new_request'});
+          type: 'new_request',
+          owner:'manager'
+        });
 
            echoNotification(req, newNotification, 'new_request', managerId);
             

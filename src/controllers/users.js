@@ -112,9 +112,9 @@ export default class usersController {
       {
         id: existUser.id,
         email: existUser.email,
+        role:existUser.role,
         firstName: existUser.firstName,
         lastName: existUser.lastName,
-        role:existUser.role
       },
       process.env.SECRETKEY
     );
