@@ -1,31 +1,30 @@
 import models from '../db/models';
 
 export default class commentController {
+  static async createComment(req, res) {
+    const commenterId = req.user.id;
+    const { comment } = req.body;
+    const { requestId } = req.query;
 
-    static async createComment(req,res) {
-        try{
-    
-          const commenterId = req.user.id; 
-          const { comment } = req.body;
-          const { requestId } = req.query;
-          
-              const newComment = await models.Comment.create({
-                commenterId,
-                requestId,
-                comment,
-              });
+    await models.Comment.create({
+      commenterId,
+      requestId,
+      comment,
+    });
+    return res.status(201).json({
+      status: 201,
+      message: 'comment successfully added',
+    });
+  }
 
-              if(newComment){
-              return res.status(201).json({
-                  status: 201,
-                  message: `comment successfully added`,
-              })
-            }
-        } 
-        catch(error){
-            return res.status(500).json({
-                error: error,
-                })
-            }
-      }
-    }
+  static async deleteComment(req, res) {
+    const { commentId } = req.query;
+    await models.Comment.destroy({
+      where: { id: commentId },
+    });
+    return res.status(200).json({
+      status: 200,
+      message: 'Comment deleted successfully!',
+    });
+  }
+}

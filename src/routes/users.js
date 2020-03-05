@@ -3,7 +3,6 @@ import passport from 'passport';
 import usersController from '../controllers/users';
 import userLoginValidation from '../middlewares/userLoginValidation';
 import userValidation from '../middlewares/newUser';
-import passportConfig from '../config/passport';
 import fakeUser from '../mockData/fakeUser';
 import auth from '../middlewares/checkAuth';
 
@@ -13,7 +12,7 @@ import imageMiddleware from '../middlewares/imageUpload';
 
 const router = express.Router();
 const {
-  registerUser, verifyAcccount, resetPassword, forgetPassword, login, socialLogin, logout
+  registerUser, verifyAcccount, resetPassword, forgetPassword, login, socialLogin, logout,
 } = usersController;
 /**
  * @swagger
@@ -149,19 +148,19 @@ router.get('/auth/login/socialLogin', (req, res) => {
 });
 router.get(
   '/auth/login/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
+  passport.authenticate('google', { scope: ['profile', 'email'] }),
 );
 router.get(
   '/auth/login/google/redirect',
   passport.authenticate('google'),
-  socialLogin
+  socialLogin,
 );
 
 router.get('/auth/login/facebook', passport.authenticate('facebook'));
 router.get(
   '/auth/login/facebook/redirect',
   passport.authenticate('facebook'),
-  socialLogin
+  socialLogin,
 );
 
 // test authorization
@@ -211,7 +210,7 @@ router.get('/auth/test/facebook', fakeUser, socialLogin);
     }
  */
 
- /**
+/**
  * @swagger
  *  "/remembered": {
       "get": {

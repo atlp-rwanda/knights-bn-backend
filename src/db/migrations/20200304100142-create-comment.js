@@ -31,7 +31,9 @@ module.exports = {
       type: Sequelize.STRING
     },
     isVisible: {
-      type: Sequelize.BOOLEAN
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
     },
     createdAt: {
       allowNull: false,

@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import localStorage from 'localStorage';
 import environment from 'dotenv';
 import sgMail from '@sendgrid/mail';
+import sequelize from 'sequelize';
 import models from '../db/models';
 import generateToken from '../utils/generateToken';
 import generatePswd from '../utils/randomPswd';
@@ -11,8 +12,8 @@ import {
   getPasswordResetURL,
   resetPasswordTemplate,
 } from '../modules/email';
-import sequelize from 'sequelize';
-const {Op} = sequelize;
+
+const { Op } = sequelize;
 
 environment.config();
 
@@ -20,11 +21,11 @@ export default class usersController {
   static async registerUser(req, res) {
     try {
       const {
-        firstName, lastName, gender, passportNumber, email, password, lineManager
+        firstName, lastName, gender, passportNumber, email, password, lineManager,
       } = req.body;
 
       const token = generateToken({
-        firstName, lastName, gender, passportNumber, email, password
+        firstName, lastName, gender, passportNumber, email, password,
       }, process.env.SECRETKEY);
 
       let host;
@@ -44,31 +45,32 @@ export default class usersController {
       };
 
       sgMail.send(msg);
-      return res.status(200).json({ message: 'Please go to your email address to verify your account.' })
-
+      return res.status(200).json({ message: 'Please go to your email address to verify your account.' });
     } catch (error) {
-      return res.status(500).json({ "Error": error.message })
+      return res.status(500).json({ Error: error.message });
     }
   }
 
   static async verifyAcccount(req, res) {
-
     try {
-      const {token : userToken } = req.params;
+      const { token: userToken } = req.params;
       const userInfo = jwt.decode(userToken, process.env.SECRETKEY);
-      const { firstName, lastName, gender, passportNumber, email, password } = userInfo;
+      const {
+        firstName, lastName, gender, passportNumber, email, password,
+      } = userInfo;
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
-      const existingUser = await models.User.findOne({ where: { 
-        [Op.or]: [
-          {email}, 
-          {passport: passportNumber}
-        ]
-      }
-    });
+      const existingUser = await models.User.findOne({
+        where: {
+          [Op.or]: [
+            { email },
+            { passport: passportNumber },
+          ],
+        },
+      });
 
       if (existingUser !== null) {
-        return res.status(409).json({ message: 'Email or Passport number already taken.' })
+        return res.status(409).json({ message: 'Email or Passport number already taken.' });
       }
 
       const newUser = await models.User.create({
@@ -84,50 +86,55 @@ export default class usersController {
         id: newUser.id,
         email: newUser.email,
         firstName: newUser.firstName,
-        lastName: newUser.lastName
+        lastName: newUser.lastName,
       }, process.env.SECRETKEY);
 
       localStorage.setItem('token', token);
-      return res.status(201).json({ message: 'Your account is successfully created.'});
+      return res.status(201).json({ message: 'Your account is successfully created.' });
     } catch (error) {
-      return res.status(500).json({ "Error": error.message})
+      return res.status(500).json({ Error: error.message });
     }
   }
+
   static async login(req, res) {
     try {
       const { email, password } = req;
       const existUser = await models.User.findOne({ where: { email } });
-      if (existUser === null) return res.status(404).json({
-        status: 404,
-        message: 'Seems you do not have an account! Create it now'
-      });
+      if (existUser === null) {
+        return res.status(404).json({
+          status: 404,
+          message: 'Seems you do not have an account! Create it now',
+        });
+      }
 
-    const passwordMatch = await bcrypt.compare(password, existUser.password);
-    if (!passwordMatch)
+      const passwordMatch = await bcrypt.compare(password, existUser.password);
+      if (!passwordMatch) {
+        return res
+          .status(401)
+          .json({ status: 401, message: 'Invalid credentials' });
+      }
+
+      const token = generateToken(
+        {
+          id: existUser.id,
+          email: existUser.email,
+          role: existUser.role,
+          firstName: existUser.firstName,
+          lastName: existUser.lastName,
+        },
+        process.env.SECRETKEY,
+      );
+
+      localStorage.setItem('token', token);
+
       return res
-        .status(401)
-        .json({ status: 401, message: 'Invalid credentials' });
-
-    const token = generateToken(
-      {
-        id: existUser.id,
-        email: existUser.email,
-        role:existUser.role,
-        firstName: existUser.firstName,
-        lastName: existUser.lastName,
-      },
-      process.env.SECRETKEY
-    );
-
-    localStorage.setItem('token', token);
-
-    return res
-      .status(200)
-      .json({ status: 200, message: 'Successfully login', token });
-    }catch(error){
-      return res.status(500).json({Error: error});
+        .status(200)
+        .json({ status: 200, message: 'Successfully login', token });
+    } catch (error) {
+      return res.status(500).json({ Error: error });
     }
   }
+
   static async socialLogin(req, res) {
     try {
       const { User } = models;
@@ -153,9 +160,9 @@ export default class usersController {
           password: generatePswd(),
           method,
           clientId: id,
-          role:'requester'
+          role: 'requester',
         },
-        raw: true
+        raw: true,
       }).spread((user, created) => {
         if (user) {
           const token = generateToken({
@@ -163,7 +170,7 @@ export default class usersController {
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
-            role:user.role
+            role: user.role,
           });
           localStorage.setItem('token', token);
           const statusCode = created === true ? 201 : 200;
@@ -175,22 +182,23 @@ export default class usersController {
             firstName,
             lastName,
             email,
-            token
+            token,
           });
         }
       });
     } catch (error) {
       res.status(500).json({
-        error: error.message
+        error: error.message,
       });
     }
   }
+
   static async forgetPassword(req, res) {
     const { email } = req.body;
     const user = await models.User.findOne({ where: { email } });
     if (!user) {
       res.status(404).json({
-        error: 'email is not registered! Please check the entered email'
+        error: 'email is not registered! Please check the entered email',
       });
     } else {
       const token = usePasswordHashToMakeToken(user);
@@ -198,7 +206,7 @@ export default class usersController {
       try {
         resetPasswordTemplate(user, url);
         return res.status(200).json({
-          message: `verify throughout your email: ${user.email}before 1 hour`
+          message: `verify throughout your email: ${user.email}before 1 hour`,
         });
       } catch (error) {
         res.status(500).json({ error: 'error sending email' });
@@ -213,7 +221,7 @@ export default class usersController {
         return res.status(401).json({ error: 'invalid token' });
       }
       const { newPassword, confirmPassword } = req.body;
-      models.User.findOne({ where: { id } }).then(user => {
+      models.User.findOne({ where: { id } }).then((user) => {
         const secret = `${user.password}`;
         const payload = jwt.decode(token, secret);
         if (!payload) {
@@ -226,12 +234,10 @@ export default class usersController {
               bcrypt.hash(newPassword, salt, (err, hash) => {
                 if (err) return;
                 models.User.update({ password: hash }, { where: { id } })
-                  .then(() =>
-                    res
-                      .status(202)
-                      .json({ message: 'Password changed successfully ' })
-                  )
-                  .catch(err => res.status(500).json(err));
+                  .then(() => res
+                    .status(202)
+                    .json({ message: 'Password changed successfully ' }))
+                  .catch((err) => res.status(500).json(err));
               });
             });
           } else {
@@ -243,11 +249,12 @@ export default class usersController {
       return res.status(401).json({ error: 'invalid token' });
     }
   }
+
   static async logout(req, res) {
     localStorage.removeItem('token');
     return res.status(200).json({
       status: 200,
-      message: 'Logout successfully'
+      message: 'Logout successfully',
     });
   }
 }

@@ -14,7 +14,7 @@ export default (req, res, next) => {
   } else {
     return res.status(401).json({
       status: 401,
-      message: 'One of your credentials is missing'
+      message: 'One of your credentials is missing',
     });
   }
 };

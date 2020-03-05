@@ -13,5 +13,5 @@ const echoNotification = (req, notification, type, receiverId) => {
 };
 
 export {
-  sendNotification, echoNotification
+  sendNotification, echoNotification,
 };

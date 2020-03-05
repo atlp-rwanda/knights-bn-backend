@@ -1,4 +1,4 @@
-import {SignUpschema, resetPassword, sendEmail } from '../helpers.js/userValidation';
+import { SignUpschema, resetPassword, sendEmail } from '../helpers/userValidation';
 
 class userValidate {
   static signUp(req, res, next) {

@@ -55,10 +55,10 @@ const userSignUp = () => {
         .request(app)
         .get('/api/v1/trips/myRequest')
         .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
+          expect(res.status).to.equal(200);
           expect(res.body.message).to.equal('List of requests');
+          done();
         });
-      done();
     });
     it('it should return 200 if user creates an account', (done) => {
       chai
