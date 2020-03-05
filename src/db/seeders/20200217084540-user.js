@@ -1,5 +1,5 @@
-module.exports = {
-  up: (queryInterface) => queryInterface.bulkInsert('Users', [{
+export function up(queryInterface) {
+  return queryInterface.bulkInsert('Users', [{
     firstName: 'Alain',
     lastName: 'Maxim',
     gender: 'male',
@@ -11,7 +11,7 @@ module.exports = {
     clientId: null,
     createdAt: new Date(),
     updatedAt: new Date(),
-    lineManager: 'william.ishimwe@andela.com'
+    lineManager: 'william.ishimwe@andela.com',
   }, {
     firstName: 'Eugene',
     lastName: 'Munyampundu',
@@ -23,7 +23,7 @@ module.exports = {
     method: 'standard',
     clientId: null,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   }, {
     firstName: 'Code',
     lastName: 'Knights',
@@ -35,7 +35,7 @@ module.exports = {
     method: 'standard',
     clientId: null,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   },
   {
     firstName: 'William',
@@ -48,7 +48,7 @@ module.exports = {
     method: 'standard',
     clientId: null,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   },
   {
     firstName: 'david',
@@ -62,8 +62,22 @@ module.exports = {
     lineManager: 'eugene.munyampundu@gmail.com',
     clientId: null,
     createdAt: new Date(),
-    updatedAt: new Date()
-  }, {
+    updatedAt: new Date(),
+  },
+  {
+    firstName: 'traveler',
+    lastName: 'Himbara',
+    gender: 'male',
+    email: 'traveladmin@gmail.com',
+    passport: 'ws846531',
+    password: '$2b$10$l05Anqm8ZkiTZiJPzDtjouorkUjPkzX1MqKau28V2nRHiiX3qpW2e',
+    role: 'traveladmin',
+    method: 'standard',
+    clientId: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
     firstName: 'murenzi',
     lastName: 'james',
     gender: 'male',
@@ -75,8 +89,7 @@ module.exports = {
     clientId: null,
     createdAt: new Date(),
     updatedAt: new Date(),
-    lineManager: 'william.ishimwe@andela.com'
-  }], {}),
-
-  down: (queryInterface) => queryInterface.bulkDelete('Users', null, {}),
-};
+    lineManager: 'william.ishimwe@andela.com',
+  }], {});
+}
+export function down(queryInterface) { return queryInterface.bulkDelete('Users', null, {}); }

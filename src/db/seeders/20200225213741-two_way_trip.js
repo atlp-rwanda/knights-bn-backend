@@ -11,7 +11,7 @@ module.exports = {
     password: process.env.MANAGER_PSWD,
     role: 'manager',
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   },
   {
     firstName: 'newiyonsenga',
@@ -24,7 +24,7 @@ module.exports = {
     method: 'standard',
     clientId: '1234566',
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   }], {}),
   down: (queryInterface) => queryInterface.bulkDelete('Users', null, {}),
 };

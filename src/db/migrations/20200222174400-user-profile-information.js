@@ -8,7 +8,7 @@ module.exports = {
         {
           type: Sequelize.STRING,
           allowNull: true,
-        }
+        },
       ),
       queryInterface.addColumn(
         'Users',
@@ -16,7 +16,7 @@ module.exports = {
         {
           type: Sequelize.DATE,
           allowNull: true,
-        }
+        },
       ),
       queryInterface.addColumn(
         'Users',
@@ -24,7 +24,7 @@ module.exports = {
         {
           type: Sequelize.STRING,
           allowNull: true,
-        }
+        },
       ),
       queryInterface.addColumn(
         'Users',
@@ -32,7 +32,7 @@ module.exports = {
         {
           type: Sequelize.STRING,
           allowNull: true,
-        }
+        },
       ),
       queryInterface.addColumn(
         'Users',
@@ -40,7 +40,7 @@ module.exports = {
         {
           type: Sequelize.STRING,
           allowNull: true,
-        }
+        },
       ),
       queryInterface.addColumn(
         'Users',
@@ -48,7 +48,7 @@ module.exports = {
         {
           type: Sequelize.STRING,
           allowNull: true,
-        }
+        },
       ),
       queryInterface.addColumn(
         'Users',
@@ -56,7 +56,7 @@ module.exports = {
         {
           type: Sequelize.STRING,
           allowNull: true,
-        }
+        },
       ),
       queryInterface.addColumn(
         'Users',
@@ -64,29 +64,27 @@ module.exports = {
         {
           type: Sequelize.STRING,
           allowNull: true,
-        }
+        },
       ), queryInterface.addColumn(
         'Users',
         'profileImage',
         {
           type: Sequelize.STRING,
           allowNull: true,
-        }
+        },
       ),
 
-    ]
+    ],
   ),
 
-  down: (queryInterface, Sequelize) => {
-    return Promise.all([
-      queryInterface.removeColumn('Users', 'language'),
-      queryInterface.removeColumn('Users', 'lineManager'),
-      queryInterface.removeColumn('Users', 'currency'),
-      queryInterface.removeColumn('Users', 'department'),
-      queryInterface.removeColumn('Users', 'homeTown'),
-      queryInterface.removeColumn('Users', 'role'),
-      queryInterface.removeColumn('Users', 'biography'),
-      queryInterface.removeColumn('Users', 'profileImage'),
-    ]);
-  }
+  down: (queryInterface) => Promise.all([
+    queryInterface.removeColumn('Users', 'language'),
+    queryInterface.removeColumn('Users', 'lineManager'),
+    queryInterface.removeColumn('Users', 'currency'),
+    queryInterface.removeColumn('Users', 'department'),
+    queryInterface.removeColumn('Users', 'homeTown'),
+    queryInterface.removeColumn('Users', 'role'),
+    queryInterface.removeColumn('Users', 'biography'),
+    queryInterface.removeColumn('Users', 'profileImage'),
+  ]),
 };

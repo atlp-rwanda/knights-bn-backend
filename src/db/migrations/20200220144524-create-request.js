@@ -6,7 +6,7 @@ module.exports = {
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
-      unique: true
+      unique: true,
     },
     userId: {
       type: Sequelize.INTEGER,
@@ -20,31 +20,31 @@ module.exports = {
       },
     },
     type: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     reason: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     destination: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     status: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     departureDate: {
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
     returnDate: {
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE
-    }
+      type: Sequelize.DATE,
+    },
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Requests')
+  down: (queryInterface) => queryInterface.dropTable('Requests'),
 };

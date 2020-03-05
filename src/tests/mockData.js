@@ -6,11 +6,11 @@ const mockData = {
     passportNumber: 'dear38bh',
     email: 'mugishadesire@gmail.com',
     password: 'Niyonkuru@1',
-    lineManager: 'william.ishimwe@andela.com'
+    lineManager: 'william.ishimwe@andela.com',
   },
   loginUserWithLineManager: {
     email: 'mugishadesire@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   loginUserWithLineManager2: {
     email: 'murenzijames@gmail.com',
@@ -22,15 +22,15 @@ const mockData = {
     gender: 'male',
     passportNumber: '12348234',
     email: 'nameless@gmail.com',
-    password: 'Password@1'
+    password: 'Password@1',
   },
   loginNewUser: {
     email: 'multi-city@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   loginX: {
     email: 'brftnomad@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   user1: {
     firstName: 'Niyonsenga',
@@ -38,11 +38,11 @@ const mockData = {
     gender: 'male',
     passportNumber: '78byvttt',
     email: 'brftnomad@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   login1: {
     email: 'brftnomad@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   user5: {
     firstName: 'Niyonsenga',
@@ -50,7 +50,7 @@ const mockData = {
     gender: 'male',
     passportNumber: '67uh09re',
     email: 'niyeric11@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   user10: {
     firstName: 'Moise',
@@ -58,7 +58,7 @@ const mockData = {
     gender: 'male',
     passportNumber: '78bh675t',
     email: 'moiserwi@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   existingPassport: {
     firstName: 'Niyonsenga',
@@ -66,7 +66,7 @@ const mockData = {
     gender: 'male ',
     passportNumber: '12345678',
     email: 'brftnomad@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   validOneWayTrip: {
     origin: 'Moroco',
@@ -74,7 +74,7 @@ const mockData = {
     departureDate: '2020-09-09',
     accommodation: 'YFB campus',
     reason: 'Attend a meeting',
-    passportNumber: '12345'
+    passportNumber: '12345',
   },
   incorectFirstName: {
     firstName: 'Niyonsenga@',
@@ -82,7 +82,7 @@ const mockData = {
     gender: 'male ',
     passportNumber: '1234incofn',
     email: 'brftnomad@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   incorectlastName: {
     firstName: 'Niyonsenga',
@@ -90,7 +90,7 @@ const mockData = {
     gender: 'male ',
     passportNumber: '1bx45x7ii',
     email: 'brftnomad@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   incorectEmail: {
     firstName: 'Niyonsenga',
@@ -102,13 +102,13 @@ const mockData = {
   },
   loginM: {
     email: 'multi-city@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   comment: {
-    comment: 'Holy'
+    comment: 'Holy',
   },
   InvalidComment: {
-    comment: 'p'
+    comment: 'p',
   },
   invalidPassport: {
     firstName: 'Niyonsenga',
@@ -116,7 +116,7 @@ const mockData = {
     gender: 'male ',
     passportNumber: '1bx',
     email: 'brftnomad@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   tooManyPassportNumber: {
     firstName: 'Niyonsenga',
@@ -124,7 +124,7 @@ const mockData = {
     gender: 'male ',
     passportNumber: '@!11111111111111111111111',
     email: 'manyNumber@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   newPassword:
   {
@@ -135,7 +135,7 @@ const mockData = {
     token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTgyNjQ4ODg4LCJleHAiOjE1ODI2NTI0ODh9.7AMsqKFdwWA08O3jGjjJTLAKR_ShWc7edjuKC9jbBiY',
   },
   fakeToken: {
-    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJOaXlvbnNlbmdhIiwibGFzdE5hbWUiOiJFcmljIiwiZ2VuZGVyIjoibWFsZSIsInBhc3Nwb3J0TnVtYmVyIjoiNzhieXZ0dHQiLCJlbWFpbCI6ImJyZnRub21hZEBnbWFpbC5jb20iLCJwYXNzd29yZCI6Ik5peW9ua3VydUAxIiwiaWF0IjoxNTgyNjU5NDU5fQ.I05YSeXG45B4XED9A64oUv5XkQyPrvKJnbJjWKkwe4w'
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJOaXlvbnNlbmdhIiwibGFzdE5hbWUiOiJFcmljIiwiZ2VuZGVyIjoibWFsZSIsInBhc3Nwb3J0TnVtYmVyIjoiNzhieXZ0dHQiLCJlbWFpbCI6ImJyZnRub21hZEBnbWFpbC5jb20iLCJwYXNzd29yZCI6Ik5peW9ua3VydUAxIiwiaWF0IjoxNTgyNjU5NDU5fQ.I05YSeXG45B4XED9A64oUv5XkQyPrvKJnbJjWKkwe4w',
   },
   invalidNewPassword1:
   {
@@ -152,19 +152,19 @@ const mockData = {
   },
   loginSuccessfully: {
     email: 'willishimw@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   loginSuccessfully2: {
     email: 'moiserwi@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   loginSuccessfully3: {
     email: 'alain.maxime@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   existingUser: {
     email: 'manzipatr@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   invalidCredentials: {
     email: 'brftnomad@gmail.com',
@@ -184,7 +184,7 @@ const mockData = {
     destination: 'kigali',
     status: 'pending',
     departureDate: '2020-07-01',
-    returnDate: '2020-09-01'
+    returnDate: '2020-09-01',
   },
   request1: {
     user: 'rwanda2020@gmail.com',
@@ -193,7 +193,7 @@ const mockData = {
     destination: 'kigali',
     status: 'pending',
     departureDate: '2020-07-01',
-    returnDate: '2020-09-01'
+    returnDate: '2020-09-01',
   },
   user9: {
     firstName: 'Niyonsenga',
@@ -201,7 +201,7 @@ const mockData = {
     gender: 'male',
     passportNumber: '78byvttt',
     email: 'rwanda2020@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   user11: {
     firstName: 'Jacques',
@@ -220,15 +220,15 @@ const mockData = {
   },
   managerLogin: {
     email: 'eugene.munyampundu@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   managerLogin3: {
     email: 'william.ishimwe@andela.com',
-    password: 'Password@1'
+    password: 'Password@1',
   },
   managerLogin2: {
     email: 'knights@gmail.com',
-    password: 'Niyonkuru@1'
+    password: 'Niyonkuru@1',
   },
   updateProfile: {
     language: 'English',
@@ -237,7 +237,7 @@ const mockData = {
     homeTown: 'kigali',
     department: 'IT',
     lineManager: 'Reporter',
-    biography: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+    biography: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
   },
   wrongPerson: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImVtYWlsIjoiZXVnZW5lbXUyMjNAZ21haWwuY29tIiwiZmlyc3ROYW1lIjoiTml5b25zZW5nYSIsImxhc3ROYW1lIjoiRXJpYyIsImlhdCI6MTU4MjQwNTk0N30.xzc9O9rKH13j4kuqjLALmBeDNWtF1zlQAnpoRLD9FG4',
   multiCityRequest: {
@@ -253,14 +253,14 @@ const mockData = {
       {
         name: 'kigali',
         from: '2020-05-02',
-        to: '2020-08-31'
+        to: '2020-08-31',
       },
       {
         name: 'kigali',
         from: '2020-06-02',
-        to: '2020-09-08'
-      }
-    ]
+        to: '2020-09-08',
+      },
+    ],
   },
   wrongMultiCityRequest: {
     destination: 'East Africa',
@@ -274,14 +274,14 @@ const mockData = {
       {
         name: 'kigali',
         from: '2020-7-2',
-        to: '2020-7-30'
+        to: '2020-7-30',
       },
       {
         name: 'Nairobi',
         from: '2020-8-1',
-        to: '2020-8-31'
-      }
-    ]
+        to: '2020-8-31',
+      },
+    ],
   },
   missingCities: {
     origin: 'New york',
@@ -296,14 +296,14 @@ const mockData = {
       {
         name: '',
         from: '2020-07-02',
-        to: '2020-07-30'
+        to: '2020-07-30',
       },
       {
         name: '',
         from: '2010-08-01',
-        to: '2010-08-31'
-      }
-    ]
+        to: '2010-08-31',
+      },
+    ],
   },
   validateDate1: {
     origin: 'New york',
@@ -318,14 +318,14 @@ const mockData = {
       {
         name: '',
         from: '2020-07-02',
-        to: '2020-07-30'
+        to: '2020-07-30',
       },
       {
         name: '',
         from: '2010-08-01',
-        to: '2010-08-31'
-      }
-    ]
+        to: '2010-08-31',
+      },
+    ],
   },
   validateDate2: {
     origin: 'New york',
@@ -340,21 +340,42 @@ const mockData = {
       {
         name: '',
         from: '2020-07-02',
-        to: '2020-10-30'
+        to: '2020-10-30',
       },
       {
         name: '',
         from: '2010-08-01',
-        to: '2010-08-31'
-      }
-    ]
+        to: '2010-08-31',
+      },
+    ],
   },
   editRequest: {
     origin: 'Nyamata',
     destination: 'Huye',
     departureDate: '2025-02-20',
     returnDate: '2025-03-20',
-    reason: 'Test update feature.'
-  }
+    reason: 'Test update feature.',
+  },
+  validateDate3: {
+    origin: 'New york',
+    destination: 'East Africa',
+    departureDate: '2020-04-28',
+    returnDate: '2020-09-30',
+    accommodation: 'XYZ campus',
+    type: 'multi_way',
+    reason: 'Reaseach',
+    passportNumber: '12345677',
+    cities: [
+      {
+        from: '2020-05-02',
+        to: '2020-08-31',
+      },
+      {
+        name: 'Nairob',
+        from: '2020-06-02',
+        to: '2020-09-08',
+      },
+    ],
+  },
 };
 export default mockData;

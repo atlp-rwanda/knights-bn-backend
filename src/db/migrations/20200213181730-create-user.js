@@ -9,41 +9,41 @@ module.exports = {
       primaryKey: true,
     },
     firstName: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     lastName: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     gender: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     email: {
       type: Sequelize.STRING,
       primaryKey: true,
-      unique: true
+      unique: true,
     },
     passport: {
       type: Sequelize.STRING,
       unique: true,
     },
     password: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     method: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     clientId: {
       type: Sequelize.STRING,
-      unique: true
+      unique: true,
     },
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE
-    }
+      type: Sequelize.DATE,
+    },
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Users')
+  down: (queryInterface) => queryInterface.dropTable('Users'),
 };

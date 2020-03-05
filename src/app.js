@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-underscore-dangle */
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
@@ -8,11 +10,12 @@ import passport from 'passport';
 import multer from 'multer';
 import cookieParser from 'cookie-parser';
 import sessions from 'express-session';
+import jwt from 'jsonwebtoken';
 import swaggerDefinition from './docs/swaggerDefinition';
 import users from './routes/users';
 import trips from './routes/trips';
 import translator from './translator';
-import jwt from 'jsonwebtoken';
+import accommodationRouter from './routes/accommodation';
 
 dotenv.config();
 
@@ -27,9 +30,9 @@ const io = socketIo(server);
 const connectedClients = {};
 io.use(async (socket, next) => {
   const { token } = socket.handshake.query;
-  const decoded = jwt.verify(token, process.env.SECRETKEY); 
+  const decoded = jwt.verify(token, process.env.SECRETKEY);
   const userData = decoded;
-  
+
   if (!userData.error) {
     const clientKey = Number.parseInt(userData.id, 10);
     connectedClients[clientKey] = connectedClients[clientKey] || [];
@@ -39,7 +42,7 @@ io.use(async (socket, next) => {
 });
 app.use((req, res, next) => {
   req.io = io;
-  
+
   req.connectedClients = connectedClients;
   next();
 });
@@ -78,6 +81,7 @@ app.get('/', (req, res) => res.json(res.__('Welcome to Barefoot Nomad')));
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/v1', users);
 app.use('/api/v1', trips);
+app.use('/api/v1', accommodationRouter);
 
 app.use((req, res) => {
   return res.status(404).send({
@@ -87,4 +91,3 @@ app.use((req, res) => {
 });
 
 export default app;
-

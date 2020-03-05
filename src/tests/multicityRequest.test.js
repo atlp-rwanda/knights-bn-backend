@@ -65,7 +65,16 @@ const multicityRequest = () => {
           done();
         });
     });
-
+    it('should return 400 when there is something missing in cities fields ', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/trips/request/multicity')
+        .send(mockData.validateDate3)
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          done();
+        });
+    });
     it('should return 400 when there is something missing ', (done) => {
       chai
         .request(app)
