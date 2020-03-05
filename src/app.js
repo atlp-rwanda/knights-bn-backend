@@ -24,7 +24,6 @@ const server = app.listen(port, () => {
 });
 
 const io = socketIo(server);
-
 const connectedClients = {};
 io.use(async (socket, next) => {
   const { token } = socket.handshake.query;

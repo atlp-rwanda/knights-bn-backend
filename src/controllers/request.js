@@ -3,16 +3,56 @@ import sgMail from '@sendgrid/mail';
 import models from '../db/models';
 import getTodayDate from '../utils/getTodayDate';
 import isObjectEmpty from '../utils/isObjectEmpty';
+import oneWayTripHelper from '../helpers/oneWayTrip';
 import Sequelize from 'sequelize';
 import { echoNotification } from '../helpers/notificationSender';
 
 const {
   Op, where, cast, col
 } = Sequelize;
+import lodash from 'lodash'
 
 environment.config();
-
 export default class usersController {
+  
+  static async createOneWayTrip(req, res) {
+    try {
+      const { id } = req.user;
+      const requesterId = id;
+
+      const {
+        origin, destination, departureDate, reason, accommodation
+      } = req.body;
+
+      const isManager = await oneWayTripHelper.searchManager();
+      const managerId = isManager.id;
+      const theRequest = await oneWayTripHelper.searchTripRequest(requesterId, Date.parse(departureDate), destination)
+      
+      if (theRequest.length != 0){
+        res.status(409).json({
+          error: 'Sorry! This request already exists. Please double-check your departure date and destination.'
+        })
+      } else {
+        const newTripRequest = await models.Request.create({
+          managerId,
+          requesterId,
+          origin,
+          destination,
+          status: 'pending',
+          type: 'one_way',
+          departureDate,
+          accommodation,
+          reason
+        });
+        const {dataValues} = newTripRequest;
+        return res.status(201).json({ message: 'Trip Request Successfully Created.', ...lodash.omit(dataValues, ['updatedAt', 'createdAt', 'returnDate', 'cities'])})
+      }
+    } catch (error) {
+      return res.status(500).json({
+        error: error.message
+      })
+    }
+  }
 
   static async createTwoWayTrip(req,res) {
     try{
@@ -46,7 +86,7 @@ export default class usersController {
         requesterId: id,
         origin,
         destination,
-        status:'pending',
+        status: 'pending',
         type: 'two_way',
         departureDate,
         returnDate,
@@ -115,44 +155,44 @@ export default class usersController {
   }
 
   static async findAllMyRequest(req, res) {
-    try{                
-    const allMyRequest = await models.Request.findAll({
+    try {
+      const allMyRequest = await models.Request.findAll({
         where: { requesterId: `${req.user.id}` },
       });
-    if(allMyRequest.length !== 0){
-      return res.status(200).json({ message: 'List of requests', allMyRequest });
-    } else{
-      return res.status(404).json({ message: 'No request found', allMyRequest });
-    }    
-    }catch (error) {
-    return res.status(500).json({
-      status: 500,
-      error: error.message
-    });
+      if (allMyRequest.length !== 0) {
+        return res.status(200).json({ message: 'List of requests', allMyRequest });
+      } else {
+        return res.status(404).json({ message: 'No request found', allMyRequest });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        status: 500,
+        error: error.message
+      });
     }
   }
   static async pendingApproval(req, res) {
-    if (req.user.role !== 'manager')
-    {
-      return res.status(403).json({ error: 'access denied'});
+    if (req.user.role !== 'manager') {
+      return res.status(403).json({ error: 'access denied' });
 
     }
-    try{          
-    const pendingRequests = await models.Request.findAll({
-        where: { managerId: req.user.id,
-      status:'pending'
-      },
-      });       
-    if(pendingRequests.length !== 0){
-      return res.status(200).json({ message: 'Pending requests', pendingRequests });
-    } else{
-      return res.status(404).json({ message: 'No Pending request available'});
-    }    
-    }catch (error) {
-    res.status(500).json({
-      status: 500,
-      error: error
-    });
+    try {
+      const pendingRequests = await models.Request.findAll({
+        where: {
+          managerId: req.user.id,
+          status: 'pending'
+        },
+      });
+      if (pendingRequests.length !== 0) {
+        return res.status(200).json({ message: 'Pending requests', pendingRequests });
+      } else {
+        return res.status(404).json({ message: 'No Pending request available' });
+      }
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        error: error
+      });
     }
   }
   static async rejectRequest(req, res) {

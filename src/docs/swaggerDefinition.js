@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 
 dotenv.config();
+const localSwagger = process.env.LOCAL_HOST;
+const herokuSwagger = process.env.HOST_NAME;
 
 const swaggerDefinition = {
   info: {
@@ -8,7 +10,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'Barefoot Nomad - Making travel and accomodation easy and convenient.',
   },
-  host: process.env.HOST_NAME,
+  host: process.env === 'development' ? localSwagger : herokuSwagger,
   basePath: '/api/v1',
   securityDefinitions: {
     bearerAuth: {

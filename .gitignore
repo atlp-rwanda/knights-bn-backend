@@ -104,6 +104,7 @@ sendgrid.env
 
 dist/
 .DS_Store
+uploads/
 
 #;profile picture uploads
 #dist

@@ -1,5 +1,76 @@
 /**
  * @swagger
+ *  "/trips/oneWayTrip": {
+      "post": {
+        "description": "Users should be able to make one-way trip request",
+        "summary": "Requesting a one-way trip request",
+        "tags": [
+          "Trips"
+        ],
+        "operationId": "Trip",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+          },
+          {
+            "name": "destination",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+          },
+          {
+            "name": "departureDate",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "value": "YYYY-MM-DD"
+          },
+          {
+            "name": "accommodation",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+          },
+          {
+            "name": "reason",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+          },
+          {
+            "name": "passportNumber",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Trip Request Successfully Created.",
+          },
+          "422": {
+            "description": "Invalid input",
+          },
+           "402": {
+            "description": "Unauthorized access"
+          }
+        }
+      }
+    }
+ */
+
+
+/**
+ * @swagger
  *  "/trips/returnTrip": {
       "post": {
         "description": "A user can request a trip from the manager",
@@ -132,6 +203,12 @@
     }
  */
 
+import express from 'express';
+import authCheck from '../middlewares/checkAuth';
+import requestControllers from '../controllers/request';
+import validateInputs from '../middlewares/validateReturnTrip';
+import validateOneWayTrip from '../middlewares/validateOneWay';
+
 /**
  * @swagger
  *  "/trips/reject/": {
@@ -204,12 +281,7 @@
  */
 
 
-import express from 'express';
-import request from '../controllers/request';
-import authCheck from '../middlewares/checkAuth';
-import requestControllers from '../controllers/request';
 import requestsController from '../controllers/searchRequest';
-import validateInputs from '../middlewares/validateReturnTrip';
 
 import {
   validateRequestDate, validateCityDate, tripInformation, multicity, checkIfRequestExists
@@ -217,20 +289,16 @@ import {
 
 
 const router = express.Router();
-
-const {
-  createTwoWayTrip, pendingApproval, rejectRequest, createMultiCityRequest
-} = requestControllers;
-
 const {
   filterTrips
 } = requestsController;
 
-router.get('/trips/myRequest', authCheck.auth, request.findAllMyRequest);
-router.post('/trips/returnTrip', authCheck.auth, validateInputs, createTwoWayTrip);
-router.get('/trips/pendingApproval', authCheck.auth, pendingApproval);
-router.patch('/trips/reject', authCheck.auth, rejectRequest);
-router.post('/trips/request/multicity', authCheck.auth, validateRequestDate, validateCityDate, tripInformation, multicity, checkIfRequestExists, createMultiCityRequest);
+router.post('/trips/oneWayTrip', authCheck.auth, validateOneWayTrip, requestControllers.createOneWayTrip);
+router.post('/trips/returnTrip', authCheck.auth, validateInputs, requestControllers.createTwoWayTrip);
+router.get('/trips/myRequest', authCheck.auth, requestControllers.findAllMyRequest);
+router.get('/trips/pendingApproval', authCheck.auth, requestControllers.pendingApproval);
+router.patch('/trips/reject', authCheck.auth, requestControllers.rejectRequest);
+router.post('/trips/request/multicity', authCheck.auth, validateRequestDate, validateCityDate, tripInformation, multicity, checkIfRequestExists, requestControllers.createMultiCityRequest);
 
 /**
  * @swagger

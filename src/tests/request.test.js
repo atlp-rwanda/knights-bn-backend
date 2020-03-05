@@ -12,7 +12,7 @@ const { validTrip2 } = returnTripMock;
 chai.use(chaiHttp);
 chai.should();
 
-const port = process.env.PORT || 4008;
+const port = 4008;
 const appp = express();
 const server = appp.listen(port);
 
@@ -80,6 +80,18 @@ const userSignUp = () => {
           expect(res.body.message).to.equal('Seems you do not have an account! Create it now');
           done();
         });
+    });
+    it('it should return 201 status for a successful one-way trip request creation', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/trips/oneWayTrip')
+        .send(mockData.validOneWayTrip)
+        .end((err, res) => {
+          expect(res.status).to.be.equal(201);
+          expect(res.body.message).to.equal('Trip Request Successfully Created.');
+          expect(res.body).to.be.an('object');
+        });
+      done();
     });
     it('it should return 404 if there is no request history', (done) => {
       chai
@@ -162,7 +174,7 @@ const userSignUp = () => {
     it('it should return 200 when search result are found and displayed', (done) => {
       chai
         .request(app)
-        .get('/api/v1/trips/search?destination=Kampala')
+        .get('/api/v1/trips/search?destination=Kampa')
         .send()
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
