@@ -22,5 +22,17 @@ class UserQuery {
     }
     return user;
   }
+
+  static getManager(managerId) {
+    return models.User.findOne(
+      { where: { id: managerId, role: 'manager' } },
+    );
+  }
+
+  static getUserByEmail(email) {
+    return models.User.findOne(
+      { where: { email } },
+    );
+  }
 }
 export default UserQuery;

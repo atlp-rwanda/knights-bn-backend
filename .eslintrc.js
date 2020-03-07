@@ -1,4 +1,11 @@
 module.exports = {
+  ecmaFeatures: {
+    modules: true,
+    spread: true,
+    restParams: true
+  },
+  root: true,
+  'extends': 'airbnb-base',
   env: {
     es6: true,
     node: true,
@@ -9,6 +16,7 @@ module.exports = {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly'
   },
+  parser: 'babel-eslint',
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module'

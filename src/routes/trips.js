@@ -68,7 +68,6 @@
     }
  */
 
-
 /**
  * @swagger
  *  "/trips/returnTrip": {
@@ -520,6 +519,91 @@
              }
           */
 
+/**
+    * @swagger
+    *  "/trips/approve/{requestId}": {
+         "patch": {
+           "description": "A manager can approve the request, and instantly both email and in-app be sent to manager.",
+           "summary": "Approve request.",
+           "tags": [
+             "Trips"
+           ],
+           "deprecated": false,
+           "produces": [
+             "application/json"
+           ],
+           "consumes": [
+             "application/x-www-form-urlencoded"
+           ],
+           "parameters": [
+             {
+                 "name": "requestId",
+                 "in": "path",
+                 "description": "ID of a request to be approved",
+                 "required": true,
+                 "type": "integer",
+                 "format": "int64"
+             }
+           ],
+           "responses": {
+             "200": {
+               "description": "The request successfully approved",
+             },
+             "422": {
+               "description": "Invalid input",
+             },
+             "403": {
+               "description": "Unauthorized access!",
+             },
+             "404": {
+                 "description": "Not found",
+               }
+              }
+            }
+          }
+          */
+/**
+    * @swagger
+    *  "/trips/request/{requestId}": {
+         "get": {
+           "description": "A user can view a specific trip request.",
+           "summary": "View request.",
+           "tags": [
+             "Trips"
+           ],
+           "deprecated": false,
+           "produces": [
+             "application/json"
+           ],
+           "consumes": [
+             "application/x-www-form-urlencoded"
+           ],
+           "parameters": [
+             {
+                 "name": "requestId",
+                 "in": "path",
+                 "description": "ID of a request to view",
+                 "required": true,
+                 "type": "integer",
+                 "format": "int64"
+             }
+           ],
+           "responses": {
+             "200": {
+               "description": "The request successfully retrieved.`",
+             },
+             "422": {
+               "description": "Invalid input",
+             },
+
+             "404": {
+                 "description": "Not found",
+               }
+              }
+            }
+          }
+          */
+
 import express from 'express';
 import authCheck from '../middlewares/checkAuth';
 import requestControllers from '../controllers/request';
@@ -531,32 +615,27 @@ import commentValidate from '../middlewares/newComment';
 import checkCommenterValidation from '../middlewares/commenter';
 import requestStatusController from '../controllers/notifications';
 import checkUserComment from '../middlewares/deleteCommentChecker';
-
 import splitUrl from '../middlewares/splitUrl';
 import {
   validateRequestDate, validateCityDate, tripInformation, multicity, checkIfRequestExists,
 } from '../middlewares/validateDate';
-
+import validateParams from '../middlewares/validateParams';
 
 const router = express.Router();
+const { filterTrips } = requestsController;
 
-const {
-  filterTrips,
-} = requestsController;
-const {
-  getRequestStatus, markAsRead,
-} = requestStatusController;
 router.post('/trips/oneWayTrip', authCheck.auth, validateOneWayTrip, requestControllers.createOneWayTrip);
 router.post('/trips/returnTrip', authCheck.auth, validateInputs, requestControllers.createTwoWayTrip);
 router.get('/trips/myRequest', authCheck.auth, requestControllers.findAllMyRequest);
 router.get('/trips/pendingApproval', authCheck.auth, requestControllers.pendingApproval);
-router.patch('/trips/reject', authCheck.auth, requestControllers.rejectRequest);
+router.patch('/trips/reject', validateParams, authCheck.auth, requestControllers.rejectRequest);
 router.post('/trips/request/multicity', authCheck.auth, validateRequestDate, validateCityDate, tripInformation, multicity, checkIfRequestExists, requestControllers.createMultiCityRequest);
 router.post('/trips/comment', authCheck.auth, commentValidate.comment, checkCommenterValidation, comment.createComment);
 router.delete('/trips/comment', authCheck.auth, checkUserComment, comment.deleteComment);
 router.get('/trips/search', authCheck.auth, filterTrips);
-router.get('/notifications', authCheck.auth, getRequestStatus);
-router.patch('/notifications', authCheck.auth, markAsRead);
+router.get('/notifications', authCheck.auth, requestStatusController.getRequestStatus);
+router.patch('/notifications', authCheck.auth, requestStatusController.markAsRead);
 router.patch('/trips/edit/:requestId', authCheck.auth, splitUrl, validateInputs, requestControllers.editRequest);
-
+router.patch('/trips/approve/:requestId', authCheck.auth, requestControllers.approveRequest);
+router.get('/trips/request/:requestId', authCheck.auth, requestControllers.getSpecificRequest);
 export default router;

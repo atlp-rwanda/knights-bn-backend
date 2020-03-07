@@ -5,9 +5,8 @@ import environment from 'dotenv';
 import sgMail from '@sendgrid/mail';
 import sequelize from 'sequelize';
 import models from '../db/models';
-import generateToken from '../utils/generateToken';
-import generatePswd from '../utils/randomPswd';
-
+import generateToken from '../helpers/generateToken';
+import generatePswd from '../helpers/randomPswd';
 import usePasswordHashToMakeToken from '../helpers/helpers';
 import {
   getPasswordResetURL,
@@ -27,7 +26,7 @@ export default class usersController {
 
       const token = generateToken({
         firstName, lastName, gender, passportNumber, email, password,
-      }, process.env.SECRETKEY);
+      });
 
       let host;
 
@@ -82,13 +81,10 @@ export default class usersController {
         password: hashedPassword,
         passport: passportNumber,
       });
-
+      const { id } = newUser;
       const token = generateToken({
-        id: newUser.id,
-        email: newUser.email,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-      }, process.env.SECRETKEY);
+        id, email, firstName, lastName,
+      });
 
       localStorage.setItem('token', token);
       return res.status(201).json({ message: 'Your account is successfully created.' });
@@ -114,16 +110,17 @@ export default class usersController {
           .status(401)
           .json({ status: 401, message: 'Invalid credentials' });
       }
-
+      const {
+        id, role, firstName, lastName,
+      } = existUser;
       const token = generateToken(
         {
-          id: existUser.id,
-          email: existUser.email,
-          role: existUser.role,
-          firstName: existUser.firstName,
-          lastName: existUser.lastName,
+          id,
+          email,
+          role,
+          firstName,
+          lastName,
         },
-        process.env.SECRETKEY,
       );
 
       localStorage.setItem('token', token);

@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import dotenv from 'dotenv';
 import app from '../app';
 import mockData from './mockData';
-import isObjectEmpty from '../utils/isObjectEmpty';
+import isObjectEmpty from '../helpers/isObjectEmpty';
 
 dotenv.config();
 
@@ -40,7 +40,7 @@ const testRejectRequest = () => {
         .post('/api/v1/auth/login')
         .send({
           email: 'eugene.munyampundu@gmail.com',
-          password: 'Niyonkuru@1'
+          password: 'Niyonkuru@1',
         })
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
@@ -55,6 +55,16 @@ const testRejectRequest = () => {
         .end((error, response) => {
           expect(response.status).to.equal(404);
           expect(response.body).to.have.property('error').equals('Request not found!');
+          done();
+        });
+    });
+    it('returns 422 on a request with invalid id', (done) => {
+      chai
+        .request(app)
+        .patch(`/api/v1/trips/reject?requestId=${'x'}`)
+        .end((error, response) => {
+          expect(response.status).to.equal(422);
+          expect(response.body).to.have.property('error');
           done();
         });
     });
@@ -83,17 +93,17 @@ const testRejectRequest = () => {
         .patch(`/api/v1/trips/reject?requestId=${3}`)
         .end((error, response) => {
           expect(response.status).to.equal(405);
-          expect(response.body).to.have.property('message').equals("Sorry can't reject ! The user is now on trip.");
+          expect(response.body).to.have.property('error').equals("Sorry can't reject ! The user is now on trip.");
           done();
         });
     });
-    it('returns 500 on a request with invalid id', (done) => {
+    it('returns 200 if request was approved but yet its start date not today ', (done) => {
       chai
         .request(app)
-        .patch(`/api/v1/trips/reject?requestId=${'x'}`)
+        .patch(`/api/v1/trips/reject?requestId=${4}`)
         .end((error, response) => {
-          expect(response.status).to.equal(500);
-          expect(response.body).to.have.property('error');
+          expect(response.status).to.equal(200);
+          expect(response.body).to.have.property('message').equals('The request successfully rejected');
           done();
         });
     });

@@ -21,4 +21,7 @@ const createTwoWayTripSchema = Joi.object({
   accommodation: Joi.string().required(),
 });
 
-export { editRequestSchema, createTwoWayTripSchema };
+const requestIdParamsSchema = Joi.object({
+  requestId: Joi.number().required(),
+});
+export { editRequestSchema, createTwoWayTripSchema, requestIdParamsSchema };
