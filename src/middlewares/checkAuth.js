@@ -6,7 +6,7 @@ const auth = (req, res, next) => {
   if (!token) {
     return res.status(401).json({
       status: 401,
-      error: 'you are not logged in'
+      error: 'you are not logged in',
     });
   }
   try {
@@ -19,5 +19,5 @@ const auth = (req, res, next) => {
   return token;
 };
 export default {
-  auth
+  auth,
 };

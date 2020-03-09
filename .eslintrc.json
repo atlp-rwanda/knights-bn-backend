@@ -15,12 +15,17 @@
   
   "rules": {
     "one-var": 0,
+    "no-multiple-empty-lines": ["error", { "max": 0, "maxEOF": 1 }],
+    "eslint use-isnan": "error",
+    "no-unused-vars": "error",
+    "comma-dangle": ["error", "never"],
+    "lines-between-class-members": ["error", "always"],
     "no-undef": 0,
     "one-var-declaration-per-line": 0,
     "new-cap": 0,
-    "consistent-return": 0,
     "no-param-reassign": 0,
-    "comma-dangle": 0,
+    "consistent-return": "error",
+    "no-console": ["error", { "allow": ["warn", "error"] }],
     "curly": [
       "error",
       "multi-line"

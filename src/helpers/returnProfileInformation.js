@@ -14,5 +14,5 @@ export default (profileInfo) => ({
   biography: profileInfo.biography,
   profileImage: profileInfo.profileImage,
   createdAt: profileInfo.createdAt,
-  updatedAt: profileInfo.updatedAt
+  updatedAt: profileInfo.updatedAt,
 });

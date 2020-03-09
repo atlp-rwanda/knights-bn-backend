@@ -6,7 +6,7 @@ export const storage = multer.diskStorage({
   },
   filename: (req, file, cback) => {
     cback(null, new Date().toISOString() + file.originalname);
-  }
+  },
 });
 export const fileFilter = (req, file, callBack) => {
   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {

@@ -1,9 +1,5 @@
 import environment from 'dotenv';
-import models from '../db/models';
-import Sequelize from 'sequelize';
 import notificationsHelper from '../helpers/getNotifications';
-
-const { Op } = Sequelize;
 
 environment.config();
 
@@ -14,36 +10,34 @@ export default class requestStatusController {
     if (role === 'manager') {
       notifications = await notificationsHelper.searchNotification(
         'manager',
-       'managerId',
-        id
+        'managerId',
+        id,
       );
 
-      if (notifications.length != 0) {
+      if (notifications.length !== 0) {
         return res
           .status(200)
           .json({ message: 'Your notifications', notifications });
-      } else {
-        return res
-          .status(404)
-          .json({ message: 'You have no new notification' });
       }
+      return res
+        .status(404)
+        .json({ message: 'You have no new notification' });
     }
 
     if (role === 'requester') {
       notifications = await notificationsHelper.searchNotification(
         'requester',
-       'requesterId',
-        id
+        'requesterId',
+        id,
       );
       if (notifications.length !== 0) {
         return res
           .status(200)
           .json({ message: 'Your notifications', notifications });
-      } else {
-        return res
-          .status(404)
-          .json({ message: 'You have no new notification' });
       }
+      return res
+        .status(404)
+        .json({ message: 'You have no new notification' });
     }
   }
 
@@ -54,8 +48,8 @@ export default class requestStatusController {
     if (role === 'manager') {
       notifications = await notificationsHelper.markNtfctionRead(
         'manager',
-       'managerId',
-        id
+        'managerId',
+        id,
       );
       return res.status(200).json({ message: 'You have no unread notification' });
     }
@@ -63,8 +57,8 @@ export default class requestStatusController {
     if (role === 'requester') {
       notifications = await notificationsHelper.markNtfctionRead(
         'requester',
-       'requesterId',
-        id
+        'requesterId',
+        id,
       );
       return res.status(200).json({ message: 'You have no unread notification' });
     }

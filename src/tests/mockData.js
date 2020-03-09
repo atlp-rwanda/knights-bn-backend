@@ -71,7 +71,7 @@ const mockData = {
   validOneWayTrip: {
     origin: 'Moroco',
     destination: 'Kigali',
-    departureDate: '2020-03-09',
+    departureDate: '2020-09-09',
     accommodation: 'YFB campus',
     reason: 'Attend a meeting',
     passportNumber: '12345'
