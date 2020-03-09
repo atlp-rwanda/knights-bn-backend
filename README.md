@@ -93,6 +93,8 @@ Open terminal from your computer
 
 `- PATCH /notifications -For marking all notification as read`
 
+`- PATCH /trips/edit - For enabling a user to edit an open request. `
+
 ### Raising an issue
 Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create an issue about this app
 

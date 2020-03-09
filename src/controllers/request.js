@@ -6,9 +6,10 @@ import getTodayDate from '../utils/getTodayDate';
 import isObjectEmpty from '../utils/isObjectEmpty';
 import oneWayTripHelper from '../helpers/oneWayTrip';
 import { echoNotification } from '../helpers/notificationSender';
+import updateRequest from '../utils/updateRequest';
 
 environment.config();
-export default class usersController {
+export default class requestsController {
   static async createOneWayTrip(req, res) {
     try {
       const { id } = req.user;
@@ -21,7 +22,6 @@ export default class usersController {
       const isManager = await oneWayTripHelper.searchManager();
       const managerId = isManager.id;
       const theRequest = await oneWayTripHelper.searchTripRequest(requesterId, Date.parse(departureDate), destination);
-
       if (theRequest.length !== 0) {
         return res.status(409).json({
           error: 'Sorry! This request already exists. Please double-check your departure date and destination.',
@@ -54,22 +54,22 @@ export default class usersController {
         origin, destination, departureDate, returnDate, reason, accommodation,
       } = req.body;
 
-      const UserData = await models.User.findOne({
+      const userData = await models.User.findOne({
         where: { id: `${id}` },
       });
-      if (UserData.lineManager == null) {
+      if (userData.lineManager === null) {
         return res.status(422).json({
-          status: 422,
+          status: res.statusCode,
           error: 'you currently have no lineManager, please go to update your profile',
         });
       }
       const manager = await models.User.findOne({
-        where: { email: `${UserData.lineManager}` },
+        where: { email: `${userData.lineManager}` },
       });
       const managerId = manager.dataValues.id;
       const request = await models.Request.create({
         managerId,
-        requesterId: id,
+        requesterId: userData.id,
         origin,
         destination,
         status: 'pending',
@@ -80,57 +80,62 @@ export default class usersController {
         reason,
       });
 
+      const isRequestEmpty = isObjectEmpty(request);
+      const {
+        id: requestId, requesterId, type, status,
+      } = request;
 
-      if (!request) {
-        return new Error('error');
-      }
-      sgMail.setApiKey(process.env.BN_API_KEY);
-      const msg = {
-        to: `${manager.dataValues.email}`,
-        from: 'no-reply@brftnomad.com',
-        subject: 'Barefoot Travel Request',
-        text: `${request.dataValues.reason}`,
-        html: `<p><strong>Dear ${manager.dataValues.firstName}<strong>
-          <br><br>
-          <p>This is to inform you that a new request was made by:<p>
-          <br>Name of the requester: ${UserData.FirstName} ${UserData.lastName}
-          <br>Reason: ${request.dataValues.reason}
-          <br>Request Type: ${request.dataValues.type}
-          <br>Destination: ${request.dataValues.destination}
-          <br>DepartureDate: ${request.dataValues.departureDate}
-          <br>ReturnDate: ${request.dataValues.returnDate}
-          <br>Barefoot Nomad Team<br>
-          <br>Thank you<br>
-          </p>`,
-      };
-
-      sgMail.send(msg);
-
-      const newNotification = await models.Notification.create({
-        requesterId: id,
-        managerId,
-        status: 'non_read',
-        message: 'a new request was made',
-        type: 'new_request',
-        owner: 'manager',
-      });
-
-      echoNotification(req, newNotification, 'new_request', managerId);
-
-      return res.status(200).json({
-        message: 'request created on success!',
-        origin,
-        destination,
-        departureDate,
-        returnDate,
-        reason,
-        requestId: request.id,
-        requestType: request.type,
-        status: request.status,
+      if (isRequestEmpty === false) {
+        sgMail.setApiKey(process.env.BN_API_KEY);
+        const msg = {
+          to: `${manager.dataValues.email}`,
+          from: 'no-reply@brftnomad.com',
+          subject: 'Barefoot Travel Request',
+          text: `${request.dataValues.reason}`,
+          html: `<p><strong>Dear ${manager.dataValues.firstName}<strong>
+              <br><br>
+              <p>This is to inform you that a new request was made by:<p>
+              <br>Name of the requester: ${userData.FirstName} ${userData.lastName}
+              <br>Reason: ${request.dataValues.reason}
+              <br>Request Type: ${request.dataValues.type}
+              <br>Destination: ${request.dataValues.destination}
+              <br>DepartureDate: ${request.dataValues.departureDate}
+              <br>ReturnDate: ${request.dataValues.returnDate}
+              <br>Barefoot Nomad Team<br>
+              <br>Thank you<br>
+              </p>`,
+        };
+        sgMail.send(msg);
+        const newNotification = await models.Notification.create({
+          requesterId: id,
+          managerId,
+          status: 'non_read',
+          message: 'a new request was made',
+          type: 'new_request',
+          owner: 'manager',
+        });
+        echoNotification(req, newNotification, 'new_request', managerId);
+        return res.status(201).json({
+          message: 'request created with success!',
+          data: {
+            requestId,
+            requesterId,
+            managerId: manager.id,
+            type,
+            reason,
+            origin,
+            destination,
+            status,
+            departureDate,
+            returnDate,
+          },
+        });
+      } return res.status(500).json({
+        error: "can't create the request, retry please!",
       });
     } catch (error) {
       return res.status(500).json({
-        error,
+        error: error.message,
       });
     }
   }
@@ -190,24 +195,14 @@ export default class usersController {
     try {
       const { requestId } = req.query;
       const managerId = req.user.id;
-
       const manager = await models.User.findOne(
-        {
-          where: { id: managerId, role: 'manager' },
-        },
+        { where: { id: managerId, role: 'manager' } },
       );
       if (manager) {
         const request = await models.Request.findAll(
-          {
-            where: {
-              id: requestId,
-              managerId,
-            },
-          },
+          { where: { id: requestId, managerId } },
         );
-
         const isRequestEmpty = isObjectEmpty(request);
-
         if (isRequestEmpty === false) {
           const requestStatus = request[0].status;
 
@@ -239,7 +234,6 @@ export default class usersController {
             if (tripStarted) {
               res.status(405).json({
                 message: "Sorry can't reject ! The user is now on trip.",
-
               });
             } else {
               const updatedRequest = await models.Request.update(
@@ -287,6 +281,41 @@ export default class usersController {
       return res.status(201).json({ status: 201, message: 'Your request has successfully created', data: multiCity });
     } catch (error) {
       return res.status(500).json({ status: 500, error });
+    }
+  }
+
+  static async editRequest(req, res) {
+    try {
+      const { requestId } = req.params;
+      const requesterId = req.user.id;
+      const request = await models.Request.findOne({
+        where: { id: requestId, requesterId },
+      });
+      if (request) {
+        if (request.status === 'pending') {
+          const updatedRequest = await updateRequest(requestId, req.body);
+          if (updatedRequest) {
+            return res.status(200).json({
+              message: 'successfully updated',
+              updatedRequest,
+            });
+          }
+        } else throw 'Sorry, the request was closed!';
+      } throw 'request not found!';
+    } catch (error) {
+      if (error === 'Sorry, the request was closed!') {
+        return res.status(200).json({ error });
+      } if (error === 'request not found!') {
+        return res.status(404).json({ error });
+      } if (error.message.includes('invalid input syntax for type integer')) {
+        return res.status(422).json({
+          status: res.statusCode,
+          error: 'make sure the request id is a number.',
+        });
+      }
+      return res.status(500).json({
+        error: error.message,
+      });
     }
   }
 }
