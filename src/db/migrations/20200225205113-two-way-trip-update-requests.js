@@ -4,8 +4,8 @@ module.exports = {
       'Requests',
       'origin',
       {
-        type: Sequelize.STRING
-      }
+        type: Sequelize.STRING,
+      },
     ),
 
     queryInterface.removeColumn('Requests', 'userId'),
@@ -21,8 +21,8 @@ module.exports = {
           model: 'Users',
           key: 'id',
           as: 'managerId',
-        }
-      }
+        },
+      },
     ),
     queryInterface.addColumn(
       'Requests',
@@ -35,15 +35,15 @@ module.exports = {
           model: 'Users',
           key: 'id',
           as: 'requesterId',
-        }
-      }
+        },
+      },
     ),
     queryInterface.removeColumn('Requests', 'status'),
     queryInterface.removeColumn('Requests', 'type'),
   ]),
-  down: (queryInterface, Sequelize) => Promise.all([
+  down: (queryInterface) => Promise.all([
     queryInterface.removeColumn('Requests', 'origin'),
     queryInterface.removeColumn('Requests', 'managerId'),
     queryInterface.removeColumn('Requests', 'requesterId'),
-  ])
+  ]),
 };

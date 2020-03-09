@@ -1,5 +1,5 @@
-module.exports = {
-  up: (queryInterface) => queryInterface.bulkInsert('Notifications', [
+export function up(queryInterface) {
+  return queryInterface.bulkInsert('Notifications', [
     {
       requesterId: 1,
       managerId: 7,
@@ -19,9 +19,7 @@ module.exports = {
       owner: 'manager',
       createdAt: new Date(),
       updatedAt: new Date(),
-    }
-
-  ], {}),
-
-  down: (queryInterface) => queryInterface.bulkDelete('Notifications', null, {}),
-};
+    },
+  ], {});
+}
+export function down(queryInterface) { return queryInterface.bulkDelete('Notifications', null, {}); }

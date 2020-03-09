@@ -78,7 +78,7 @@
         "tags": [
           "Trips"
         ],
-        "operationId": "Trip",
+        "operationId": "Trip-return",
         "produces": [
           "application/json"
         ],
@@ -155,12 +155,12 @@
         "tags": [
           "Trips"
         ],
-        "operationId": "Trip",
+        "operationId": "Trip-multicity",
         "produces": [
           "application/json"
         ],
         "consumes": [
-          "application/x-www-form-urlencoded"
+          "application/json"
         ],
         "parameters": [
           {

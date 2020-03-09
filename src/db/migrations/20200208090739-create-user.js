@@ -10,7 +10,7 @@ module.exports = {
       autoIncrement: true,
       type: Sequelize.INTEGER,
       primaryKey: true,
-      unique: true
+      unique: true,
     },
     firstName: {
       type: Sequelize.STRING,
@@ -45,7 +45,7 @@ module.exports = {
     updatedAt: {
       allowNull: false,
       type: Sequelize.DATE,
-    }
+    },
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Users'),
+  down: (queryInterface) => queryInterface.dropTable('Users'),
 };

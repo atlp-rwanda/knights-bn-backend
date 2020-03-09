@@ -1,0 +1,204 @@
+import { Router } from 'express';
+import accommodation from '../controllers/accommodation';
+import verifyToken from '../middlewares/checkAuth';
+import isAdmin from '../middlewares/isTravelAdmin';
+import { accommodationValidataion, validateRooms, isExist } from '../middlewares/validateDate';
+import imageMiddleware from '../middlewares/imageUpload';
+
+
+/**
+ * @swagger
+ *  "/create/accommodation": {
+      "post": {
+        "description": "Travel admin can create accommodation facility",
+        "summary": "create accommodation",
+        "tags": [
+          "Accommodation"
+        ],
+        "deprecated": false,
+        "operationId": "accommodation",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+         {
+            "name": "accommodation",
+            "in": "body",
+            "description": "create accommodation",
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successfully",
+          },
+        }
+      }
+    }
+ */
+
+/**
+ * @swagger
+ *  "/upload/accommodation/{id}": {
+      "patch": {
+        "description": "upload accommodation image",
+        "summary": "upload image",
+        "tags": [
+          "Accommodation"
+        ],
+        "operationId": "accommodation-image",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+                  {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "accommodation id"
+          },
+          {
+            "name": "imageOfBuilding",
+            "in": "formData",
+            "required": true,
+            "type": "file",
+          },
+
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully",
+          },
+           "401": {
+            "description": "Unauthorized access"
+          }
+        }
+      }
+    }
+ */
+
+/**
+ * @swagger
+ *  "/view/accommodations": {
+      "get": {
+        "description": "view all accommodations",
+        "summary": "view all accommodations",
+        "tags": [
+          "Accommodation"
+        ],
+        "operationId": "accommodations-view",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+
+        ],
+        "responses": {
+          "200": {
+            "description":"successfully",
+          },
+           "401": {
+            "description": "Unauthorized access"
+          }
+        }
+      }
+    }
+ */
+
+/**
+ * @swagger
+ *  "/view/accommodation/{id}": {
+      "get": {
+        "description": "view single accommodation",
+        "summary": "view single accommodation",
+        "tags": [
+          "Accommodation"
+        ],
+        "operationId": "accommodation-view",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+         {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "accommodation id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully",
+          },
+           "401": {
+            "description": "Unauthorized access"
+          }
+        }
+      }
+    }
+ */
+
+/**
+ * @swagger
+ *  "/edit/accommodation/{id}": {
+      "patch": {
+        "description": "edit accommodations",
+        "summary": "edit accommodations",
+        "tags": [
+          "Accommodation"
+        ],
+        "operationId": "accommodation-edit",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+                  {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "accommodation id"
+          },
+         {
+            "name": "accommodation",
+            "in": "body",
+            "description": "update accommodation",
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully",
+          },
+           "401": {
+            "description": "Unauthorized access"
+          }
+        }
+      }
+    }
+ */
+
+const accommodationRouter = Router();
+accommodationRouter.patch('/upload/accommodation/:id', verifyToken.auth, isAdmin, imageMiddleware.single('imageOfBuilding'), accommodation.uploadBuildingImage);
+accommodationRouter.patch('/edit/accommodation/:id', verifyToken.auth, isAdmin, accommodation.editAccommodation);
+accommodationRouter.post('/create/accommodation', verifyToken.auth, imageMiddleware.single('imageOfBuilding'), isAdmin, accommodationValidataion, validateRooms, isExist, accommodation.createAccomodation);
+accommodationRouter.get('/view/accommodation/:id', verifyToken.auth, accommodation.getSingleAccommodation);
+accommodationRouter.get('/view/accommodations', verifyToken.auth, accommodation.getAllAccommodations);
+
+
+export default accommodationRouter;

@@ -4,7 +4,7 @@ module.exports = {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
     },
     requestId: {
       type: Sequelize.INTEGER,
@@ -14,7 +14,7 @@ module.exports = {
         model: 'Requests',
         key: 'id',
         as: 'id',
-      }
+      },
     },
     commenterId: {
       type: Sequelize.INTEGER,
@@ -28,7 +28,7 @@ module.exports = {
       },
     },
     comment: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     isVisible: {
       type: Sequelize.BOOLEAN,
@@ -37,12 +37,12 @@ module.exports = {
     },
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
     },
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE
-    }
+      type: Sequelize.DATE,
+    },
   }),
-  down: (queryInterface) => queryInterface.dropTable('Comments')
+  down: (queryInterface) => queryInterface.dropTable('Comments'),
 };

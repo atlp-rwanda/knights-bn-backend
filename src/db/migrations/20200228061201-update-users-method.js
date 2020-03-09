@@ -4,5 +4,5 @@ module.exports = {
   },
   down(queryInterface) {
     return queryInterface.sequelize.query('DROP TYPE "enum_Users_method" CASCADE');
-  }
+  },
 };

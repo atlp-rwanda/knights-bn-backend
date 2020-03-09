@@ -1,4 +1,9 @@
 {
+  "ecmaFeatures": {
+    "modules": true,
+    "spread" : true,
+    "restParams" : true
+  },
   "root": true,
   "extends": "airbnb-base",
   "env": {
@@ -6,16 +11,17 @@
     "es6": true,
     "mocha": true
   },
+  "parser": "babel-eslint",
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 11,
     "sourceType": "module",
     "parser":"babel-eslint",
-    "allowImportExportEverywhere": true
+    "allowImportExportEverywhere": false
   },
-  
   "rules": {
     "no-throw-literal": "off",
     "one-var": 0,
+    "strict": 0,
     "no-multiple-empty-lines": ["error", { "max": 0, "maxEOF": 1 }],
     "eslint use-isnan": "error",
     "no-unused-vars": "error",

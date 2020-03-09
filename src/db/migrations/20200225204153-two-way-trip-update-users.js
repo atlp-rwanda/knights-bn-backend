@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => Promise.all([
+  up: (queryInterface) => Promise.all([
 
     queryInterface.removeColumn('Users', 'gender'),
 
@@ -9,15 +9,15 @@ module.exports = {
 
     queryInterface.removeColumn('Users', 'id'),
 
-    queryInterface.renameColumn('Users', 'userId', 'id')
+    queryInterface.renameColumn('Users', 'userId', 'id'),
 
   ]),
   down: (queryInterface, Sequelize) => Promise.all([
     queryInterface.addColumn('Users', 'userId', {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
     }),
     queryInterface.addColumn('Users', 'role', {
       type: Sequelize.STRING,
     }),
-  ])
+  ]),
 };
