@@ -71,8 +71,8 @@ app.use(sessions({
   saveUninitialized: false,
   cookie: {
     maxAge: 14 * 24 * 3600 * 1000,
-    sameSite: true
-  }
+    sameSite: true,
+  },
 }));
 app.use(passport.initialize());
 
@@ -83,11 +83,9 @@ app.use('/api/v1', users);
 app.use('/api/v1', trips);
 app.use('/api/v1', accommodationRouter);
 
-app.use((req, res) => {
-  return res.status(404).send({
-    status: 404,
-    error: 'Not Found!',
-  });
-});
+app.use((req, res) => res.status(404).send({
+  status: 404,
+  error: 'Not Found!',
+}));
 
 export default app;

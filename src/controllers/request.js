@@ -79,7 +79,6 @@ export default class requestsController {
         accommodation,
         reason,
       });
-
       const isRequestEmpty = isObjectEmpty(request);
       const {
         id: requestId, requesterId, type, status,
@@ -295,6 +294,16 @@ export default class requestsController {
         if (request.status === 'pending') {
           const updatedRequest = await updateRequest(requestId, req.body);
           if (updatedRequest) {
+            const { managerId } = updatedRequest.dataValues;
+            const newNotification = await models.Notification.create({
+              requesterId,
+              managerId,
+              status: 'non_read',
+              message: 'This request was updated by the user',
+              type: 'edited_request',
+              owner: 'manager',
+            });
+            echoNotification(req, newNotification, 'edited_request', managerId);
             return res.status(200).json({
               message: 'successfully updated',
               updatedRequest,

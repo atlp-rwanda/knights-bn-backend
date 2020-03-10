@@ -27,7 +27,6 @@ export const accommodationFacility = () => {
         .post('/api/v1/create/accommodation')
         .send(facility)
         .end((err, res) => {
-          console.log(res.body);
           expect(res.statusCode).to.equal(201);
           expect(res.body.data).to.be.an('object');
           done();
