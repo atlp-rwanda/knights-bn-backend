@@ -2,11 +2,10 @@ import { config } from 'dotenv';
 import models from '../db/models';
 
 config();
-
 export default class accomodationFacility {
   static async getAllAccommodations(req, res) {
     try {
-      const accommodations = await models.Accommodation.findAll({ where: { userId: req.user.id } });
+      const accommodations = await models.Accommodation.findAll();
       return res.status(200).json({ status: 200, data: accommodations });
     } catch (error) {
       return res.status(500).json({ status: 500, errorMessage: error });
@@ -16,7 +15,7 @@ export default class accomodationFacility {
   static async getSingleAccommodation(req, res) {
     const accommodationId = req.params.id;
     const singleAccommodation = await models.Accommodation
-      .findOne({ where: { id: accommodationId, userId: req.user.id } });
+      .findOne({ where: { id: accommodationId } });
     if (singleAccommodation === null) {
       return res.status(404)
         .json({ status: 404, errorMessage: 'accommmodation not found' });

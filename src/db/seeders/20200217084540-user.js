@@ -90,6 +90,19 @@ export function up(queryInterface) {
     createdAt: new Date(),
     updatedAt: new Date(),
     lineManager: 'william.ishimwe@andela.com',
+  }, {
+    firstName: 'Black',
+    lastName: 'Hotel',
+    gender: 'male',
+    passport: 'black123',
+    email: 'blackhotel@gmail.com',
+    password: '$2b$10$l05Anqm8ZkiTZiJPzDtjouorkUjPkzX1MqKau28V2nRHiiX3qpW2e',
+    role: 'supplier',
+    method: 'standard',
+    clientId: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    lineManager: 'william.ishimwe@andela.com',
   }], {});
 }
 export function down(queryInterface) { return queryInterface.bulkDelete('Users', null, {}); }

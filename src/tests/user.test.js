@@ -180,7 +180,7 @@ const userSignUp = () => {
         from: 'no-reply@barefootnomad.com',
         subject: 'Barefoot Nomad Confirmation email',
         text: 'Verify Your Email',
-        html: 'emailTemplate'
+        html: 'emailTemplate',
       });
     });
     after(() => {
