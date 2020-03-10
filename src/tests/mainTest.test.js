@@ -10,6 +10,8 @@ import routeExistance from './app.test';
 import rememberMe from './rememberMe.test';
 import commentTest from './comment.test';
 import editRequest from './editRequest.test';
+import events from '../helpers/eventConnect';
+
 import uploadEmptyImage from './accommodation/imageUploadAccommodation.test';
 import {
   accommodationFacility, missingInfomation,
@@ -50,6 +52,6 @@ notFoundUpdate();
 notFoungUpload();
 violatingDatabase();
 wrongUserAccess();
-
 socialLogin();
 routeExistance();
+events();

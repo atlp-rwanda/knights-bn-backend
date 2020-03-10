@@ -6,6 +6,7 @@ import app from '../app';
 import mockData from './mockData';
 import returnTripMock from '../mockData/twoWayTrip';
 import { sendNotification } from '../helpers/notificationSender';
+import events from '../helpers/eventConnect';
 
 
 const { validTrip2 } = returnTripMock;
@@ -25,6 +26,10 @@ const userSignUp = () => {
     });
     it('should send notification if all information are filled', () => {
       sendNotification(1, {}, { 1: ['jashgfe'] }, io, 'new_request');
+    });
+
+    it('should send a message', () => {
+      events();
     });
 
     it('it should return 200 on successful signIn', (done) => {

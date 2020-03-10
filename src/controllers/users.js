@@ -7,6 +7,7 @@ import sequelize from 'sequelize';
 import models from '../db/models';
 import generateToken from '../utils/generateToken';
 import generatePswd from '../utils/randomPswd';
+
 import usePasswordHashToMakeToken from '../helpers/helpers';
 import {
   getPasswordResetURL,
@@ -126,7 +127,6 @@ export default class usersController {
       );
 
       localStorage.setItem('token', token);
-
       return res
         .status(200)
         .json({ status: 200, message: 'Successfully login', token });
