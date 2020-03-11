@@ -23,7 +23,7 @@ const testTwoWayTrip = () => {
         .post('/api/v1/auth/login')
         .send({
           email: 'knights@gmail.com',
-          password: 'Niyonkuru@1'
+          password: 'Niyonkuru@1',
         })
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);

@@ -9,7 +9,8 @@ import {
   missingInformation,
   missingRoomInfo,
   editAccommodation,
-  travelToken,
+  travelToken, facility2,
+  supplierToken,
 } from './accommodationMockData';
 
 chai.use(chaiHttp);
@@ -27,7 +28,6 @@ export const accommodationFacility = () => {
         .post('/api/v1/create/accommodation')
         .send(facility)
         .end((err, res) => {
-          console.log(res.body);
           expect(res.statusCode).to.equal(201);
           expect(res.body.data).to.be.an('object');
           done();
@@ -35,6 +35,26 @@ export const accommodationFacility = () => {
     });
   });
 };
+
+describe('Supplier can create accommodation/facilities ', () => {
+  before((done) => {
+    localStorage.setItem('token', supplierToken);
+    done();
+  });
+  it('it should return 201 successfully facility created ', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/create/accommodation')
+      .send(facility2)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.data).to.be.an('object');
+        expect(res.body.data).to.have.property('accommodationName');
+        expect(res.body.data).to.have.property('locationName');
+        done();
+      });
+  });
+});
 
 export const missingRoomInformation = () => {
   describe('accommodation ', () => {
@@ -54,7 +74,6 @@ export const missingRoomInformation = () => {
           done();
         });
     });
-
   });
 };
 
@@ -179,7 +198,6 @@ export const editAccommodations = () => {
         });
       done();
     });
-
     it('it should return 500 when violating ', (done) => {
       chai
         .request(app)
@@ -188,6 +206,29 @@ export const editAccommodations = () => {
         .end((err, res) => {
           expect(res.statusCode).to.equal(500);
           expect(res.body.name).to.equal('SequelizeDatabaseError');
+        });
+      done();
+    });
+  });
+};
+
+export const SuppliersEditAccommodations = () => {
+  describe('supplier can edit their accomodation ', () => {
+    before((done) => {
+      localStorage.setItem('token', supplierToken);
+      done();
+    });
+
+    it('it should return 200 when editing single accommodation ', (done) => {
+      chai
+        .request(app)
+        .patch(`/api/v1/edit/accommodation/${2}`)
+        .send(editAccommodation)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body.data).to.be.an('object');
+          expect(res.body.data).to.have.property('accommodationName');
+          expect(res.body.data).to.have.property('locationName');
         });
       done();
     });
