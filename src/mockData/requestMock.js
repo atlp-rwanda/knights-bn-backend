@@ -5,8 +5,8 @@ const requestMock = {
   response,
   request: {
     body: {
-    }
-  }
+    },
+  },
 };
 
 export default requestMock;

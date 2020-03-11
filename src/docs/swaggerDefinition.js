@@ -10,7 +10,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'Barefoot Nomad - Making travel and accomodation easy and convenient.',
   },
-  host: process.env === 'development' ? localSwagger : herokuSwagger,
+  host: (process.env === 'production') ? herokuSwagger : localSwagger,
   basePath: '/api/v1',
   securityDefinitions: {
     bearerAuth: {

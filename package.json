@@ -11,7 +11,9 @@
     "createTables": "sequelize db:migrate && sequelize db:seed:all",
     "build": "babel src --out-dir dist --source-maps inline --copy-files",
     "start": "nodemon dist/app.js",
-    "dev-start": "nodemon --exec babel-node src/app.js"
+    "dev-start": "nodemon --exec babel-node src/app.js",
+    "es-lint": "./node_modules/.bin/eslint ./src",
+    "eslint-solve": "eslint ./ --fix"
   },
   "author": "Andela code-knights",
   "license": "MIT",

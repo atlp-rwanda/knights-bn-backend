@@ -4,18 +4,18 @@ module.exports = (sequelize, DataTypes) => {
     requestId: DataTypes.INTEGER,
     commenterId: DataTypes.INTEGER,
     comment: DataTypes.STRING,
-    isVisible: DataTypes.BOOLEAN
+    isVisible: DataTypes.BOOLEAN,
   }, {});
   Comment.associate = (models) => {
     Comment.belongsTo(models.Request, {
       foreignKey: 'requestId',
       as: 'comments',
-      timestamps: false
+      timestamps: false,
     });
     Comment.belongsTo(models.User, {
       foreignKey: 'commenterId',
       as: 'author',
-      timestamps: false
+      timestamps: false,
     });
   };
   return Comment;

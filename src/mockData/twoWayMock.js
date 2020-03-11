@@ -11,9 +11,9 @@ const twoWayTrip = {
       departureDate: '2023-01-11',
       returnDate: '2023-01-15',
       reason: 'Having fun',
-      accommodation: 'Z campus'
-    }
-  }
+      accommodation: 'Z campus',
+    },
+  },
 };
 
 export default twoWayTrip;

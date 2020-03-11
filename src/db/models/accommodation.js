@@ -1,5 +1,5 @@
-export default (sequelize, DataTypes) => {
-  const accommodation = sequelize.define('Accommodation', {
+module.exports = (sequelize, DataTypes) => {
+  const Accommodation = sequelize.define('Accommodation', {
     accommodationName: DataTypes.STRING,
     locationName: DataTypes.STRING,
     streetNumber: DataTypes.STRING,
@@ -8,10 +8,14 @@ export default (sequelize, DataTypes) => {
     availableRooms: DataTypes.ARRAY(DataTypes.JSON),
     imageOfBuilding: DataTypes.STRING,
     userId: DataTypes.INTEGER,
+    rate: DataTypes.FLOAT,
   }, {});
   // eslint-disable-next-line func-names
-  accommodation.associate = function () {
-    // associations can be defined here
+  Accommodation.associate = (models) => {
+    Accommodation.hasMany(models.Rate, {
+      foreignKey: 'accommodationId',
+      onDelete: 'CASCADE',
+    });
   };
-  return accommodation;
+  return Accommodation;
 };

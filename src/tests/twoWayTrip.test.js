@@ -12,7 +12,7 @@ const {
   validRequest, requestDateSetInThePast,
   requestWithDepartureDateSetAfterReturnDate, repeatedRequest,
   requestWithMissedComponent, requestWithSimilarOriginAndDestination,
-  invalidTrip, sameDirection
+  invalidTrip, sameDirection,
 } = returnTripMock;
 
 const testTwoWayTrip = () => {
@@ -40,7 +40,7 @@ const testTwoWayTrip = () => {
           departureDate: '2023-01-11',
           returnDate: '2023-01-15',
           reason: 'Having fun',
-          accommodation: 'Z campus'
+          accommodation: 'Z campus',
         })
         .end((err, res) => {
           expect(res.status).to.equal(422);
@@ -68,7 +68,7 @@ const testTwoWayTrip = () => {
           departureDate: '2023-01-11',
           returnDate: '2023-01-15',
           reason: 'Having fun',
-          accommodation: 'Z campus'
+          accommodation: 'Z campus',
         })
         .end((err, res) => {
           expect(res.status).to.equal(201);
@@ -131,7 +131,7 @@ const testTwoWayTrip = () => {
           departureDate: '2023-01-11',
           returnDate: '2023-01-15',
           reason: 'Having fun',
-          accommodation: 'Z campus'
+          accommodation: 'Z campus',
         })
         .end((err, res) => {
           expect(res.status).to.equal(422);

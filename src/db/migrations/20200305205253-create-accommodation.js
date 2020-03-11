@@ -42,6 +42,10 @@ export function up(queryInterface, Sequelize) {
       type: Sequelize.STRING,
       allowNull: true,
     },
+    rate: {
+      type: Sequelize.FLOAT,
+      allowNull: true,
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,

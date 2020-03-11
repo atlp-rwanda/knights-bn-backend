@@ -69,7 +69,6 @@ const userProfile = () => {
       done();
     });
 
-
     it('it should return 500 when is not a right person to update profile ', (done) => {
       localStorage.setItem('token', mockData.wrongPerson);
       chai

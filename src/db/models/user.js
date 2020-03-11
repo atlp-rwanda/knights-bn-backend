@@ -11,12 +11,12 @@ module.exports = (sequelize, DataTypes) => {
     clientId: DataTypes.STRING,
     lineManager: {
       allowNull: true,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     birthDay: {
       allowNull: true,
       type: DataTypes.DATEONLY,
-      defaultValue: null
+      defaultValue: null,
     },
     language: {
       allowNull: true,
@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     profileImage: {
       allowNull: true,
       type: DataTypes.STRING,
-    }
+    },
   }, {});
   User.associate = (models) => {
   };

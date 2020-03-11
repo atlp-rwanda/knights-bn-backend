@@ -5,6 +5,25 @@ export const wrongUser = {
   email: 'multi-city@gmail.com',
   password: 'Niyonkuru@1',
 };
+
+export const nonExistingUser = {
+  email: 'nonExsting@gmail.com',
+  password: 'Niyonkuru@1',
+};
+
+export const validRate = {
+  rate: 4,
+};
+
+export const invalidRate = {
+  rate: 40,
+};
+
+export const ExistingUser = {
+  email: 'alain.maxime@gmail.com',
+  password: 'Niyonkuru@1',
+};
+
 export const facility = {
   accommodationName: 'Top tower',
   locationName: 'Kigali',

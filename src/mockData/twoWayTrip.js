@@ -33,7 +33,7 @@ const returnTrip = {
     departureDate: '2038-07-20',
     returnDate: '2039-08-20',
     accommodation: 'XYZ campus',
-    reason: 'Having fun'
+    reason: 'Having fun',
   },
 
   invalidDateTrip: {
@@ -42,7 +42,7 @@ const returnTrip = {
     departureDate: '2038-07-20',
     returnDate: '2039-08-20',
     accommodation: 'XYZ campus',
-    reason: 'Having fun'
+    reason: 'Having fun',
   },
   validRequest: {
     origin: 'Kigali',
@@ -108,7 +108,7 @@ const returnTrip = {
     returnDate: '2021-03-30',
     accommodation: 'XYZ campus',
     reason: 'Having fun',
-    passportNumber: '12345677'
+    passportNumber: '12345677',
   },
 };
 

@@ -12,7 +12,6 @@ module.exports = {
     updatedAt: new Date(),
   }], {}),
 
-
   // eslint-disable-next-line no-unused-vars
-  down: (queryInterface) => queryInterface.bulkDelete('Accommodation', null, {})
+  down: (queryInterface) => queryInterface.bulkDelete('Accommodation', null, {}),
 };

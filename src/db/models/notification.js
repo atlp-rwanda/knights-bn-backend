@@ -1,4 +1,4 @@
-'use strict';
+
 module.exports = (sequelize, DataTypes) => {
   const Notification = sequelize.define('Notification', {
     requesterId: DataTypes.INTEGER,

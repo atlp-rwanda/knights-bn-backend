@@ -24,7 +24,6 @@ export default async (req, res, next) => {
     const reqDepartureDate = new Date(departureDate);
     const reqReturnDate = new Date(returnDate);
 
-
     const urlSections = req.urlPathSections;
     if (urlSections) address = urlSections[urlSections.length - 2] || null;
 

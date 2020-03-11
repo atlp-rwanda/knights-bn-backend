@@ -3,7 +3,7 @@ const user = {
   name: {
     familyName: 'William',
     givenName: 'Ishimwe',
-    middleName: 'Wil'
+    middleName: 'Wil',
   },
   emails: [{ value: 'ishimwewilliam@yahoo.fr' }],
   provider: 'facebook',
@@ -13,7 +13,7 @@ const user = {
     last_name: 'William',
     first_name: 'Ishimwe',
     middle_name: 'Wil',
-    id: '1985674401577712'
-  }
+    id: '1985674401577712',
+  },
 };
 export default user;

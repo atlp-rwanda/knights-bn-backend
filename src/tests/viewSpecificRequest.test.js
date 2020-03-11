@@ -13,7 +13,7 @@ const testViewRequest = () => {
         .post('/api/v1/auth/login')
         .send({
           email: 'ishimwewil005@gmail.com',
-          password: 'Password@1'
+          password: 'Password@1',
         })
         .end((err, res) => {
           expect(res.body).to.have.property('status').that.equals(200);
