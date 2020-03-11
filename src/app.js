@@ -1,42 +1,38 @@
-/* eslint-disable no-console */
 /* eslint-disable no-underscore-dangle */
+
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 import bodyParser from 'body-parser';
-import socketIo from 'socket.io';
 import dotenv from 'dotenv';
 import passport from 'passport';
 import multer from 'multer';
 import cookieParser from 'cookie-parser';
 import sessions from 'express-session';
-import jwt from 'jsonwebtoken';
 import swaggerDefinition from './docs/swaggerDefinition';
 import users from './routes/users';
 import trips from './routes/trips';
+import chats from './routes/chat';
 import translator from './translator';
 import accommodationRouter from './routes/accommodation';
+import events from './helpers/eventConnect';
+import decodeToken from './helpers/decodeToken';
+import io from './helpers/ioServerHelper';
 
 dotenv.config();
-
-// server
-const port = process.env.PORT || 4000;
 const app = express();
-const server = app.listen(port, () => {
-  console.log(`listening on port ${port} ...`);
-});
-
-const io = socketIo(server);
+// server
 const connectedClients = {};
 io.use(async (socket, next) => {
   const { token } = socket.handshake.query;
-  const decoded = jwt.verify(token, process.env.SECRETKEY);
-  const userData = decoded;
-
-  if (!userData.error) {
-    const clientKey = Number.parseInt(userData.id, 10);
-    connectedClients[clientKey] = connectedClients[clientKey] || [];
-    connectedClients[clientKey].push(socket.id);
+  if (token) {
+    const decoded = decodeToken(token, process.env.SECRETKEY);
+    const userData = decoded;
+    if (!userData.error) {
+      const clientKey = Number.parseInt(userData.id, 10);
+      connectedClients[clientKey] = connectedClients[clientKey] || [];
+      connectedClients[clientKey].push(socket.id);
+    }
   }
   next();
 });
@@ -53,7 +49,7 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
   });
 });
-
+events();
 const newSwaggerDef = {
   swaggerDefinition,
   apis: [`${__dirname}/models/*.js`, `${__dirname}/routes/*.js`],
@@ -71,8 +67,8 @@ app.use(sessions({
   saveUninitialized: false,
   cookie: {
     maxAge: 14 * 24 * 3600 * 1000,
-    sameSite: true
-  }
+    sameSite: true,
+  },
 }));
 app.use(passport.initialize());
 
@@ -82,12 +78,11 @@ app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/v1', users);
 app.use('/api/v1', trips);
 app.use('/api/v1', accommodationRouter);
+app.use('/api/v1', chats);
 
-app.use((req, res) => {
-  return res.status(404).send({
-    status: 404,
-    error: 'Not Found!',
-  });
-});
+app.use((req, res) => res.status(404).send({
+  status: 404,
+  error: 'Not Found!',
+}));
 
 export default app;
