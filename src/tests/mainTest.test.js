@@ -13,6 +13,8 @@ import editRequest from './editRequest.test';
 import events from '../helpers/eventConnect';
 
 import uploadEmptyImage from './accommodation/imageUploadAccommodation.test';
+import approveRequest from './approveRequest.test';
+import viewSpecificRequest from './viewSpecificRequest.test';
 import {
   accommodationFacility, missingInfomation,
   missingRoomInformation, createThesame, wrongUserAccess,
@@ -52,6 +54,8 @@ notFoundUpdate();
 notFoungUpload();
 violatingDatabase();
 wrongUserAccess();
+approveRequest();
+viewSpecificRequest();
 socialLogin();
 routeExistance();
 events();

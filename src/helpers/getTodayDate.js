@@ -3,6 +3,6 @@ const getTodayDate = () => {
   const dd = String(today.getDate());
   const mm = String(today.getMonth() + 1);
   const yyyy = today.getFullYear();
-  return `${yyyy}-${mm}-${dd}`;
+  return new Date(`${yyyy}-${mm}-${dd}`);
 };
 export default getTodayDate;

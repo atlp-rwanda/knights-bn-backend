@@ -39,6 +39,19 @@ export function up(queryInterface) {
       createdAt: new Date(),
       updatedAt: new Date(),
     },
+    {
+      requesterId: 3,
+      managerId: 2,
+      type: 'one_way',
+      reason: 'partner engagment',
+      origin: 'Kigali',
+      destination: 'Lagos',
+      status: 'approved',
+      departureDate: '2021-02-01',
+      returnDate: '2021-02-05',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
   ], {});
 }
 export function down(queryInterface) { return queryInterface.bulkDelete('Requests', null, {}); }

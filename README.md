@@ -93,7 +93,11 @@ Open terminal from your computer
 
 `- PATCH /notifications -For marking all notification as read`
 
-`- PATCH /trips/edit - For enabling a user to edit an open request. `
+`- PATCH /trips/edit/:requestId - For a user to edit an open request. `
+
+`- PATCH /trips/approve/:requestId - For a manager to approve a request and send notification to the user. `
+
+`- GET /trips/request/:requestId - For a user to view specific trip request. `
 
 ### Raising an issue
 Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create an issue about this app

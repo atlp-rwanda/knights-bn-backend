@@ -1,10 +1,10 @@
 import models from '../db/models';
-import getTodayDate from '../utils/getTodayDate';
+import getTodayDate from '../helpers/getTodayDate';
 import {
   editRequestSchema,
   createTwoWayTripSchema,
-} from '../utils/validationSchemas';
-import isObjectEmpty from '../utils/isObjectEmpty';
+} from '../helpers/validationSchemas';
+import isObjectEmpty from '../helpers/isObjectEmpty';
 
 let conflictingTripRequest;
 

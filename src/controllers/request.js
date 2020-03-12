@@ -2,11 +2,16 @@ import environment from 'dotenv';
 import sgMail from '@sendgrid/mail';
 import lodash from 'lodash';
 import models from '../db/models';
-import getTodayDate from '../utils/getTodayDate';
-import isObjectEmpty from '../utils/isObjectEmpty';
+import getTodayDate from '../helpers/getTodayDate';
+import isObjectEmpty from '../helpers/isObjectEmpty';
 import oneWayTripHelper from '../helpers/oneWayTrip';
 import { echoNotification } from '../helpers/notificationSender';
-import updateRequest from '../utils/updateRequest';
+import sendEmail from '../helpers/sendEmail';
+import handleError from '../helpers/errorHandler';
+import addNotification from '../helpers/addNotification';
+import Request from '../helpers/Request';
+import User from '../helpers/userQueries';
+import compareDates from '../helpers/compareDates';
 
 environment.config();
 export default class requestsController {
@@ -195,75 +200,28 @@ export default class requestsController {
     try {
       const { requestId } = req.query;
       const managerId = req.user.id;
-      const manager = await models.User.findOne(
-        { where: { id: managerId, role: 'manager' } },
-      );
-      if (manager) {
-        const request = await models.Request.findAll(
-          { where: { id: requestId, managerId } },
-        );
-        const isRequestEmpty = isObjectEmpty(request);
-        if (isRequestEmpty === false) {
-          const requestStatus = request[0].status;
-
-          if (requestStatus === 'pending') {
-            const updatedRequest = await models.Request.update(
-              { status: 'rejected' },
-              { where: { id: requestId } },
-            );
-            const isUpdatedRequestEmpty = isObjectEmpty(updatedRequest);
-            if (isUpdatedRequestEmpty === false) {
-              return res.status(200).json({
-                message: 'The request successfully rejected',
-                requestId,
-                requestStatus: updatedRequest[0].status,
-              });
-            }
-          } else if (requestStatus === 'rejected') {
-            return res.status(200).json({
-              message: 'The request was rejected before!',
-              requestId,
-              requestStatus,
-            });
-          } else if (requestStatus === 'approved') {
-            const { departureDate } = request[0];
-            const todayDate = getTodayDate();
-            const compareDate = (todayDate, departureDate) => ((new Date(todayDate) > new Date(departureDate)));
-            const tripStarted = compareDate(todayDate, departureDate);
-
-            if (tripStarted) {
-              res.status(405).json({
-                message: "Sorry can't reject ! The user is now on trip.",
-              });
-            } else {
-              const updatedRequest = await models.Request.update(
-                { status: 'rejected' },
-                { where: { id: requestId } },
-              );
-              const isUpdatedRequestEmpty = isObjectEmpty(updatedRequest);
-              if (isUpdatedRequestEmpty === false) {
-                res.status(200).json({
-                  message: 'The request successfully rejected',
-                  requestId,
-                  requestStatus: updatedRequest[0].status,
-                });
-              }
-            }
-          }
-        } else {
-          res.status(404).json({
-            error: 'Request not found!',
-          });
-        }
-      } else {
-        res.status(403).json({
-          error: 'Unauthorized access!',
-        });
+      const manager = await User.getManager(managerId);
+      if (!manager) throw 'Unauthorized access!';
+      const request = await Request.isRequestBelongsToManager(requestId, managerId);
+      if (!request) throw 'Request not found!';
+      const requestStatus = request.status;
+      if (requestStatus === 'rejected') throw 'The request was rejected before!';
+      if (requestStatus === 'pending') {
+        await Request.updateStatus(request, 'rejected');
       }
-    } catch (error) {
-      res.status(500).json({
-        error: error.message,
+      if (requestStatus === 'approved') {
+        const { departureDate } = request;
+        const todayDate = getTodayDate();
+        const isTodayDateAfterTheTripStartDate = compareDates(todayDate, departureDate);
+        if (isTodayDateAfterTheTripStartDate) throw "Sorry can't reject ! The user is now on trip.";
+        await Request.updateStatus(request, 'rejected');
+      }
+      res.status(200).json({
+        message: 'The request successfully rejected',
+        requestId,
       });
+    } catch (error) {
+      handleError(res, error);
     }
   }
 
@@ -288,34 +246,54 @@ export default class requestsController {
     try {
       const { requestId } = req.params;
       const requesterId = req.user.id;
-      const request = await models.Request.findOne({
-        where: { id: requestId, requesterId },
+      const request = await Request.isRequestBelongsToRequester(requestId, requesterId);
+
+      if (!request) throw 'Request not found!';
+      if (request.status !== 'pending') throw 'Sorry, the request was closed!';
+      const updatedRequest = await Request.updateRequest(requestId, req.body);
+      return res.status(200).json({
+        message: 'successfully updated',
+        updatedRequest,
       });
-      if (request) {
-        if (request.status === 'pending') {
-          const updatedRequest = await updateRequest(requestId, req.body);
-          if (updatedRequest) {
-            return res.status(200).json({
-              message: 'successfully updated',
-              updatedRequest,
-            });
-          }
-        } else throw 'Sorry, the request was closed!';
-      } throw 'request not found!';
     } catch (error) {
-      if (error === 'Sorry, the request was closed!') {
-        return res.status(200).json({ error });
-      } if (error === 'request not found!') {
-        return res.status(404).json({ error });
-      } if (error.message.includes('invalid input syntax for type integer')) {
-        return res.status(422).json({
-          status: res.statusCode,
-          error: 'make sure the request id is a number.',
-        });
-      }
-      return res.status(500).json({
-        error: error.message,
+      return handleError(res, error);
+    }
+  }
+
+  static async approveRequest(req, res) {
+    try {
+      const { requestId } = req.params;
+      const managerId = req.user.id;
+      const manager = await User.getManager(managerId);
+      if (!manager) throw 'Unauthorized access!';
+      const request = await Request.isRequestBelongsToManager(requestId, managerId);
+      if (!request) throw 'Request not found!';
+      const todayDate = getTodayDate();
+      if (todayDate >= request.departureDate) throw 'The request start date is due.';
+      if (request.status === 'approved') throw 'The request was approved before!';
+      await Request.updateStatus(request, 'approved');
+      const requester = await User.getUser('id', request.requesterId);
+      sendEmail(process.env.BN_EMAIL_NO_REPLY, requester, request);
+      const newNotification = await addNotification(requester, 'approved_request');
+      echoNotification(req, newNotification, 'approved_request', requester.id);
+      res.status(200).json({
+        message: 'The request successfully approved',
+        requestId,
       });
+    } catch (error) {
+      handleError(res, error);
+    }
+  }
+
+  static async getSpecificRequest(req, res) {
+    try {
+      const { requestId } = req.params;
+      const requesterId = req.user.id;
+      const request = await Request.isRequestBelongsToRequester(requestId, requesterId);
+      if (!request) throw 'Request not found!';
+      res.status(200).json({ message: 'Request details:', request });
+    } catch (error) {
+      handleError(res, error);
     }
   }
 }
