@@ -17,11 +17,10 @@ import translator from './translator';
 import accommodationRouter from './routes/accommodation';
 import events from './helpers/eventConnect';
 import decodeToken from './helpers/decodeToken';
-import io from './helpers/ioServerHelper';
+import io, { app } from './helpers/ioServerHelper';
 
 dotenv.config();
-const app = express();
-// server
+
 const connectedClients = {};
 io.use(async (socket, next) => {
   const { token } = socket.handshake.query;

@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 const localSwagger = process.env.LOCAL_HOST;
-const herokuSwagger = process.env.HOST_NAME;
+const herokuSwagger = 'localhost:4000';
 
 const swaggerDefinition = {
   info: {

@@ -5,7 +5,6 @@ import isAdmin from '../middlewares/isTravelAdmin';
 import { accommodationValidataion, validateRooms, isExist } from '../middlewares/validateDate';
 import imageMiddleware from '../middlewares/imageUpload';
 
-
 /**
  * @swagger
  *  "/create/accommodation": {
@@ -193,12 +192,62 @@ import imageMiddleware from '../middlewares/imageUpload';
     }
  */
 
+/**
+ * @swagger
+ *  "/book/accommodations": {
+      "post": {
+        "description": "A user can book an accomodation facility",
+        "summary": "Book an accomodation facility",
+        "tags": [
+          "Bookings"
+        ],
+        "operationId": "book-accomodation",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "accomodationId",
+            "in": "formData",
+            "required": true,
+            "type": "integer",
+          },
+          {
+            "name": "checkinDate",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "value": "YYYY-MM-DD"
+          },
+          {
+            "name": "checkoutDate",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "value": "YYYY-MM-DD"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Accomodation successfully booked",
+          },
+          "422": {
+            "description": "Invalid input",
+          }
+        }
+      }
+    }
+ */
+
 const accommodationRouter = Router();
 accommodationRouter.patch('/upload/accommodation/:id', verifyToken.auth, isAdmin, imageMiddleware.single('imageOfBuilding'), accommodation.uploadBuildingImage);
 accommodationRouter.patch('/edit/accommodation/:id', verifyToken.auth, isAdmin, accommodation.editAccommodation);
 accommodationRouter.post('/create/accommodation', verifyToken.auth, imageMiddleware.single('imageOfBuilding'), isAdmin, accommodationValidataion, validateRooms, isExist, accommodation.createAccomodation);
 accommodationRouter.get('/view/accommodation/:id', verifyToken.auth, accommodation.getSingleAccommodation);
 accommodationRouter.get('/view/accommodations', verifyToken.auth, accommodation.getAllAccommodations);
-
+accommodationRouter.post('/book/accommodations', verifyToken.auth, accommodation.bookAccomodation);
 
 export default accommodationRouter;

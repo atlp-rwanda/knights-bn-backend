@@ -1,7 +1,12 @@
 import { config } from 'dotenv';
+import lodash from 'lodash';
 import models from '../db/models';
+import accomodationHelper from '../helpers/accomodationsQueries';
+import validateBookings from '../middlewares/validateBookings';
 
 config();
+const { Accommodation, Bookings } = models;
+const { searchAccomodation } = accomodationHelper;
 export default class accomodationFacility {
   static async getAllAccommodations(req, res) {
     try {
@@ -52,6 +57,37 @@ export default class accomodationFacility {
       return res.status(201).json({ status: 200, data: accommodation });
     } catch (error) {
       return res.status(500).json({ status: 500, errorMessage: error });
+    }
+  }
+
+  static async bookAccomodation(req, res) {
+    const { id } = req.user;
+    req.body.userId = id;
+    const { error } = validateBookings(req.body);
+    if (error) {
+      return res.status(422).json({ status: 422, error: `${error.details[0].message}` });
+    }
+    const { accomodationId } = req.body;
+    if (isNaN(accomodationId)) {
+      return res.status(400).json({ status: 404, error: 'accomodationId must be a number' });
+    }
+
+    try {
+      const findAccomodation = await searchAccomodation(accomodationId);
+      if (!findAccomodation) {
+        return res.status(404).json({ status: 404, message: "accomodation doesn't exist" });
+      } if (findAccomodation.availableRooms <= 0) {
+        return res.status(404).json({ status: 404, message: 'no room left in the accomodation' });
+      }
+
+      const bookAccomodation = await Bookings.create(req.body);
+      Accommodation.increment('availableRooms', { by: -1, where: { id: accomodationId } });
+      const { dataValues } = bookAccomodation;
+      return res.status(201).json({
+        status: 200, message: 'Accomodation successfully booked', ...lodash.omit(dataValues, ['userId', 'updatedAt', 'createdAt', 'returnDate', 'cities']),
+      });
+    } catch (err) {
+      return res.status(500).json({ status: 500, errorMessage: err });
     }
   }
 }
