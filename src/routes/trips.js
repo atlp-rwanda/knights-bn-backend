@@ -318,6 +318,47 @@
        }
     */
 
+    /**
+    * @swagger
+    *  "/trips/comment/": {
+         "delete": {
+           "description": "owner of the comment can delete it",
+           "summary": "delete a comment",
+           "tags": [
+             "Trips"
+           ],
+           "deprecated": false,
+           "produces": [
+             "application/json"
+           ],
+           "consumes": [
+             "application/x-www-form-urlencoded"
+           ],
+           "parameters": [
+             {
+                 "name": "commentId",
+                 "in": "params",
+                 "description": "ID of comment to be deleted",
+                 "required": true,
+                 "type": "integer",
+                 "format": "int64"
+             },
+           ],
+           "responses": {
+             "200": {
+               "description": "comment successfully deleted",
+             },
+             "422": {
+               "description": "Invalid commentId",
+             },
+             "404": {
+               "description": "no comment found",
+             }
+           }
+         }
+       }
+    */
+
 /**
        * @swagger
        *   "/trips/search?{targetKey}={filterKey}": {

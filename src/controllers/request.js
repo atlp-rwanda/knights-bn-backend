@@ -4,7 +4,7 @@ import lodash from 'lodash';
 import models from '../db/models';
 import getTodayDate from '../helpers/getTodayDate';
 import isObjectEmpty from '../helpers/isObjectEmpty';
-import oneWayTripHelper from '../helpers/oneWayTrip';
+import TripHelper from '../helpers/TripHelper';
 import { echoNotification } from '../helpers/notificationSender';
 import sendEmail from '../helpers/sendEmail';
 import handleError from '../helpers/errorHandler';
@@ -24,9 +24,9 @@ export default class requestsController {
         origin, destination, departureDate, reason, accommodation,
       } = req.body;
 
-      const isManager = await oneWayTripHelper.searchManager();
+      const isManager = await TripHelper.searchManager();
       const managerId = isManager.id;
-      const theRequest = await oneWayTripHelper.searchTripRequest(requesterId, Date.parse(departureDate), destination);
+      const theRequest = await TripHelper.searchTripRequest(requesterId, Date.parse(departureDate), destination);
       if (theRequest.length !== 0) {
         return res.status(409).json({
           error: 'Sorry! This request already exists. Please double-check your departure date and destination.',

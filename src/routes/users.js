@@ -5,8 +5,6 @@ import userLoginValidation from '../middlewares/userLoginValidation';
 import userValidation from '../middlewares/newUser';
 import fakeUser from '../mockData/fakeUser';
 import auth from '../middlewares/checkAuth';
-
-
 import userProfile from '../controllers/userProfile';
 import imageMiddleware from '../middlewares/imageUpload';
 
@@ -487,6 +485,5 @@ router.patch('/password/reset/:id/:token', userValidation.reset, resetPassword);
     }
   */
 router.patch('/auth/logout', auth.auth, logout);
-
 
 export default router;
