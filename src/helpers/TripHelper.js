@@ -5,10 +5,15 @@ const {
   Op,
 } = Sequelize;
 
-class oneWayTripHelper {
+class TripHelper {
   static async searchManager() {
     const isManager = await models.User.findOne({ where: { role: 'manager' } });
     return isManager;
+  }
+
+  static async searchRequest(id) {
+    const isRequest = await models.Request.findOne({ where: { id } });
+    return isRequest;
   }
 
   static async searchTripRequest(requesterId, departureDate, destination) {
@@ -25,4 +30,4 @@ class oneWayTripHelper {
   }
 }
 
-export default oneWayTripHelper;
+export default TripHelper;
