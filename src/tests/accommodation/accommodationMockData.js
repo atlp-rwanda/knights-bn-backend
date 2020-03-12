@@ -32,27 +32,31 @@ export const facility = {
   description: 'it has wifi and big secreen TV',
   availableRooms: [
     {
-      roomName: 'double room',
+      roomName: 'Room 1',
       roomType: 'king',
       price: '$50/night',
+      available: 'true',
 
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 2',
       roomType: 'qween',
       price: '$53/night',
+      available: 'true',
 
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 3',
       roomType: 'qween',
       price: '$54/night',
+      available: 'true',
 
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 4',
       roomType: 'qween',
       price: '$55/night',
+      available: 'true',
 
     },
   ],
@@ -66,27 +70,31 @@ export const facility2 = {
   description: 'it has wifi and big secreen TV',
   availableRooms: [
     {
-      roomName: 'double room',
+      roomName: 'Room 1',
       roomType: 'king',
       price: '$50/night',
+      available: 'true',
 
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 2',
       roomType: 'qween',
       price: '$53/night',
+      available: 'true',
 
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 3',
       roomType: 'qween',
       price: '$54/night',
+      available: 'true',
 
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 4',
       roomType: 'qween',
       price: '$55/night',
+      available: 'true',
 
     },
   ],
@@ -100,27 +108,31 @@ export const existingFacility = {
   description: 'it has wifi and big secreen TV',
   availableRooms: [
     {
-      roomName: 'double room',
+      roomName: 'Room 1',
       roomType: 'king',
       price: '$50/night',
+      available: 'true',
 
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 2',
       roomType: 'qween',
       price: '$53/night',
+      available: 'true',
 
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 3',
       roomType: 'qween',
       price: '$54/night',
+      available: 'true',
 
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 4',
       roomType: 'qween',
       price: '$55/night',
+      available: 'true',
 
     },
   ],
@@ -134,23 +146,27 @@ export const missingInformation = {
     {
       roomName: 'double room',
       price: '$50/night',
+      available: 'true',
 
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 1',
       roomType: 'qween',
       price: '$53/night',
+      available: 'true',
 
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 2',
       roomType: 'qween',
       price: '$54/night',
+      available: 'true',
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 3',
       roomType: 'qween',
       price: '$55/night',
+      available: 'true',
     },
   ],
 };
@@ -162,24 +178,28 @@ export const missingRoomInfo = {
 
   availableRooms: [
     {
-      roomName: 'double room',
+      roomName: 'Room 1',
       roomType: 'king',
       price: '$50/night',
+      available: 'true',
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 2',
       roomType: 'qween',
       price: '$53/night',
+      available: 'true',
 
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 3',
       roomType: 'qween',
       price: '$54/night',
+      available: 'true',
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 4',
       price: '$55/night',
+      available: 'true',
     },
   ],
 };
@@ -190,24 +210,28 @@ export const editAccommodation = {
   numberOfRooms: 4,
   availableRooms: [
     {
-      roomName: 'double room',
+      roomName: 'Room 1',
       roomType: 'king',
       price: '$50/night',
+      available: 'true',
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 2',
       roomType: 'qween',
       price: '$53/night',
+      available: 'true',
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 3',
       roomType: 'qween',
       price: '$54/night',
+      available: 'true',
     },
     {
-      roomName: 'sleeping room',
+      roomName: 'Room 4',
       roomType: 'qween',
       price: '$55/night',
+      available: 'true',
     },
   ],
 };

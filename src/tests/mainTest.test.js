@@ -11,6 +11,7 @@ import rememberMe from './rememberMe.test';
 import commentTest from './comment.test';
 import editRequest from './editRequest.test';
 import events from '../helpers/eventConnect';
+import bookingTest from './booking.test';
 
 import uploadEmptyImage from './accommodation/imageUploadAccommodation.test';
 import approveRequest from './approveRequest.test';
@@ -49,6 +50,7 @@ getAllAccommodations();
 getSingleAccommodation();
 editAccommodations();
 uploadLocationImage();
+bookingTest();
 rateAccomodation();
 violatingDb();
 editwithEmptyData();

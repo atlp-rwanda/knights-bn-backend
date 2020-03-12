@@ -13,6 +13,7 @@ import swaggerDefinition from './docs/swaggerDefinition';
 import users from './routes/users';
 import trips from './routes/trips';
 import chats from './routes/chat';
+import bookings from './routes/booking';
 import translator from './translator';
 import accommodationRouter from './routes/accommodation';
 import events from './helpers/eventConnect';
@@ -21,7 +22,6 @@ import io, { app } from './helpers/ioServerHelper';
 
 dotenv.config();
 
-// server
 const connectedClients = {};
 io.use(async (socket, next) => {
   const { token } = socket.handshake.query;
@@ -79,6 +79,7 @@ app.use('/api/v1', users);
 app.use('/api/v1', trips);
 app.use('/api/v1', accommodationRouter);
 app.use('/api/v1', chats);
+app.use('/api/v1', bookings);
 
 app.use((req, res) => res.status(404).send({
   status: 404,
