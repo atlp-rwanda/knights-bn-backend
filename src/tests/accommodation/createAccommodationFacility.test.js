@@ -200,8 +200,17 @@ export const getSingleAccommodation = () => {
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           expect(res.body.data).to.be.an('object');
+          done();
         });
-      done();
+    });
+    it('it should return 400 wrong ID params', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/view/accommodation/n')
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(400);
+          done();
+        });
     });
   });
 };
@@ -224,16 +233,15 @@ export const editAccommodations = () => {
         });
       done();
     });
-    it('it should return 500 when violating the database ', (done) => {
+    it('it should return 400 wrong ID parameter ', (done) => {
       chai
         .request(app)
         .patch('/api/v1/edit/accommodation/n')
         .send(editAccommodation)
         .end((err, res) => {
-          expect(res.statusCode).to.equal(500);
-          expect(res.body.name).to.equal('SequelizeDatabaseError');
+          expect(res.statusCode).to.equal(400);
+          done();
         });
-      done();
     });
   });
 };
@@ -274,7 +282,7 @@ export const editwithEmptyData = () => {
         .send({})
         .end((err, res) => {
           expect(res.statusCode).to.equal(400);
-          expect(res.body.errorMessage).to.equal('You are sending with empty fields');
+          expect(res.body.errorMessage).to.equal('You are sending an empty fields');
         });
       done();
     });
@@ -288,14 +296,13 @@ export const violatingDatabase = () => {
       done();
     });
 
-    it('it should return 500 when violating database ', (done) => {
+    it('it should return 400 wrong ID params ', (done) => {
       chai
         .request(app)
         .patch('/api/v1/edit/accommodation/n')
         .send(editAccommodation)
         .end((err, res) => {
-          expect(res.statusCode).to.equal(500);
-          expect(res.body.name).to.equal('SequelizeDatabaseError');
+          expect(res.statusCode).to.equal(400);
         });
       done();
     });

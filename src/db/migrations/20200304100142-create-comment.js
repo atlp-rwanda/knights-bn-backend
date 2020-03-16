@@ -27,6 +27,9 @@ module.exports = {
         as: 'id',
       },
     },
+    accommodationId: {
+      type: Sequelize.INTEGER,
+    },
     comment: {
       type: Sequelize.STRING,
     },

@@ -1,13 +1,15 @@
 import { config } from 'dotenv';
 import _ from 'lodash';
-import models, { Accommodation, Bookings } from '../db/models';
-import Accomodation from '../helpers/queries';
+import { Accommodation, Bookings, Comment } from '../db/models';
+import accomodation from '../helpers/queries';
 
 config();
 export default class accomodationFacility {
   static async getAllAccommodations(req, res) {
     try {
-      const accommodations = await Accommodation.findAll();
+      const accommodations = await Accommodation.findAll({
+        include: [{ model: Comment, attributes: ['commenterId', 'comment', 'createdAt', 'updatedAt'] }],
+      });
       return res.status(200).json({ status: 200, data: accommodations });
     } catch (error) {
       return res.status(500).json({ status: 500, errorMessage: error });
@@ -15,28 +17,32 @@ export default class accomodationFacility {
   }
 
   static async getSingleAccommodation(req, res) {
-    const accommodationId = req.params.id;
-    const singleAccommodation = await Accommodation
-      .findOne({ where: { id: accommodationId } });
-    if (singleAccommodation === null) {
-      return res.status(404)
-        .json({ status: 404, errorMessage: 'accommmodation not found' });
+    try {
+      const singleAccommodation = await Accommodation
+        .findOne({
+          where: { id: req.params.id },
+          include: [{
+            model: Comment,
+            attributes: ['commenterId', 'comment', 'createdAt', 'updatedAt'],
+          }],
+        });
+      if (singleAccommodation === null) {
+        return res.status(404)
+          .json({ status: 404, errorMessage: 'accommmodation not found' });
+      }
+      return res.status(200).json({ status: 200, data: singleAccommodation });
+    } catch (error) {
+      return res.status(500)
+        .json({ errorMessage: `Invalid url parameter "${req.params.id}"` });
     }
-    return res.status(200).json({ status: 200, data: singleAccommodation });
   }
 
   static async editAccommodation(req, res) {
-    try {
-      if (Object.keys(req.body).length === 0) {
-        return res.status(400)
-          .json({ status: 400, errorMessage: 'You are sending with empty fields' });
-      }
-      await models.Accommodation
-        .update(req.body, { where: { id: req.params.id, userId: req.user.id } });
-      return res.status(200).json({ status: 200, data: req.accommodation });
-    } catch (error) {
-      return res.status(500).json(error);
-    }
+    Accommodation
+      .update(req.body, { where: { id: req.params.id, userId: req.user.id } })
+      .then(() => {
+        res.status(200).json({ status: 200, data: req.accommodation });
+      });
   }
 
   static async uploadBuildingImage(req, res) {
@@ -46,9 +52,10 @@ export default class accomodationFacility {
           .json({ status: 400, errorMessage: 'You forget to chose image' });
       }
       req.body.imageOfBuilding = `${process.env.HOST_NAME}/${req.file.url}`;
+      await accomodation.update(req.body, { id: req.params.id }, Accommodation);
       return res.status(200).json({ status: 200, message: 'image uploaded successfully' });
     } catch (error) {
-      return res.status(500).json(error);
+      return res.status(500).json(error.name);
     }
   }
 
@@ -70,7 +77,7 @@ export default class accomodationFacility {
       if (isNaN(id)) {
         return res.status(401).json({ error: 'id must be a number' });
       }
-      const findAccomodation = await Accomodation.getAccommodation('id', id, Accommodation);
+      const findAccomodation = await accomodation.getAccommodation('id', id, Accommodation);
       if (findAccomodation.availableRooms === null || !findAccomodation) {
         return res.status(404).json({ status: 404, message: 'accomodation not available' });
       }
@@ -91,7 +98,7 @@ export default class accomodationFacility {
     req.body.userId = req.user.id;
     const { accomodationId, roomName } = req.body;
     try {
-      const findAccomodation = await Accomodation.getAccommodation('id', accomodationId, Accommodation);
+      const findAccomodation = await accomodation.getAccommodation('id', accomodationId, Accommodation);
       if (!findAccomodation || findAccomodation.availableRooms === null) {
         return res.status(404).json({ status: 404, message: 'accomodation not found' });
       }
@@ -109,6 +116,27 @@ export default class accomodationFacility {
         return res.status(200).json({ status: 200, message: 'accomodation booked successfully', ..._.omit(book.dataValues, ['updatedAt', 'createdAt', 'userId']) });
       }
       return res.status(404).json({ status: 404, message: 'Room not available' });
+    } catch (error) {
+      return res.status(500).json({ status: 500, errorMessage: error });
+    }
+  }
+
+  static async accommodationFeedBack(req, res) {
+    try {
+      const newComment = {
+        commenterId: req.user.id,
+        comment: req.body.comment,
+        accommodationId: req.params.id,
+      };
+      return Comment.create(newComment).then((accomm) => {
+        const { commenterId, comment, createdAt } = accomm;
+        res.status(201).json({
+          status: 201,
+          commenterId,
+          comment,
+          createdAt,
+        });
+      });
     } catch (error) {
       return res.status(500).json({ status: 500, errorMessage: error });
     }

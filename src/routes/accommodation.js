@@ -2,13 +2,16 @@ import { Router } from 'express';
 import accommodation from '../controllers/accommodation';
 import verifyToken from '../middlewares/checkAuth';
 import isAdmin from '../middlewares/isTravelAdmin';
-import { accommodationValidataion, validateRooms, isExist } from '../middlewares/validateDate';
+import { accommodationValidataion,
+   validateRooms, 
+  isExist, checkParams,
+  validateInputBody } from '../middlewares/validateDate';
 import imageMiddleware from '../middlewares/imageUpload';
 import rateAccommodation from '../controllers/rate.accommodation';
 import validateParams from '../middlewares/validateParamsRate';
 import validateRate from '../middlewares/validateRate';
 import validateBookings from '../middlewares/validateBookings';
-
+import commentValidate from '../middlewares/newComment';
 import findOne from '../middlewares/findAccommodation';
 /**
  * @swagger
@@ -17,7 +20,7 @@ import findOne from '../middlewares/findAccommodation';
         "description": "Travel admin can create accommodation facility",
         "summary": "create accommodation",
         "tags": [
-          "Accommodation"
+          "Accommodations"
         ],
         "deprecated": false,
         "operationId": "accommodation",
@@ -50,7 +53,7 @@ import findOne from '../middlewares/findAccommodation';
         "description": "upload accommodation image",
         "summary": "upload image",
         "tags": [
-          "Accommodation"
+          "Accommodations"
         ],
         "operationId": "accommodation-image",
         "produces": [
@@ -93,7 +96,7 @@ import findOne from '../middlewares/findAccommodation';
         "description": "view all accommodations",
         "summary": "view all accommodations",
         "tags": [
-          "Accommodation"
+           "Accommodations"
         ],
         "operationId": "accommodations-view",
         "produces": [
@@ -123,7 +126,7 @@ import findOne from '../middlewares/findAccommodation';
         "description": "view single accommodation",
         "summary": "view single accommodation",
         "tags": [
-          "Accommodation"
+         "Accommodations"
         ],
         "operationId": "accommodation-view",
         "produces": [
@@ -160,7 +163,7 @@ import findOne from '../middlewares/findAccommodation';
         "description": "edit accommodations",
         "summary": "edit accommodations",
         "tags": [
-          "Accommodation"
+         "Accommodations"
         ],
         "operationId": "accommodation-edit",
         "produces": [
@@ -202,7 +205,7 @@ import findOne from '../middlewares/findAccommodation';
         "description": "user can rate accommodation",
         "summary": "rate accommodation",
         "tags": [
-          "Accommodation"
+          "Accommodations"
         ],
         "operationId": "accommodation-rate",
         "produces": [
@@ -252,7 +255,7 @@ import findOne from '../middlewares/findAccommodation';
         "description": "view available Rooms in an accommodations",
         "summary": "view available Rooms",
         "tags": [
-          "Accommodation"
+           "Accommodations"
         ],
         "operationId": "available-rooms",
         "produces": [
@@ -368,14 +371,61 @@ import findOne from '../middlewares/findAccommodation';
       }
     }
  */
+
+ /**
+ * @swagger
+ *  "/accommodation/comment/{id}": {
+      "post": {
+        "description": "comment on accommodation",
+        "summary": "comment on accommodation",
+        "tags": [
+          "Accommodations"
+        ],
+        "operationId": "comment-accomm",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "accommodation id"
+          },
+           {
+            "name": "comment",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+          },
+
+        ],
+        "responses": {
+          "201": {
+            "description":"successfully",
+          },
+           "401": {
+            "description": "Unauthorized access"
+          }
+        }
+      }
+    }
+ */
+
 const accommodationRouter = Router();
-accommodationRouter.patch('/upload/accommodation/:id', verifyToken.auth, isAdmin, imageMiddleware.single('imageOfBuilding'), findOne, accommodation.uploadBuildingImage);
-accommodationRouter.patch('/edit/accommodation/:id', verifyToken.auth, isAdmin, findOne, accommodation.editAccommodation);
+accommodationRouter.patch('/upload/accommodation/:id', verifyToken.auth, isAdmin, checkParams, imageMiddleware.single('imageOfBuilding'), findOne, accommodation.uploadBuildingImage);
+accommodationRouter.patch('/edit/accommodation/:id', verifyToken.auth, isAdmin, checkParams, validateInputBody, findOne, accommodation.editAccommodation);
 accommodationRouter.post('/create/accommodation', verifyToken.auth, imageMiddleware.single('imageOfBuilding'), isAdmin, accommodationValidataion, validateRooms, isExist, accommodation.createAccomodation);
-accommodationRouter.get('/view/accommodation/:id', verifyToken.auth, accommodation.getSingleAccommodation);
+accommodationRouter.get('/view/accommodation/:id', verifyToken.auth, checkParams, accommodation.getSingleAccommodation);
 accommodationRouter.get('/view/accommodations', verifyToken.auth, accommodation.getAllAccommodations);
 accommodationRouter.patch('/edit/accommodation/rate/:id', verifyToken.auth, validateParams, validateRate, rateAccommodation.rateExistingAccomodation);
-accommodationRouter.get('/rooms/accommodations/:id', verifyToken.auth, accommodation.availableRooms);
+accommodationRouter.get('/rooms/accommodations/:id', verifyToken.auth, checkParams, accommodation.availableRooms);
 accommodationRouter.post('/book/accommodations', verifyToken.auth, validateBookings, accommodation.bookAccomodation);
+accommodationRouter.post('/accommodation/comment/:id', verifyToken.auth, commentValidate.comment, checkParams, accommodation.accommodationFeedBack);
 
 export default accommodationRouter;

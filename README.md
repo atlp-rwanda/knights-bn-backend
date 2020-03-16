@@ -112,6 +112,8 @@ Open terminal from your computer
 
 `- GET /trips/stats/:date? - For a manager and a user to get statistics of the trips made.`
 
+`- GET /accommodation/comment/:id? - For commenting on accommodation.`
+
 ### Raising an issue
 Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create an issue about this app
 
