@@ -15,6 +15,7 @@ import events from '../helpers/eventConnect';
 import uploadEmptyImage from './accommodation/imageUploadAccommodation.test';
 import approveRequest from './approveRequest.test';
 import viewSpecificRequest from './viewSpecificRequest.test';
+import rateAccomodation from './accommodation/rate.accommodation.test';
 import {
   accommodationFacility, missingInfomation,
   missingRoomInformation, createThesame, wrongUserAccess,
@@ -48,6 +49,7 @@ getAllAccommodations();
 getSingleAccommodation();
 editAccommodations();
 uploadLocationImage();
+rateAccomodation();
 violatingDb();
 editwithEmptyData();
 notFoundUpdate();

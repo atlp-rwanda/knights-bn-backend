@@ -1,7 +1,6 @@
 import intl from 'i18n';
 import path from 'path';
 
-
 intl.configure({
   locales: ['en', 'iw', 'fr', 'it'],
   directory: path.join(__dirname, '/locales'),

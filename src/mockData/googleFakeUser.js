@@ -4,13 +4,13 @@ const user = {
   displayName: 'William Ishimwe',
   name: {
     familyName: 'Ishimwe',
-    givenName: 'William'
+    givenName: 'William',
   },
   emails: [
     {
       value: 'william.ishimwe@andela.com',
-      verified: true
-    }
+      verified: true,
+    },
   ],
   photos: [{ value: 'https://lh3.googleusercontent.com/a-/AAuE7mAc5uxnvN_E2mncc8aZt3BcdMHamBVSAW78HpNU' }],
   provider: 'google',
@@ -24,8 +24,8 @@ const user = {
     email: 'william.ishimwe@andela.com',
     email_verified: true,
     locale: 'en',
-    hd: 'andela.com'
-  }
+    hd: 'andela.com',
+  },
 };
 
 export default user;

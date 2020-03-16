@@ -262,7 +262,6 @@ export const violatingDatabase = () => {
       done();
     });
 
-
     it('it should return 500 when violating database ', (done) => {
       chai
         .request(app)
@@ -305,7 +304,6 @@ export const notFoungUpload = () => {
       localStorage.setItem('token', travelToken);
       done();
     });
-
 
     it('it should return 404 when accommodation is not found ', (done) => {
       chai

@@ -4,7 +4,9 @@ import verifyToken from '../middlewares/checkAuth';
 import isAdmin from '../middlewares/isTravelAdmin';
 import { accommodationValidataion, validateRooms, isExist } from '../middlewares/validateDate';
 import imageMiddleware from '../middlewares/imageUpload';
-
+import rateAccommodation from '../controllers/rate.accommodation';
+import validateParams from '../middlewares/validateParamsRate';
+import validateRate from '../middlewares/validateRate';
 
 /**
  * @swagger
@@ -193,12 +195,62 @@ import imageMiddleware from '../middlewares/imageUpload';
     }
  */
 
+/**
+ * @swagger
+ *  "/edit/accommodation/rate/{id}": {
+      "patch": {
+        "description": "user can rate accommodation",
+        "summary": "rate accommodation",
+        "tags": [
+          "Accommodation"
+        ],
+        "operationId": "accommodation-rate",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+           "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+                  {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "accommodation id"
+          },
+      {
+            "name": "rate",
+            "in": "formData",
+            "required": true,
+            "type": "number",
+            "description": "rate and should be between 0-5"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully",
+          },
+           "401": {
+            "description": "Unauthorized access"
+          },
+           "422": {
+            "description": for invalid rate"
+          },
+           "404": {
+            "description": for non existing accommodation"
+          }
+        }
+      }
+    }
+ */
+
 const accommodationRouter = Router();
 accommodationRouter.patch('/upload/accommodation/:id', verifyToken.auth, isAdmin, imageMiddleware.single('imageOfBuilding'), accommodation.uploadBuildingImage);
 accommodationRouter.patch('/edit/accommodation/:id', verifyToken.auth, isAdmin, accommodation.editAccommodation);
 accommodationRouter.post('/create/accommodation', verifyToken.auth, imageMiddleware.single('imageOfBuilding'), isAdmin, accommodationValidataion, validateRooms, isExist, accommodation.createAccomodation);
 accommodationRouter.get('/view/accommodation/:id', verifyToken.auth, accommodation.getSingleAccommodation);
 accommodationRouter.get('/view/accommodations', verifyToken.auth, accommodation.getAllAccommodations);
-
+accommodationRouter.patch('/edit/accommodation/rate/:id', verifyToken.auth, validateParams, validateRate, rateAccommodation.rateExistingAccomodation);
 
 export default accommodationRouter;

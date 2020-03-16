@@ -317,8 +317,7 @@
          }
        }
     */
-
-    /**
+/**
     * @swagger
     *  "/trips/comment/": {
          "delete": {
@@ -337,7 +336,7 @@
            "parameters": [
              {
                  "name": "commentId",
-                 "in": "params",
+                 "in": "query",
                  "description": "ID of comment to be deleted",
                  "required": true,
                  "type": "integer",
@@ -346,7 +345,7 @@
            ],
            "responses": {
              "200": {
-               "description": "comment successfully deleted",
+               "description": "comment successfully added",
              },
              "422": {
                "description": "Invalid commentId",

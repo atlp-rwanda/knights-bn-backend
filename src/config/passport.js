@@ -5,11 +5,9 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-
 passport.serializeUser((user, done) => { done(null, user.id); });
 
 passport.deserializeUser((user, done) => done(null, user));
-
 
 const getUser = (accessToken, refreshToken, profile, done) => {
   done(null, profile);

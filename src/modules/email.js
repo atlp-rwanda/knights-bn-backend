@@ -8,8 +8,8 @@ const template = new mailgen({
   theme: 'salted',
   product: {
     name: 'Barefoot Nomad',
-    link: '#'
-  }
+    link: '#',
+  },
 });
 
 sgMail.setApiKey(process.env.BN_API_KEY);
@@ -30,11 +30,11 @@ const generateEmail = (name, instructions, buttonTxt, link) => ({
       button: {
         color: '#87ceeb',
         text: buttonTxt,
-        link
-      }
+        link,
+      },
     },
-    outro: 'Your friends at Barefoot.'
-  }
+    outro: 'Your friends at Barefoot.',
+  },
 });
 export const resetPasswordTemplate = (user, url) => {
   const emailBody = generateEmail(
@@ -46,7 +46,7 @@ export const resetPasswordTemplate = (user, url) => {
     have a Good day! 
     `,
     'Verify account',
-    `${url}`
+    `${url}`,
   );
   const emailTemplate = template.generate(emailBody);
 
@@ -54,7 +54,7 @@ export const resetPasswordTemplate = (user, url) => {
     to: user.email,
     from: 'no-reply@barefootnomad.com',
     subject: 'Verify Your Email',
-    html: emailTemplate
+    html: emailTemplate,
   };
   sgMail.send(msg);
 };

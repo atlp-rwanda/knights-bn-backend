@@ -8,7 +8,6 @@ import returnTripMock from '../mockData/twoWayTrip';
 import { sendNotification } from '../helpers/notificationSender';
 import events from '../helpers/eventConnect';
 
-
 const { validTrip2 } = returnTripMock;
 chai.use(chaiHttp);
 chai.should();

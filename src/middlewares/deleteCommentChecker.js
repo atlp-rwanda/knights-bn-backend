@@ -1,4 +1,5 @@
-import commentQuery from '../helpers/commentQueries';
+import commentQuery from '../helpers/queries';
+import models from '../db/models';
 
 const checkAuthorizedCommenter = async (req, res, next) => {
   const commenterId = req.user.id;
@@ -9,7 +10,7 @@ const checkAuthorizedCommenter = async (req, res, next) => {
       error: 'wrong commentId input,commentId should be a number',
     });
   }
-  const comment = await commentQuery.getComment('id', commentId);
+  const comment = await commentQuery.getAccommodation('id', commentId, models.Comment);
   if (!comment) {
     return res.status(404).json({
       status: 404,

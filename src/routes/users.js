@@ -364,7 +364,6 @@ router.get('/user/profile', auth.auth, userProfile.getProfileInformation);
 router.patch('/edit/user/profile', auth.auth, imageMiddleware.single('profileImage'), userProfile.changeMyProfileInfo);
 router.get('/remembered', auth.auth, userProfile.rememberMe);
 
-
 /**
  * @swagger
  *  "/reset_pw/user": {

@@ -24,4 +24,14 @@ const createTwoWayTripSchema = Joi.object({
 const requestIdParamsSchema = Joi.object({
   requestId: Joi.number().required(),
 });
-export { editRequestSchema, createTwoWayTripSchema, requestIdParamsSchema };
+const rateValidatorId = Joi.object({
+  id: Joi.number().required(),
+});
+
+const rateValidator = Joi.object({
+  rate: Joi.number().required().min(1).max(5),
+});
+
+export {
+  rateValidatorId, editRequestSchema, createTwoWayTripSchema, requestIdParamsSchema, rateValidator,
+};

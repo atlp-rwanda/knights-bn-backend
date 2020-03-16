@@ -85,13 +85,13 @@ export const accommodationValidataion = (req, res, next) => {
     streetNumber: Joi.string().required(),
     numberOfRooms: Joi.number().required(),
     availableRooms: Joi.required(),
-    description: Joi.string().required()
+    description: Joi.string().required(),
   });
   const { error } = Joi.validate(req.body, accommodationShema);
   if (error) {
     return res.status(400).json({
       status: 400,
-      error: error.details[0].message
+      error: error.details[0].message,
     });
   }
 
@@ -102,7 +102,7 @@ export const validateRooms = (req, res, next) => {
   const roomsSchema = Joi.object({
     roomName: Joi.string().required(),
     roomType: Joi.string().required(),
-    price: Joi.string().required()
+    price: Joi.string().required(),
   });
   const roomErrors = [];
   req.body.availableRooms.forEach((room) => {
@@ -114,7 +114,7 @@ export const validateRooms = (req, res, next) => {
   if (roomErrors.length > 0) {
     return res.status(400).json({
       status: 400,
-      error: roomErrors[0].details[0].message
+      error: roomErrors[0].details[0].message,
     });
   }
   next();
@@ -144,7 +144,6 @@ export const validateCityDate = (req, res, next) => {
       });
     }
   }
-
 
   next();
 };
