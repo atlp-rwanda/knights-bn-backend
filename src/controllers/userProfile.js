@@ -1,4 +1,3 @@
-
 import dotEnv from 'dotenv';
 import models from '../db/models';
 import returnProfile from '../helpers/returnProfileInformation';
@@ -14,8 +13,8 @@ export default class changeUserProfile {
 
   static changeMyProfileInfo(request, response) {
     request.body.birthDay = validateDate(request.body.birthDay);
-    request.body.profileImage = (typeof request.file === 'undefined') ? null : `${process.env.HOST_NAME}/${request.file.path}`;
-    models.User.update(request.body, { where: { id: request.user.id } })
+    request.body.profileImage = (typeof request.file === 'undefined') ? null : `${process.env.HOST_NAME}/${request.file.url}`;
+    return models.User.update(request.body, { where: { id: request.user.id } })
       .then(() => models.User.findOne({ where: { id: request.user.id } }))
       .then((user) => {
         response.status(200).json({ status: 200, user: returnProfile(user) });

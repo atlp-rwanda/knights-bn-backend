@@ -31,8 +31,8 @@ const testRejectRequest = () => {
         .end((error, response) => {
           expect(response.status).to.equal(403);
           expect(response.body).to.have.property('error').equals('Unauthorized access!');
-          done();
         });
+      done();
     });
     it('returns 200 on a manager signed in successfully', (done) => {
       chai
@@ -55,8 +55,8 @@ const testRejectRequest = () => {
         .end((error, response) => {
           expect(response.status).to.equal(404);
           expect(response.body).to.have.property('error').equals('Request not found!');
-          done();
         });
+      done();
     });
     it('returns 422 on a request with invalid id', (done) => {
       chai
@@ -75,8 +75,8 @@ const testRejectRequest = () => {
         .end((error, response) => {
           expect(response.status).to.equal(200);
           expect(response.body).to.have.property('message').equals('The request successfully rejected');
-          done();
         });
+      done();
     });
     it('returns 200 on a request with already rejected status', (done) => {
       chai
@@ -84,8 +84,8 @@ const testRejectRequest = () => {
         .patch(`/api/v1/trips/reject?requestId=${2}`)
         .end((error, response) => {
           expect(response.status).to.equal(200);
-          done();
         });
+      done();
     });
     it('returns 405 on a request with approved status', (done) => {
       chai
@@ -94,8 +94,8 @@ const testRejectRequest = () => {
         .end((error, response) => {
           expect(response.status).to.equal(405);
           expect(response.body).to.have.property('error').equals("Sorry can't reject ! The user is now on trip.");
-          done();
         });
+      done();
     });
     it('returns 200 if request was approved but yet its start date not today ', (done) => {
       chai
@@ -104,8 +104,8 @@ const testRejectRequest = () => {
         .end((error, response) => {
           expect(response.status).to.equal(200);
           expect(response.body).to.have.property('message').equals('The request successfully rejected');
-          done();
         });
+      done();
     });
     it('should return true if object is empty', (done) => {
       const userInfo = {};

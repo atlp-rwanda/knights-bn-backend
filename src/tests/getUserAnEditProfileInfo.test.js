@@ -1,12 +1,16 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import localStorage from 'localStorage';
-import fs from 'fs';
+import sinonChai from 'sinon-chai';
+import { mockReq, mockRes } from 'sinon-express-mock';
+import sinon from 'sinon';
 import app from '../app';
 import mockData from './mockData';
+import profileImage from '../controllers/userProfile';
 
 chai.use(chaiHttp);
 chai.should();
+chai.use(sinonChai);
 
 const userProfile = () => {
   describe('UserProfile settings ', () => {
@@ -45,28 +49,23 @@ const userProfile = () => {
       done();
     });
 
-    it('it should return 200 when successfully profile image uploaded ', (done) => {
-      chai
-        .request(app)
-        .patch('/api/v1/edit/user/profile')
-        .type('form')
-        .attach('profileImage', fs.readFileSync('src/tests/mockImages/test.png'), 'test.png')
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
-        });
-      done();
-    });
-
-    it('it should return 500 when wrong format image is uploaded ', (done) => {
-      chai
-        .request(app)
-        .patch('/api/v1/edit/user/profile')
-        .type('form')
-        .attach('profileImage', fs.readFileSync('src/tests/mockImages/fakeimage.txt'), 'fakeimage.txt')
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(500);
-        });
-      done();
+    it('it should return 200 when successfully profile image uploaded ', async () => {
+      const changeMyProfileInfoStub = sinon.spy(profileImage, 'changeMyProfileInfo');
+      const request = {
+        file: {
+          url: 'https://via.placeholder.com/300.png/09f/fff',
+        },
+        body: {},
+        user: {
+          id: 5,
+        },
+      };
+      const req = mockReq(request);
+      const res = mockRes();
+      profileImage.changeMyProfileInfo(req, res);
+      expect(changeMyProfileInfoStub).calledWith(req, res).to.be.ok;
+      expect(changeMyProfileInfoStub).to.have.been.calledWith(req, res);
+      changeMyProfileInfoStub.restore();
     });
 
     it('it should return 500 when is not a right person to update profile ', (done) => {

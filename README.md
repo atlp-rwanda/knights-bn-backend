@@ -91,7 +91,10 @@ Open terminal from your computer
 
 `- GET /notifications -For checking new notifications`
 
-`- PATCH /notifications -For marking all notification as read. `
+`- PATCH /notifications -For marking all notification as read`
+`- GET /trips/view/request/{id} for viewing single request`
+
+`- GET /trips/edit/request/{id} for editing single request`
 
 `- PATCH /trips/edit/:requestId - For a user to edit an open request. `
 

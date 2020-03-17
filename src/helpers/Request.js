@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import models from '../db/models';
 
 export default class Request {

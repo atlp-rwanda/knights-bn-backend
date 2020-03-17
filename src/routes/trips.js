@@ -635,7 +635,6 @@
              "422": {
                "description": "Invalid input",
              },
-
              "404": {
                  "description": "Not found",
                }

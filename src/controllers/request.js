@@ -1,6 +1,7 @@
 import environment from 'dotenv';
 import sgMail from '@sendgrid/mail';
 import lodash from 'lodash';
+import emiter from 'events';
 import models from '../db/models';
 import getTodayDate from '../helpers/getTodayDate';
 import isObjectEmpty from '../helpers/isObjectEmpty';
@@ -12,6 +13,7 @@ import addNotification from '../helpers/addNotification';
 import Request from '../helpers/Request';
 import User from '../helpers/userQueries';
 import compareDates from '../helpers/compareDates';
+import editEventHandler from '../events/editEvent';
 
 environment.config();
 export default class requestsController {
@@ -207,21 +209,21 @@ export default class requestsController {
       const requestStatus = request.status;
       if (requestStatus === 'rejected') throw 'The request was rejected before!';
       if (requestStatus === 'pending') {
-        await Request.updateStatus(request, 'rejected');
+        return await Request.updateStatus(request, 'rejected');
       }
       if (requestStatus === 'approved') {
         const { departureDate } = request;
         const todayDate = getTodayDate();
         const isTodayDateAfterTheTripStartDate = compareDates(todayDate, departureDate);
         if (isTodayDateAfterTheTripStartDate) throw "Sorry can't reject ! The user is now on trip.";
-        await Request.updateStatus(request, 'rejected');
+        return await Request.updateStatus(request, 'rejected');
       }
-      res.status(200).json({
+      return res.status(200).json({
         message: 'The request successfully rejected',
         requestId,
       });
     } catch (error) {
-      handleError(res, error);
+      return console.error(error);
     }
   }
 
@@ -251,6 +253,16 @@ export default class requestsController {
       if (!request) throw 'Request not found!';
       if (request.status !== 'pending') throw 'Sorry, the request was closed!';
       const updatedRequest = await Request.updateRequest(requestId, req.body);
+
+      const FireEvent = new emiter.EventEmitter();
+      FireEvent.on('editEvent', editEventHandler);
+      FireEvent.emit('editEvent', {
+        managerId: updatedRequest.managerId,
+        title: updatedRequest.reason,
+        id: requestId,
+        user: req.user,
+      });
+
       return res.status(200).json({
         message: 'successfully updated',
         updatedRequest,

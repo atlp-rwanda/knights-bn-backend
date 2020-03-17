@@ -8,6 +8,199 @@ import auth from '../middlewares/checkAuth';
 import userProfile from '../controllers/userProfile';
 import imageMiddleware from '../middlewares/imageUpload';
 
+/**
+ * @swagger
+ *  "/auth/login": {
+      "post": {
+        "description": "User will be able to get authenticated with registered email and password",
+        "summary": "User login",
+        "tags": [
+          "User"
+        ],
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "format": "password",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+ */
+
+/**
+ * @swagger
+ *  "/remembered": {
+      "get": {
+        "description": "Click remember me to be remembered next time",
+        "summary": "remember me button",
+        "tags": [
+          "User"
+        ],
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+ */
+/**
+/**
+ * @swagger
+ *  "/user/profile": {
+      "get": {
+        "description": "Let user view his/her profile information",
+        "summary": "user profile",
+        "tags": [
+          "User"
+        ],
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+ */
+/**
+ * @swagger
+ *  "/edit/user/profile": {
+      "patch": {
+        "description": "Let user to edit his/her own profile information",
+        "summary": "edit profile information",
+        "tags": [
+          "User"
+        ],
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+           {
+            "name": "firstName",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "lastName",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": ""
+          },
+           {
+            "name": "passportNumber",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": ""
+          },
+           {
+            "name": "gender",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "language",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "birthDay",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "description": "yyy-mm-dd"
+          },
+          {
+            "name": "currency",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "homeTown",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "department",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "lineManager",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+           {
+            "name": "biography",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+           {
+            "name": "profileImage",
+            "in": "formData",
+            "required": false,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+ */
+
 const router = express.Router();
 const {
   registerUser, verifyAcccount, resetPassword, forgetPassword, login, socialLogin, logout,
@@ -165,199 +358,6 @@ router.get(
 router.get('/auth/test/google', fakeUser, socialLogin);
 router.get('/auth/test/facebook', fakeUser, socialLogin);
 
-/**
- * @swagger
- *  "/auth/login": {
-      "post": {
-        "description": "User will be able to get authenticated with registered email and password",
-        "summary": "User login",
-        "tags": [
-          "User"
-        ],
-        "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
-        "parameters": [
-          {
-            "name": "email",
-            "in": "formData",
-            "required": true,
-            "type": "string",
-            "description": ""
-          },
-          {
-            "name": "password",
-            "in": "formData",
-            "required": true,
-            "type": "string",
-            "format": "password",
-            "description": ""
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "headers": {}
-          }
-        }
-      }
-    }
- */
-
-/**
- * @swagger
- *  "/remembered": {
-      "get": {
-        "description": "Click remember me to be remembered next time",
-        "summary": "remember me button",
-        "tags": [
-          "User"
-        ],
-        "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "headers": {}
-          }
-        }
-      }
-    }
- */
-/**
-
-/**
- * @swagger
- *  "/user/profile": {
-      "get": {
-        "description": "Let user view his/her profile information",
-        "summary": "user profile",
-        "tags": [
-          "User"
-        ],
-        "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "headers": {}
-          }
-        }
-      }
-    }
- */
-/**
- * @swagger
- *  "/edit/user/profile": {
-      "patch": {
-        "description": "Let user to edit his/her own profile information",
-        "summary": "edit profile information",
-        "tags": [
-          "User"
-        ],
-        "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
-        "parameters": [
-           {
-            "name": "firstName",
-            "in": "formData",
-            "required": false,
-            "type": "string",
-            "description": ""
-          },
-          {
-            "name": "lastName",
-            "in": "formData",
-            "required": false,
-            "type": "string",
-            "description": ""
-          },
-           {
-            "name": "passportNumber",
-            "in": "formData",
-            "required": false,
-            "type": "string",
-            "description": ""
-          },
-           {
-            "name": "gender",
-            "in": "formData",
-            "required": false,
-            "type": "string",
-            "description": ""
-          },
-          {
-            "name": "language",
-            "in": "formData",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "birthDay",
-            "in": "formData",
-            "required": false,
-            "type": "string",
-            "description": "yyy-mm-dd"
-          },
-          {
-            "name": "currency",
-            "in": "formData",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "homeTown",
-            "in": "formData",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "department",
-            "in": "formData",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "lineManager",
-            "in": "formData",
-            "required": false,
-            "type": "string"
-          },
-           {
-            "name": "biography",
-            "in": "formData",
-            "required": false,
-            "type": "string"
-          },
-           {
-            "name": "profileImage",
-            "in": "formData",
-            "required": false,
-            "type": "file"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "headers": {}
-          }
-        }
-      }
-    }
- */
 router.post('/auth/signup', userValidation.signUp, registerUser);
 router.post('/auth/login', userLoginValidation, login);
 router.get('/user/profile', auth.auth, userProfile.getProfileInformation);

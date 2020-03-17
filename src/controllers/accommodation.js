@@ -25,30 +25,37 @@ export default class accomodationFacility {
     return res.status(200).json({ status: 200, data: singleAccommodation });
   }
 
-  static editAccommodation(req, res) {
-    if (Object.keys(req.body).length === 0) return res.status(400).json({ status: 400, errorMessage: 'You are sending with empty fields' });
-    models.Accommodation.update(req.body, { where: { id: req.params.id, userId: req.user.id } })
-      .then(() => Accommodation.findOne({ where: { id: req.params.id, userId: req.user.id } })
-        .then((accommodation) => {
-          if (accommodation === null) return res.status(404).json({ status: 404, errorMessage: 'Accommodation not found' });
-          return res.status(200).json({ status: 200, data: accommodation });
-        })).catch((error) => res.status(500).json(error));
+  static async editAccommodation(req, res) {
+    try {
+      if (Object.keys(req.body).length === 0) {
+        return res.status(400)
+          .json({ status: 400, errorMessage: 'You are sending with empty fields' });
+      }
+      await models.Accommodation
+        .update(req.body, { where: { id: req.params.id, userId: req.user.id } });
+      return res.status(200).json({ status: 200, data: req.accommodation });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
   }
 
-  static uploadBuildingImage(req, res) {
-    if (typeof req.file === 'undefined') return res.status(400).json({ status: 400, errorMessage: 'You forget to chose image' });
-    req.body.imageOfBuilding = `${process.env.HOST_NAME}/${req.file.path}`;
-    models.Accommodation.update(req.body, { where: { id: req.params.id, userId: req.user.id } })
-      .then(() => Accommodation.findOne({ where: { id: req.params.id, userId: req.user.id } }))
-      .then((accommodation) => {
-        if (accommodation === null) return res.status(404).json({ status: 404, errorMessage: 'Accommodation not found' });
-        res.status(200).json({ status: 200, message: 'image uploaded successfully' });
-      }).catch((error) => res.status(500).json(error));
+  static async uploadBuildingImage(req, res) {
+    try {
+      if (typeof req.file === 'undefined') {
+        return res.status(400)
+          .json({ status: 400, errorMessage: 'You forget to chose image' });
+      }
+      req.body.imageOfBuilding = `${process.env.HOST_NAME}/${req.file.url}`;
+      return res.status(200).json({ status: 200, message: 'image uploaded successfully' });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
   }
 
   static async createAccomodation(req, res) {
     try {
-      req.body.imageOfBuilding = (typeof req.file === 'undefined') ? null : `${process.env.HOST_NAME}/${req.file.path}`;
+      req.body.imageOfBuilding = (typeof req.file === 'undefined') ? 'image'
+        : `${process.env.HOST_NAME}/${req.file.url}`;
       req.body.userId = req.user.id;
       const accommodation = await Accommodation.create(req.body);
       return res.status(201).json({ status: 200, data: accommodation });
@@ -107,3 +114,4 @@ export default class accomodationFacility {
     }
   }
 }
+

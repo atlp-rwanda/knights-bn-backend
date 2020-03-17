@@ -1,6 +1,7 @@
 import BaseJoi from 'joi';
 import Extension from 'joi-date-extensions';
 import models from '../db/models';
+import findOne from '../helpers/queries';
 
 const Joi = BaseJoi.extend(Extension);
 export const tripInformation = (req, res, next) => {
@@ -121,13 +122,18 @@ export const validateRooms = (req, res, next) => {
   next();
 };
 
-export const isExist = (req, res, next) => {
-  models.Accommodation.findOne({ where: { locationName: req.body.locationName, accommodationName: req.body.accommodationName } }).then((location) => {
-    if (location !== null) {
-      return res.status(409).json({ status: 409, errorMessage: 'This accommodation was already created make a new one!' });
-    }
-    next();
-  });
+export const isExist = async (req, res, next) => {
+  const isAccommodationExist = findOne.getAOne(
+    req.body.locationName,
+    req.body.accommodationName, models.Accommodation,
+  );
+  if (await isAccommodationExist !== null) {
+    return res.status(409).json({
+      status: 409,
+      errorMessage: 'This accommodation was already created make a new one!',
+    });
+  }
+  next();
 };
 export const validateCityDate = (req, res, next) => {
   const errors = [];
