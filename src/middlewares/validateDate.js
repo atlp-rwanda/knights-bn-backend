@@ -102,6 +102,7 @@ export const validateRooms = (req, res, next) => {
   const roomsSchema = Joi.object({
     roomName: Joi.string().required(),
     roomType: Joi.string().required(),
+    available: Joi.string().required().valid('true', 'false'),
     price: Joi.string().required(),
   });
   const roomErrors = [];

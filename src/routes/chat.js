@@ -13,7 +13,7 @@ const {
  *   "/chat": {
       "get": {
         "description": "read all of the past chats",
-        "summary": "Past_chats",
+        "summary": "Past chats",
         "tags": [
           "Chat"
         ],
@@ -36,7 +36,6 @@ const {
       }
     }
     */
-
 router.get('/chat', authCheck.auth, getChats);
 
 export default router;

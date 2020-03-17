@@ -54,7 +54,6 @@ const rateAccomodation = () => {
         .patch(`/api/v1/edit/accommodation/rate/${1}`)
         .send(validRate)
         .end((err, res) => {
-          console.log(res.body);
           expect(res.statusCode).to.equal(200);
           expect(res.body.message).to.equal('your rating was updated successfully ');
           done();

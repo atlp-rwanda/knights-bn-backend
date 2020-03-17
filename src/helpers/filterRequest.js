@@ -7,7 +7,7 @@ const {
 const requestFilter = (key, value) => [
   where(
     cast(col(key), 'varchar'),
-    { [Op.like]: `%${value}%` },
+    { [Op.iLike]: `%${value}%` },
   ),
 ];
 export default (requestFilter);

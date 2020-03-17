@@ -377,5 +377,17 @@ const mockData = {
       },
     ],
   },
+  booking: {
+    accomodationId: 3,
+    roomName: 'Room 1',
+    checkinDate: '2020-06-13',
+    checkoutDate: '2020-06-24',
+  },
+  unexistingBooking: {
+    accomodationId: 30,
+    roomName: 'Room 1',
+    checkinDate: '2020-06-13',
+    checkoutDate: '2020-06-24',
+  },
 };
 export default mockData;

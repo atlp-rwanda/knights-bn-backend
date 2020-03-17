@@ -91,13 +91,21 @@ Open terminal from your computer
 
 `- GET /notifications -For checking new notifications`
 
-`- PATCH /notifications -For marking all notification as read`
+`- PATCH /notifications -For marking all notification as read. `
 
 `- PATCH /trips/edit/:requestId - For a user to edit an open request. `
 
 `- PATCH /trips/approve/:requestId - For a manager to approve a request and send notification to the user. `
 
 `- GET /trips/request/:requestId - For a user to view specific trip request. `
+
+`- GET /chat:requestId - For Viewing the past chats. `
+
+`- GET /rooms/accommodations/:3 - For viewing available room in an accommodation. `
+
+`- POST /book/accommodations - For booking an accommodation. `
+
+`- GET /bookings - For viewing my bookings. `
 
 ### Raising an issue
 Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create an issue about this app
