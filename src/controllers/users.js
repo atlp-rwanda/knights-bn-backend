@@ -8,10 +8,8 @@ import models from '../db/models';
 import generateToken from '../helpers/generateToken';
 import generatePswd from '../helpers/randomPswd';
 import usePasswordHashToMakeToken from '../helpers/helpers';
-import {
-  getPasswordResetURL,
-  resetPasswordTemplate,
-} from '../modules/email';
+import { getPasswordResetURL, resetPasswordTemplate } from '../modules/email';
+import userQuery from '../helpers/userQueries';
 
 const { Op } = sequelize;
 
@@ -23,13 +21,10 @@ export default class usersController {
       const {
         firstName, lastName, gender, passportNumber, email, password, lineManager,
       } = req.body;
-
       const token = generateToken({
         firstName, lastName, gender, passportNumber, email, password,
       });
-
       let host;
-
       if (process.env.NODE_ENV === 'development') {
         host = process.env.LOCAL_HOST;
       } else {
@@ -43,7 +38,6 @@ export default class usersController {
         subject: 'Account Verification',
         html: `<strong> Dear ${firstName}, please open this <a href="${url}">link</a> to verify your account </strong>`,
       };
-
       sgMail.send(msg);
       return res.status(200).json({ message: 'Please go to your email address to verify your account.' });
     } catch (error) {
@@ -68,11 +62,9 @@ export default class usersController {
           ],
         },
       });
-
       if (existingUser !== null) {
         return res.status(409).json({ message: 'Email or Passport number already taken.' });
       }
-
       const newUser = await models.User.create({
         firstName,
         lastName,
@@ -85,7 +77,6 @@ export default class usersController {
       const token = generateToken({
         id, email, firstName, lastName,
       });
-
       localStorage.setItem('token', token);
       return res.status(201).json({ message: 'Your account is successfully created.' });
     } catch (error) {
@@ -103,7 +94,6 @@ export default class usersController {
           message: 'Seems you do not have an account! Create it now',
         });
       }
-
       const passwordMatch = await bcrypt.compare(password, existUser.password);
       if (!passwordMatch) {
         return res
@@ -122,7 +112,6 @@ export default class usersController {
           lastName,
         },
       );
-
       localStorage.setItem('token', token);
       return res
         .status(200)
@@ -142,7 +131,6 @@ export default class usersController {
       const lastName = profile.name.lastName || profile.name.familyName;
       const { gender } = profile;
       const email = profile.emails ? profile.emails[0].value : null;
-
       const identity = method === 'google' ? email : id;
       const field = method === 'google' ? 'email' : 'clientId';
       const condition = {};
@@ -244,6 +232,20 @@ export default class usersController {
       });
     } catch (error) {
       return res.status(401).json({ error: 'invalid token' });
+    }
+  }
+
+  static async updateUserRole(req, res) {
+    const { email } = req.query;
+    const { role } = req.body;
+    try {
+      if (req.user.role !== 'superAdmin') return res.status(403).json({ status: 403, message: 'Sorry! Only super admin authorized!' });
+      const existingUser = await userQuery.getUserByEmail(email);
+      if (!existingUser) return res.status(404).json({ status: 404, message: `User  ${email} is not found!` });
+      await userQuery.updateUserRole(role, email);
+      return res.status(200).json({ status: 200, message: 'User successfully updated!' });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
     }
   }
 

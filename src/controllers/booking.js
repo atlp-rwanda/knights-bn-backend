@@ -1,7 +1,6 @@
 import Accomodation from '../helpers/queries';
 import { Bookings } from '../db/models';
 
-
 export default class bookAccomodation {
   static async myBookings(req, res) {
     const { id } = req.user;

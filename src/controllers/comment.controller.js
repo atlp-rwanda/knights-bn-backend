@@ -1,6 +1,7 @@
 import models from '../db/models';
 import { echoNotification } from '../helpers/notificationSender';
 import TripHelper from '../helpers/TripHelper';
+import currentEnv from '../helpers/currentEnv';
 
 export default class commentController {
   static async createComment(req, res) {
@@ -16,7 +17,7 @@ export default class commentController {
           requesterId,
           managerId: newComment.commenterId,
           status: 'non_read',
-          message: 'New comment made on your request',
+          message: `<a href="${currentEnv()}" target="_blank" onClick="javascript:document.location.reload(true)">New comment made on your request </a>`,
           type: 'new_comment',
           owner: 'requester',
         });
@@ -27,9 +28,7 @@ export default class commentController {
         });
       }
     } catch (error) {
-      return res.status(500).json({
-        error,
-      });
+      return res.status(500).json({ error });
     }
   }
 
