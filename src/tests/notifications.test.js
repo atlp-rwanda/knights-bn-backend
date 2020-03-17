@@ -18,37 +18,23 @@ const notifications = () => {
           done();
         });
     });
-    it('it should return 200 when new notifications are found and displayed', (done) => {
+    it('should return 201 on successful created request ', (done) => {
       chai
         .request(app)
-        .get('/api/v1/notifications')
-        .send()
+        .post('/api/v1/trips/returnTrip')
+        .send({
+          origin: 'Kigali',
+          destination: 'Kampala',
+          departureDate: '2080-01-11',
+          returnDate: '2081-01-15',
+          reason: 'meet Egyptians',
+          accommodation: 'Egyptian Hotel',
+        })
         .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
+          expect(res.status).to.equal(201);
+          done();
         });
-      done();
     });
-    it('it should return 200 when all notifications are marked as read', (done) => {
-      chai
-        .request(app)
-        .patch('/api/v1/notifications')
-        .send()
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
-        });
-      done();
-    });
-    it('it should return 404 when there is no new notification found', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/notifications')
-        .send()
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(404);
-        });
-      done();
-    });
-
     it('it should return 200 on successful signIn for a manager', (done) => {
       chai
         .request(app)
@@ -65,7 +51,7 @@ const notifications = () => {
         .get('/api/v1/notifications')
         .send()
         .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
+          expect(res.body.message).to.equal('Your notifications');
         });
       done();
     });
@@ -75,18 +61,7 @@ const notifications = () => {
         .patch('/api/v1/notifications')
         .send()
         .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
-        });
-      done();
-    });
-    it('it should return 404 when there is no new notification found', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/notifications')
-        .send()
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(404);
-          done();
+          expect(res.body.message).to.equal('You have no unread notification');
         });
       done();
     });

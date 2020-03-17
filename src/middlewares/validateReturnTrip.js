@@ -56,7 +56,8 @@ export default async (req, res, next) => {
         raw: true,
       });
       requests.map((request) => {
-        if (((request.departureDate <= reqDepartureDate) && (reqDepartureDate <= request.returnDate))
+        if (((request.departureDate <= reqDepartureDate)
+        && (reqDepartureDate <= request.returnDate))
           || ((request.departureDate <= reqReturnDate) && (reqReturnDate <= request.returnDate))) {
           if (request.type === 'one_way') {
             const {
@@ -119,7 +120,7 @@ export default async (req, res, next) => {
       });
     }
     if (error === 'conflicting trip') {
-      return res.status(422).json({
+      res.status(422).json({
         status: res.statusCode,
         error: 'conflicting trip request.',
         conflictingTripRequest,

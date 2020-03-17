@@ -1,6 +1,5 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
-import localStorage from 'localStorage';
 import sinonChai from 'sinon-chai';
 import { mockReq, mockRes } from 'sinon-express-mock';
 import sinon from 'sinon';
@@ -13,8 +12,9 @@ import {
   missingInformation,
   missingRoomInfo,
   editAccommodation,
-  travelToken, facility2,
-  supplierToken,
+  facility2,
+  travelAdminInfo,
+  supplierInfo,
 } from './accommodationMockData';
 
 chai.use(chaiHttp);
@@ -23,9 +23,15 @@ chai.use(sinonChai);
 
 export const accommodationFacility = () => {
   describe('Accommodation facilities ', () => {
-    before((done) => {
-      localStorage.setItem('token', travelToken);
-      done();
+    it('it should return 200 on successful signIn', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/login')
+        .send(travelAdminInfo)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          done();
+        });
     });
     it('it should return 201 successfully facility created ', (done) => {
       chai
@@ -62,33 +68,34 @@ export const accommodationFacility = () => {
   });
 };
 
-describe('Supplier can create accommodation/facilities ', () => {
-  before((done) => {
-    localStorage.setItem('token', supplierToken);
-    done();
+export const editwithEmptyData = () => {
+  describe('accommodation ', () => {
+    it('it should return 200 on successful signIn', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/login')
+        .send(travelAdminInfo)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          done();
+        });
+    });
+    it('it should return 400 when data was not provided ', (done) => {
+      chai
+        .request(app)
+        .patch(`/api/v1/edit/accommodation/${1}`)
+        .send({})
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(400);
+          expect(res.body.errorMessage).to.equal('You are sending an empty fields');
+        });
+      done();
+    });
   });
-  it('it should return 201 successfully facility created ', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/create/accommodation')
-      .send(facility2)
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
-        expect(res.body.data).to.be.an('object');
-        expect(res.body.data).to.have.property('accommodationName');
-        expect(res.body.data).to.have.property('locationName');
-      });
-    done();
-  });
-});
+};
 
 export const missingRoomInformation = () => {
   describe('accommodation ', () => {
-    before((done) => {
-      localStorage.setItem('token', travelToken);
-      done();
-    });
-
     it('it should return 400  when room information is missing', (done) => {
       chai
         .request(app)
@@ -105,11 +112,7 @@ export const missingRoomInformation = () => {
 
 export const missingInfomation = () => {
   describe('accommodation ', () => {
-    before((done) => {
-      localStorage.setItem('token', travelToken);
-      done();
-    });
-    it('it should return 400  whenaccommodation information is not full ', (done) => {
+    it('it should return 400  whenacommodation information is not full ', (done) => {
       chai
         .request(app)
         .post('/api/v1/create/accommodation')
@@ -124,11 +127,7 @@ export const missingInfomation = () => {
 
 export const createThesame = () => {
   describe('accommodation ', () => {
-    before((done) => {
-      localStorage.setItem('token', travelToken);
-      done();
-    });
-    it('it should return 409 when you create the same accommodation ', (done) => {
+    it('it should return 409 when yu create the same accommodation ', (done) => {
       chai
         .request(app)
         .post('/api/v1/create/accommodation')
@@ -144,11 +143,7 @@ export const createThesame = () => {
 
 export const getAllAccommodations = () => {
   describe('accommodation ', () => {
-    before((done) => {
-      localStorage.setItem('token', travelToken);
-      done();
-    });
-    it('it should return 200 to get all accommodation ', (done) => {
+    it('it should return 200 to getall accommodation ', (done) => {
       chai
         .request(app)
         .get('/api/v1/view/accommodations')
@@ -161,39 +156,9 @@ export const getAllAccommodations = () => {
   });
 };
 
-export const wrongUserAccess = () => {
-  describe('accommodation ', () => {
-    before((done) => {
-      chai
-        .request(app)
-        .post('/api/v1/auth/login')
-        .send(wrongUser)
-        .end((err, res) => {
-          localStorage.setItem('token', res.body.token);
-          done();
-        });
-    });
-
-    it('it should return 401 for unauthorized access ', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/create/accommodation')
-        .send(facility)
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(401);
-        });
-      done();
-    });
-  });
-};
-
 export const getSingleAccommodation = () => {
   describe('accommodation ', () => {
-    before((done) => {
-      localStorage.setItem('token', travelToken);
-      done();
-    });
-    it('it should return 200 when viewing single accommodation ', (done) => {
+    it('it should return 200 when vewing single accommodation ', (done) => {
       chai
         .request(app)
         .get(`/api/v1/view/accommodation/${1}`)
@@ -217,11 +182,6 @@ export const getSingleAccommodation = () => {
 
 export const editAccommodations = () => {
   describe('accommodation ', () => {
-    before((done) => {
-      localStorage.setItem('token', travelToken);
-      done();
-    });
-
     it('it should return 200 when editing single accommodation ', (done) => {
       chai
         .request(app)
@@ -246,13 +206,66 @@ export const editAccommodations = () => {
   });
 };
 
-export const SuppliersEditAccommodations = () => {
-  describe('supplier can edit their accomodation ', () => {
-    before((done) => {
-      localStorage.setItem('token', supplierToken);
+export const violatingDatabase = () => {
+  describe('accommodation ', () => {
+    it('it should return 400 when violating database ', (done) => {
+      chai
+        .request(app)
+        .patch('/api/v1/edit/accommodation/n')
+        .send(editAccommodation)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(400);
+          expect(res.body.error).to.equal('id must be a number');
+        });
       done();
     });
+  });
+};
 
+export const notFoundUpdate = () => {
+  describe('accommodation ', () => {
+    it('it should return 404 when accommodation is not found ', (done) => {
+      chai
+        .request(app)
+        .patch(`/api/v1/edit/accommodation/${7}`)
+        .send(editAccommodation)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(404);
+          expect(res.body.errorMessage).to.equal('Accommodation not found');
+        });
+      done();
+    });
+  });
+};
+
+describe('Supplier can create accommodation/facilities ', () => {
+  it('it should return 200 on successful signIn', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/auth/login')
+      .send(supplierInfo)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(200);
+        done();
+      });
+  });
+  it('it should return 201 successfully facility created ', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/create/accommodation')
+      .send(facility2)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.data).to.be.an('object');
+        expect(res.body.data).to.have.property('accommodationName');
+        expect(res.body.data).to.have.property('locationName');
+      });
+    done();
+  });
+});
+
+export const SuppliersEditAccommodations = () => {
+  describe('supplier can edit their accomodation ', () => {
     it('it should return 200 when editing single accommodation ', (done) => {
       chai
         .request(app)
@@ -263,46 +276,6 @@ export const SuppliersEditAccommodations = () => {
           expect(res.body.data).to.be.an('object');
           expect(res.body.data).to.have.property('accommodationName');
           expect(res.body.data).to.have.property('locationName');
-        });
-      done();
-    });
-  });
-};
-
-export const editwithEmptyData = () => {
-  describe('accommodation ', () => {
-    before((done) => {
-      localStorage.setItem('token', travelToken);
-      done();
-    });
-    it('it should return 400 when data was not provided ', (done) => {
-      chai
-        .request(app)
-        .patch(`/api/v1/edit/accommodation/${1}`)
-        .send({})
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(400);
-          expect(res.body.errorMessage).to.equal('You are sending an empty fields');
-        });
-      done();
-    });
-  });
-};
-
-export const violatingDatabase = () => {
-  describe('accommodation ', () => {
-    before((done) => {
-      localStorage.setItem('token', travelToken);
-      done();
-    });
-
-    it('it should return 400 wrong ID params ', (done) => {
-      chai
-        .request(app)
-        .patch('/api/v1/edit/accommodation/n')
-        .send(editAccommodation)
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(400);
         });
       done();
     });
@@ -358,26 +331,6 @@ export const notFoungUpload = () => {
   });
 };
 
-export const notFoundUpdate = () => {
-  describe('accommodation ', () => {
-    before((done) => {
-      localStorage.setItem('token', travelToken);
-      done();
-    });
-
-    it('it should return 404 when accommodation is not found ', (done) => {
-      chai
-        .request(app)
-        .patch(`/api/v1/edit/accommodation/${7}`)
-        .send(editAccommodation)
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(404);
-          expect(res.body.errorMessage).to.equal('Accommodation not found');
-        });
-      done();
-    });
-  });
-};
 export const violatingDb = () => {
   describe('violating database ', () => {
     it('Testing database violation', (done) => {
@@ -399,6 +352,32 @@ export const violatingDb = () => {
       accommodationFacilities.uploadBuildingImage(req, res);
       expect(uploadBuildingImage).to.have.been.calledWith(req, res);
       uploadBuildingImage.restore();
+      done();
+    });
+  });
+};
+
+export const wrongUserAccess = () => {
+  describe('accommodation ', () => {
+    it('it should return 200 on successful signIn', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/login')
+        .send(wrongUser)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          done();
+        });
+    });
+
+    it('it should return 401 for unauthorized access ', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/create/accommodation')
+        .send(facility)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(401);
+        });
       done();
     });
   });

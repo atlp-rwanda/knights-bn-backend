@@ -47,7 +47,6 @@ const userSignUp = () => {
         .post('/api/v1/trips/returnTrip')
         .send(validTrip2)
         .end((err, res) => {
-
           expect(res.status).to.equal(201);
           expect(res.body).to.have.property('message').that.equals('request created with success!');
           expect(res.body.data).to.have.property('status').that.equals('pending');
@@ -82,7 +81,7 @@ const userSignUp = () => {
         .send(mockData.loginSuccessfully2)
         .end((err, res) => {
           expect(res.statusCode).to.equal(404);
-          expect(res.body.message).to.equal('Seems you do not have an account! Create it now');
+          expect(res.body.error).to.equal('Seems you do not have an account! Create it now');
           done();
         });
     });

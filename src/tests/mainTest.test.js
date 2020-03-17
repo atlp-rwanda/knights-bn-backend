@@ -21,7 +21,7 @@ import viewSpecificRequest from './viewSpecificRequest.test';
 import rateAccomodation from './accommodation/rate.accommodation.test';
 import getStats from './getStats.test';
 import mostTravelled from './accommodation/mostTravelled.test';
-
+import notification from './notifications.test';
 import {
   accommodationFacility, missingInfomation,
   missingRoomInformation, createThesame, wrongUserAccess,
@@ -44,6 +44,7 @@ userProfileInformation();
 twoWayTrip();
 muliltiRequest();
 allRequestTest();
+notification();
 commentTest();
 rejectRequest();
 rememberMe();
