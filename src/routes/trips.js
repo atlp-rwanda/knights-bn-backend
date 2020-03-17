@@ -642,6 +642,42 @@
             }
           }
           */
+/**
+    * @swagger
+    *  "/trips/stats/{date}": {
+         "get": {
+           "description": "A user should get statistics of his/her trips..",
+           "summary": "View stats.",
+           "tags": [
+             "Trips"
+           ],
+           "deprecated": false,
+           "produces": [
+             "application/json"
+           ],
+           "consumes": [
+             "application/x-www-form-urlencoded"
+           ],
+           "parameters": [
+             {
+                 "name": "date",
+                 "in": "path",
+                 "description": "past date",
+                 "required": true,
+                 "type": "string",
+             }
+           ],
+           "responses": {
+             "200": {
+               "description": "Statistics retrieved successfully.`",
+             },
+             "422": {
+               "description": "Invalid input",
+             }
+              }
+            }
+          }
+          */
 
 import express from 'express';
 import authCheck from '../middlewares/checkAuth';
@@ -659,6 +695,7 @@ import {
   validateRequestDate, validateCityDate, tripInformation, multicity, checkIfRequestExists,
 } from '../middlewares/validateDate';
 import validateParams from '../middlewares/validateParams';
+import validateStatsDate from '../middlewares/validateStatsDate';
 
 const router = express.Router();
 const { filterTrips } = requestsController;
@@ -677,4 +714,6 @@ router.patch('/notifications', authCheck.auth, requestStatusController.markAsRea
 router.patch('/trips/edit/:requestId', authCheck.auth, splitUrl, validateInputs, requestControllers.editRequest);
 router.patch('/trips/approve/:requestId', authCheck.auth, requestControllers.approveRequest);
 router.get('/trips/request/:requestId', authCheck.auth, requestControllers.getSpecificRequest);
+router.get('/trips/stats/:date?', authCheck.auth, validateStatsDate, requestControllers.getStats);
+
 export default router;

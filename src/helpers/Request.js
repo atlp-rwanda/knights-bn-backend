@@ -1,5 +1,7 @@
 /* eslint-disable no-restricted-syntax */
-import models from '../db/models';
+import models, { Sequelize } from '../db/models';
+
+const { Op, fn } = Sequelize;
 
 export default class Request {
   static isRequestBelongsToRequester(requestId, requesterId) {
@@ -45,6 +47,17 @@ export default class Request {
     }
     return models.Request.findOne({
       where: { id: requestId },
+    });
+  }
+
+  static getTripsMade(userId, startingDate) {
+    return models.Request.findAll({
+      where: {
+        status: 'approved',
+        [Op.or]: [{ requesterId: userId }, { managerId: userId }],
+        departureDate: { [Op.gte]: startingDate },
+        returnDate: { [Op.lt]: fn('NOW') },
+      },
     });
   }
 }
