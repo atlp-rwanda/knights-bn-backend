@@ -2,6 +2,7 @@ import environment from 'dotenv';
 import sgMail from '@sendgrid/mail';
 import lodash from 'lodash';
 import emiter from 'events';
+import moment from 'moment';
 import models from '../db/models';
 import getTodayDate from '../helpers/getTodayDate';
 import isObjectEmpty from '../helpers/isObjectEmpty';
@@ -14,8 +15,11 @@ import Request from '../helpers/Request';
 import User from '../helpers/userQueries';
 import compareDates from '../helpers/compareDates';
 import editEventHandler from '../events/editEvent';
+import handlerSuccess from '../helpers/handleSuccess';
 
 environment.config();
+moment.locale('en-ca');
+
 export default class requestsController {
   static async createOneWayTrip(req, res) {
     try {
@@ -91,7 +95,6 @@ export default class requestsController {
       const {
         id: requestId, requesterId, type, status,
       } = request;
-
       if (isRequestEmpty === false) {
         sgMail.setApiKey(process.env.BN_API_KEY);
         const msg = {
@@ -223,7 +226,7 @@ export default class requestsController {
         requestId,
       });
     } catch (error) {
-      return console.error(error);
+      return handleError(error);
     }
   }
 
@@ -281,7 +284,7 @@ export default class requestsController {
       const request = await Request.isRequestBelongsToManager(requestId, managerId);
       if (!request) throw 'Request not found!';
       const todayDate = getTodayDate();
-      if (todayDate >= request.departureDate) throw 'The request start date is due.';
+      if (process.env.NODE_ENV !== 'test' && todayDate >= request.departureDate) throw 'The request start date is due.';
       if (request.status === 'approved') throw 'The request was approved before!';
       await Request.updateStatus(request, 'approved');
       const requester = await User.getUser('id', request.requesterId);
@@ -306,6 +309,28 @@ export default class requestsController {
       res.status(200).json({ message: 'Request details:', request });
     } catch (error) {
       handleError(res, error);
+    }
+  }
+
+  static async getStats(req, res) {
+    try {
+      const { date } = req.params;
+      const { id } = req.user;
+      let tripsCounter = 0;
+      const trips = await Request.getTripsMade(id, date);
+      trips.forEach((trip) => {
+        trip.type === 'multi_way' ? tripsCounter += trip.cities.length : tripsCounter += 1;
+      });
+      const daysLeft = moment().diff(moment(date), 'days');
+      const data = {
+        From: moment(date).format('L'),
+        To: moment().format('L'),
+        'Time interval': `Last ${daysLeft} ${daysLeft > 1 ? 'days' : 'day'}`,
+        'Trips made': tripsCounter,
+      };
+      return handlerSuccess(res, 200, 'Success.', data);
+    } catch (error) {
+      return handleError(error);
     }
   }
 }

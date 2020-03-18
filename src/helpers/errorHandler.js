@@ -8,9 +8,10 @@ const handleError = (res, error) => {
     { name: "Sorry can't reject ! The user is now on trip.", statusCode: 405 },
     { name: 'Sorry, the request was closed!', statusCode: 200 },
     { name: 'invalid input syntax for type integer', statusCode: 422 },
+    { name: 'Empty request !', statusCode: 422 },
   ];
   const definedError = errors.find((err) => err.name === error);
-  if (definedError) res.status(definedError.statusCode).json({ error });
-  return res.status(500).json({ error: error.message });
+  if (definedError) return res.status(definedError.statusCode).json({ error });
+  return res.status(500).json({ error: error.message || error });
 };
 export default handleError;

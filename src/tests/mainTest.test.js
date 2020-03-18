@@ -12,11 +12,12 @@ import commentTest from './comment.test';
 import editRequest from './editRequest.test';
 import events from '../helpers/eventConnect';
 import bookingTest from './booking.test';
-
 import uploadEmptyImage from './accommodation/imageUploadAccommodation.test';
 import approveRequest from './approveRequest.test';
 import viewSpecificRequest from './viewSpecificRequest.test';
 import rateAccomodation from './accommodation/rate.accommodation.test';
+import getStats from './getStats.test';
+
 import {
   accommodationFacility, missingInfomation,
   missingRoomInformation, createThesame, wrongUserAccess,
@@ -60,6 +61,7 @@ violatingDatabase();
 wrongUserAccess();
 approveRequest();
 viewSpecificRequest();
+getStats();
 socialLogin();
 routeExistance();
 events();
