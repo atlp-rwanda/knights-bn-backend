@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
     imageOfBuilding: DataTypes.STRING,
     userId: DataTypes.INTEGER,
     rate: DataTypes.FLOAT,
+    likes: DataTypes.INTEGER,
+    dislikes: DataTypes.INTEGER,
+    likesUsers: DataTypes.ARRAY(DataTypes.INTEGER),
+    dislikeUsers: DataTypes.ARRAY(DataTypes.INTEGER),
+
   }, {});
   // eslint-disable-next-line func-names
   Accommodation.associate = (models) => {

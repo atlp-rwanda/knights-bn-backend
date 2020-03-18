@@ -3,7 +3,7 @@ import _ from 'lodash';
 import {
   Accommodation, Bookings, Comment, sequelize,
 } from '../db/models';
-import accomodation from '../helpers/queries';
+import accommodation from '../helpers/queries';
 
 config();
 export default class accomodationFacility {
@@ -14,7 +14,7 @@ export default class accomodationFacility {
       });
       return res.status(200).json({ status: 200, data: accommodations });
     } catch (error) {
-      return res.status(500).json({ status: 500, errorMessage: error });
+      return res.status(500).json({ error: error.name, errorMessage: 'your inputs are violating our system' });
     }
   }
 
@@ -35,16 +35,16 @@ export default class accomodationFacility {
       return res.status(200).json({ status: 200, data: singleAccommodation });
     } catch (error) {
       return res.status(500)
-        .json({ errorMessage: `Invalid url parameter "${req.params.id}"` });
+        .json({ error: error.name, errorMessage: 'your inputs are violating our system' });
     }
   }
 
   static async editAccommodation(req, res) {
-    Accommodation
+    return Accommodation
       .update(req.body, { where: { id: req.params.id, userId: req.user.id } })
       .then(() => {
         res.status(200).json({ status: 200, data: req.accommodation });
-      });
+      }).catch((error) => res.status(500).json({ error: error.name, errorMessage: 'your inputs are violating our system' }));
   }
 
   static async uploadBuildingImage(req, res) {
@@ -54,7 +54,7 @@ export default class accomodationFacility {
           .json({ status: 400, errorMessage: 'You forget to chose image' });
       }
       req.body.imageOfBuilding = `${process.env.HOST_NAME}/${req.file.url}`;
-      await accomodation.update(req.body, { id: req.params.id }, Accommodation);
+      await accommodation.update(req.body, { id: req.params.id }, Accommodation);
       return res.status(200).json({ status: 200, message: 'image uploaded successfully' });
     } catch (error) {
       return res.status(500).json(error.name);
@@ -66,10 +66,10 @@ export default class accomodationFacility {
       req.body.imageOfBuilding = (typeof req.file === 'undefined') ? 'image'
         : `${process.env.HOST_NAME}/${req.file.url}`;
       req.body.userId = req.user.id;
-      const accommodation = await Accommodation.create(req.body);
-      return res.status(201).json({ status: 200, data: accommodation });
+      const newAccommodation = await Accommodation.create(req.body);
+      return res.status(201).json({ status: 200, data: newAccommodation });
     } catch (error) {
-      return res.status(500).json({ status: 500, errorMessage: error });
+      return res.status(500).json({ error: error.name, errorMessage: 'your inputs are violating our system' });
     }
   }
 
@@ -79,7 +79,7 @@ export default class accomodationFacility {
       if (isNaN(id)) {
         return res.status(401).json({ error: 'id must be a number' });
       }
-      const findAccomodation = await accomodation.getAccommodation('id', id, Accommodation);
+      const findAccomodation = await accommodation.getAccommodation('id', id, Accommodation);
       if (findAccomodation.availableRooms === null || !findAccomodation) {
         return res.status(404).json({ status: 404, message: 'accomodation not available' });
       }
@@ -100,7 +100,7 @@ export default class accomodationFacility {
     req.body.userId = req.user.id;
     const { accomodationId, roomName } = req.body;
     try {
-      const findAccomodation = await accomodation.getAccommodation('id', accomodationId, Accommodation);
+      const findAccomodation = await accommodation.getAccommodation('id', accomodationId, Accommodation);
       if (!findAccomodation || findAccomodation.availableRooms === null) {
         return res.status(404).json({ status: 404, message: 'accomodation not found' });
       }
@@ -160,7 +160,41 @@ export default class accomodationFacility {
       });
       return res.status(200).json({ status: 200, mostTraveled: traveledCentre });
     } catch (error) {
-      return res.status(500).json({ status: 500, errorMessage: error });
+      return res.status(500).json({ error: error.name, errorMessage: 'your inputs are violating our system' });
+    }
+  }
+
+  static likeAccommodation(req, res) {
+    const accommId = req.params.id;
+    Accommodation
+      .findOne({ where: { id: accommId } }).then((accomm) => {
+        const { likes } = accomm;
+        return Accommodation.update(
+          {
+            likesUsers: sequelize.fn('array_append', sequelize.col('likesUsers'), req.user.id),
+            likes: likes + 1,
+          },
+          { where: { id: accommId } },
+        ).then(() => res.status(201).json({ likes: likes + 1 }));
+      }).catch((error) => res.status(500)
+        .json({ error: error.name, errorMessage: 'your inputs are violating our system' }));
+  }
+
+  static async dislikeAccommodation(req, res) {
+    try {
+      const accommId = req.params.id;
+      const { dislikes } = await accommodation
+        .verifyAccom({ id: accommId }, Accommodation);
+      await accommodation.update(
+        {
+          dislikeUsers: sequelize.fn('array_append', sequelize.col('dislikeUsers'), req.user.id),
+          dislikes: dislikes + 1,
+        }, { id: accommId }, Accommodation,
+      );
+      return res.status(201).json({ dislikes: dislikes + 1 });
+    } catch (error) {
+      return res.status(500)
+        .json({ error: error.name, errorMessage: 'your inputs are violating our system' });
     }
   }
 }

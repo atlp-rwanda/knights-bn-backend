@@ -139,7 +139,7 @@ export default class requestsController {
         if (isTodayDateAfterTheTripStartDate) throw "Sorry can't reject ! The user is now on trip.";
         return await Request.updateStatus(request, 'rejected');
       } return res.status(200).json({ message: 'The request successfully rejected', requestId });
-    } catch (error) { return handleError(error); }
+    } catch (error) { return handleError(res, error); }
   }
 
   static async createMultiCityRequest(req, res) {

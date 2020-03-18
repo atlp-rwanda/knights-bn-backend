@@ -46,6 +46,26 @@ export function up(queryInterface, Sequelize) {
       type: Sequelize.FLOAT,
       allowNull: true,
     },
+    likes: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    dislikes: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    likesUsers: {
+      type: Sequelize.ARRAY(Sequelize.INTEGER),
+      allowNull: false,
+      defaultValue: [0],
+    },
+    dislikeUsers: {
+      type: Sequelize.ARRAY(Sequelize.INTEGER),
+      allowNull: false,
+      defaultValue: [0],
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,

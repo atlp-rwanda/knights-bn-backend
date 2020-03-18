@@ -14,7 +14,9 @@ import validateParams from '../middlewares/validateParamsRate';
 import validateRate from '../middlewares/validateRate';
 import validateBookings from '../middlewares/validateBookings';
 import commentValidate from '../middlewares/newComment';
-import findOne from '../middlewares/findAccommodation';
+import {findAccommodation, isFound} from '../middlewares/findAccommodation';
+import { checkDisLike, checkLike } from '../middlewares/likeUser';
+import { searchIndisLike, searchInLike } from '../middlewares/dislikeUser';
 /**
  * @swagger
  *  "/create/accommodation": {
@@ -373,7 +375,6 @@ import findOne from '../middlewares/findAccommodation';
       }
     }
  */
-
 /**
  * @swagger
  *  "/accommodation/comment/{id}": {
@@ -419,6 +420,82 @@ import findOne from '../middlewares/findAccommodation';
 
 /**
  * @swagger
+ *  "/accommodation/like/{id}": {
+      "post": {
+        "description": "liking accommodation",
+        "summary": "liking accommodation",
+        "tags": [
+         "Accommodations"
+        ],
+        "operationId": "like",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+         "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "accommodation id"
+          }
+
+        ],
+        "responses": {
+          "201": {
+            "description":"successfully",
+          },
+           "401": {
+            "description": "Unauthorized access"
+          }
+        }
+      }
+    }
+ */
+/**
+ * @swagger
+ *  "/accommodation/dislike/{id}": {
+      "post": {
+        "description": "dislik accommodation",
+        "summary": "dislik accommodation",
+        "tags": [
+         "Accommodations"
+        ],
+        "operationId": "dislike",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+         "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "accommodation id"
+          }
+
+        ],
+        "responses": {
+          "201": {
+            "description":"successfully",
+          },
+           "401": {
+            "description": "Unauthorized access"
+          }
+        }
+      }
+    }
+ */
+
+/**
+ * @swagger
  *  "/most/traveled": {
       "get": {
         "description": "view most travelled destination",
@@ -448,8 +525,8 @@ import findOne from '../middlewares/findAccommodation';
     }
  */
 const accommodationRouter = Router();
-accommodationRouter.patch('/upload/accommodation/:id', verifyToken.auth, isAdmin, checkParams, imageMiddleware.single('imageOfBuilding'), findOne, accommodation.uploadBuildingImage);
-accommodationRouter.patch('/edit/accommodation/:id', verifyToken.auth, isAdmin, checkParams, validateInputBody, findOne, accommodation.editAccommodation);
+accommodationRouter.patch('/upload/accommodation/:id', verifyToken.auth, isAdmin, checkParams, imageMiddleware.single('imageOfBuilding'), findAccommodation, accommodation.uploadBuildingImage);
+accommodationRouter.patch('/edit/accommodation/:id', verifyToken.auth, isAdmin, checkParams, validateInputBody, findAccommodation, accommodation.editAccommodation);
 accommodationRouter.post('/create/accommodation', verifyToken.auth, imageMiddleware.single('imageOfBuilding'), isAdmin, accommodationValidataion, validateRooms, isExist, accommodation.createAccomodation);
 accommodationRouter.get('/view/accommodation/:id', verifyToken.auth, checkParams, accommodation.getSingleAccommodation);
 accommodationRouter.get('/view/accommodations', verifyToken.auth, accommodation.getAllAccommodations);
@@ -458,6 +535,8 @@ accommodationRouter.get('/rooms/accommodations/:id', verifyToken.auth, checkPara
 accommodationRouter.post('/book/accommodations', verifyToken.auth, validateBookings, accommodation.bookAccomodation);
 accommodationRouter.post('/accommodation/comment/:id', verifyToken.auth, commentValidate.comment, checkParams, accommodation.accommodationFeedBack);
 accommodationRouter.get('/most/traveled', verifyToken.auth, accommodation.mostTraveled);
+accommodationRouter.post('/accommodation/like/:id', verifyToken.auth, checkParams, isFound, checkLike, checkDisLike, accommodation.likeAccommodation);
+accommodationRouter.post('/accommodation/dislike/:id', verifyToken.auth, checkParams, isFound, searchIndisLike, searchInLike, accommodation.dislikeAccommodation);
 
 export default accommodationRouter;
 
