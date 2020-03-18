@@ -13,8 +13,7 @@ const findAccommodation = async (req, res, next) => {
     req.accommodation = accommodation;
     return next();
   } catch (error) {
-    return res.status(500)
-      .json({ error: error.name, errorMessage: `Invalid url parameter "${req.params.id}"` });
+    return res.status(500).json({ errorMessage: error });
   }
 };
 

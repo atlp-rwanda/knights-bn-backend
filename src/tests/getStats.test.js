@@ -50,7 +50,6 @@ const testGetStats = () => {
       const response = httpMocks.createResponse();
       await requests.createMultiCityRequest(request, response);
       const responseBody = response._getJSONData();
-      console.log('Response=====>', responseBody);
       multiWayRequest = responseBody.data.id;
       expect(responseBody).to.have.property('status').that.equals(201);
       expect(responseBody).to.have.property('message').that.equals('Your request has successfully created');
