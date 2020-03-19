@@ -44,12 +44,13 @@ const testGetStats = () => {
     });
     it('should return 201 when a multi-city request is created', async () => {
       const request = httpMocks.createRequest({
-        user: { id: 10 },
+        user: { id: 11 },
         body: mockData.multiCityTrip,
       });
       const response = httpMocks.createResponse();
       await requests.createMultiCityRequest(request, response);
       const responseBody = response._getJSONData();
+      console.log('Response=====>', responseBody);
       multiWayRequest = responseBody.data.id;
       expect(responseBody).to.have.property('status').that.equals(201);
       expect(responseBody).to.have.property('message').that.equals('Your request has successfully created');
@@ -58,7 +59,7 @@ const testGetStats = () => {
     it('should return OK when a two-way trip request is approved', async () => {
       const request = httpMocks.createRequest({
         params: { requestId: 10 },
-        user: { id: 9 },
+        user: { id: 10 },
       });
       const response = httpMocks.createResponse();
       await requests.approveRequest(request, response);
@@ -67,7 +68,7 @@ const testGetStats = () => {
     it('should return OK when a multi-way trip request is approved', async () => {
       const request = httpMocks.createRequest({
         params: { requestId: multiWayRequest },
-        user: { id: 9 },
+        user: { id: 10 },
       });
       const response = httpMocks.createResponse();
       await requests.approveRequest(request, response);

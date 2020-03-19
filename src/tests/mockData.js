@@ -389,5 +389,22 @@ const mockData = {
     checkinDate: '2020-06-13',
     checkoutDate: '2020-06-24',
   },
+  superAdminLogin: {
+    email: 'superadmin@barefootnomad.com',
+    password: 'Niyonkuru@1',
+  },
+  regularStaffLogin: {
+    email: 'alain.maxime@gmail.com',
+    password: 'Niyonkuru@1',
+  },
+  updatableUser: {
+    email: 'brftnomad@gmail.com',
+  },
+  wrongUser: {
+    email: 'xxxxxx',
+  },
+  newRole: {
+    role: 'requester',
+  },
 };
 export default mockData;

@@ -31,9 +31,11 @@ import {
   violatingDatabase,
   violatingDb,
 } from './accommodation/createAccommodationFacility.test';
+import testUserRoles from './userRoles.test';
 
 signUpTest();
 userLoginTest();
+testUserRoles();
 userProfileInformation();
 twoWayTrip();
 muliltiRequest();

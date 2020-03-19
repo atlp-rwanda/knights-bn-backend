@@ -71,6 +71,8 @@ Open terminal from your computer
 
 `- PATCH /auth/logout - Logout a user`
 
+`- PATCH /users/setUserRole - Set/update a user's role`
+
 `- POST /trips/returnTrip - create a two-way trip request`
 
 `- GET /trips/myRequest - view all my request history`

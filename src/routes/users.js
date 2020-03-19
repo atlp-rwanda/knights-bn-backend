@@ -1,13 +1,3 @@
-import express from 'express';
-import passport from 'passport';
-import usersController from '../controllers/users';
-import userLoginValidation from '../middlewares/userLoginValidation';
-import userValidation from '../middlewares/newUser';
-import fakeUser from '../mockData/fakeUser';
-import auth from '../middlewares/checkAuth';
-import userProfile from '../controllers/userProfile';
-import imageMiddleware from '../middlewares/imageUpload';
-
 /**
  * @swagger
  *  "/auth/login": {
@@ -201,10 +191,6 @@ import imageMiddleware from '../middlewares/imageUpload';
     }
  */
 
-const router = express.Router();
-const {
-  registerUser, verifyAcccount, resetPassword, forgetPassword, login, socialLogin, logout,
-} = usersController;
 /**
  * @swagger
  *  "/auth/signup": {
@@ -278,8 +264,7 @@ const {
       }
     }
  */
-router.post('/auth/signup', userValidation.signUp, registerUser);
-router.get('/auth/signup/:token', verifyAcccount);
+
 /**
  * @swagger
  * "/auth/login/google": {
@@ -334,36 +319,6 @@ router.get('/auth/signup/:token', verifyAcccount);
     }
  */
 
-router.get('/auth/login/socialLogin', (req, res) => {
-  res.sendFile('socialLogin.html', { root: `${__dirname}/../templates/` });
-});
-router.get(
-  '/auth/login/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] }),
-);
-router.get(
-  '/auth/login/google/redirect',
-  passport.authenticate('google'),
-  socialLogin,
-);
-
-router.get('/auth/login/facebook', passport.authenticate('facebook'));
-router.get(
-  '/auth/login/facebook/redirect',
-  passport.authenticate('facebook'),
-  socialLogin,
-);
-
-// test authorization
-router.get('/auth/test/google', fakeUser, socialLogin);
-router.get('/auth/test/facebook', fakeUser, socialLogin);
-
-router.post('/auth/signup', userValidation.signUp, registerUser);
-router.post('/auth/login', userLoginValidation, login);
-router.get('/user/profile', auth.auth, userProfile.getProfileInformation);
-router.patch('/edit/user/profile', auth.auth, imageMiddleware.single('profileImage'), userProfile.changeMyProfileInfo);
-router.get('/remembered', auth.auth, userProfile.rememberMe);
-
 /**
  * @swagger
  *  "/reset_pw/user": {
@@ -399,7 +354,7 @@ router.get('/remembered', auth.auth, userProfile.rememberMe);
       }
     }
  */
-router.post('/reset_pw/user', userValidation.sendEmail, forgetPassword);
+
 /**
  * @swagger
  *  "/password/reset/{id}/{token}": {
@@ -458,7 +413,49 @@ router.post('/reset_pw/user', userValidation.sendEmail, forgetPassword);
       }
     }
  */
-router.patch('/password/reset/:id/:token', userValidation.reset, resetPassword);
+
+/**
+ * @swagger
+ *  "/users/setUserRole?email={email}": {
+      "patch": {
+        "description": "Update roles for staff members",
+        "summary": "New Role",
+        "tags": [
+          "Super Admin Access"
+        ],
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "role",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+ */
+
 /**
  * @swagger
  *  "/auth/logout": {
@@ -483,6 +480,57 @@ router.patch('/password/reset/:id/:token', userValidation.reset, resetPassword);
       }
     }
   */
+
+import express from 'express';
+import passport from 'passport';
+import usersController from '../controllers/users';
+import userLoginValidation from '../middlewares/userLoginValidation';
+import userValidation from '../middlewares/newUser';
+import fakeUser from '../mockData/fakeUser';
+import auth from '../middlewares/checkAuth';
+import userProfile from '../controllers/userProfile';
+import imageMiddleware from '../middlewares/imageUpload';
+import validateRole from '../middlewares/validateRole';
+
+const router = express.Router();
+const {
+  registerUser, verifyAcccount, resetPassword, forgetPassword, login, socialLogin, logout, updateUserRole,
+} = usersController;
+
+router.get('/auth/login/socialLogin', (req, res) => {
+  res.sendFile('socialLogin.html', { root: `${__dirname}/../templates/` });
+});
+router.get(
+  '/auth/login/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] }),
+);
+router.get(
+  '/auth/login/google/redirect',
+  passport.authenticate('google'),
+  socialLogin,
+);
+
+router.get('/auth/login/facebook', passport.authenticate('facebook'));
+router.get(
+  '/auth/login/facebook/redirect',
+  passport.authenticate('facebook'),
+  socialLogin,
+);
+
+// test authorization
+router.get('/auth/test/google', fakeUser, socialLogin);
+router.get('/auth/test/facebook', fakeUser, socialLogin);
+
+router.post('/auth/signup', userValidation.signUp, registerUser);
+router.post('/auth/login', userLoginValidation, login);
+router.get('/user/profile', auth.auth, userProfile.getProfileInformation);
+router.patch('/edit/user/profile', auth.auth, imageMiddleware.single('profileImage'), userProfile.changeMyProfileInfo);
+router.get('/remembered', auth.auth, userProfile.rememberMe);
+router.post('/auth/signup', userValidation.signUp, registerUser);
+router.get('/auth/signup/:token', verifyAcccount);
+router.post('/reset_pw/user', userValidation.sendEmail, forgetPassword);
+router.patch('/password/reset/:id/:token', userValidation.reset, resetPassword);
 router.patch('/auth/logout', auth.auth, logout);
+router.patch('/users/setUserRole', auth.auth, validateRole, updateUserRole);
 
 export default router;

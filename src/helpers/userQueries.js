@@ -34,5 +34,12 @@ class UserQuery {
       { where: { email } },
     );
   }
+
+  static async updateUserRole(role, email) {
+    const userToUpdate = await this.getUserByEmail(email);
+    const { dataValues } = userToUpdate;
+    const updatedUser = await models.User.update({ role }, { where: { email: dataValues.email } });
+    return updatedUser;
+  }
 }
 export default UserQuery;
