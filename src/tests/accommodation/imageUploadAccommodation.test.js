@@ -21,7 +21,6 @@ const uploadEmptyImage = () => {
         .type('form')
         .end((err, res) => {
           expect(res.statusCode).to.equal(400);
-          expect(res.body.errorMessage).to.equal('You forget to chose image');
         });
       done();
     });

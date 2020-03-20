@@ -7,7 +7,6 @@ import sinon from 'sinon';
 import mockData from './mockData';
 import app from '../app';
 import rememberme from '../controllers/userProfile';
-import { travelToken } from './accommodation/accommodationMockData';
 
 chai.use(chaiHttp);
 chai.should();
@@ -37,7 +36,6 @@ const remembered = () => {
       const req = mockReq(request);
       const res = mockRes();
       rememberme.rememberMe(req, res);
-      expect(remembermeStub).calledWith(req, res).to.be.ok;
       expect(remembermeStub).to.have.been.calledWith(req, res);
       remembermeStub.restore();
     });

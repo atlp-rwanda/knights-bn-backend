@@ -25,10 +25,14 @@ class accommodationQueries {
     return accommodation;
   }
 
-  static async getAOne(value1, value2, entity) {
+  static async verifyAccom(whereQuery, entity) {
     const result = await entity
-      .findOne({ where: { accommodationName: value2, locationName: value1 } });
+      .findOne({ where: whereQuery });
     return result;
+  }
+
+  static async update(updateData, whereQuery, entity) {
+    await entity.update(updateData, { where: whereQuery });
   }
 }
 

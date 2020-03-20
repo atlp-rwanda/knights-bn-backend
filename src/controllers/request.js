@@ -226,7 +226,7 @@ export default class requestsController {
         requestId,
       });
     } catch (error) {
-      return handleError(error);
+      return handleError(res, error);
     }
   }
 
@@ -330,7 +330,7 @@ export default class requestsController {
       };
       return handlerSuccess(res, 200, 'Success.', data);
     } catch (error) {
-      return handleError(error);
+      return handleError(res, error);
     }
   }
 }

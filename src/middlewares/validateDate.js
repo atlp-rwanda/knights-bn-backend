@@ -99,6 +99,20 @@ export const accommodationValidataion = (req, res, next) => {
   next();
 };
 
+export const validateInputBody = (req, res, next) => {
+  if (Object.keys(req.body).length === 0) {
+    return res.status(400)
+      .json({ status: 400, errorMessage: 'You are sending an empty fields' });
+  }
+  next();
+};
+
+export const checkParams = async (req, res, next) => {
+  if (isNaN(req.params.id)) {
+    return res.status(400).json({ error: 'id must be a number' });
+  }
+  next();
+};
 export const validateRooms = (req, res, next) => {
   const roomsSchema = Joi.object({
     roomName: Joi.string().required(),
@@ -123,11 +137,12 @@ export const validateRooms = (req, res, next) => {
 };
 
 export const isExist = async (req, res, next) => {
-  const isAccommodationExist = findOne.getAOne(
-    req.body.locationName,
-    req.body.accommodationName, models.Accommodation,
-  );
-  if (await isAccommodationExist !== null) {
+  const whereQuery = {
+    accommodationName: req.body.accommodationName,
+    locationName: req.body.locationName,
+  };
+  const isAccommodationExist = await findOne.verifyAccom(whereQuery, models.Accommodation);
+  if (isAccommodationExist !== null) {
     return res.status(409).json({
       status: 409,
       errorMessage: 'This accommodation was already created make a new one!',
@@ -135,12 +150,14 @@ export const isExist = async (req, res, next) => {
   }
   next();
 };
+
 export const validateCityDate = (req, res, next) => {
   const errors = [];
   if (typeof req.body.cities !== 'undefined') {
     req.body.cities.forEach((city) => {
       const insertedDate = new Date(city.to);
-      if (insertedDate.getFullYear() < new Date().getFullYear() || insertedDate.getFullYear() > new Date().getFullYear() + 2) {
+      if (insertedDate.getFullYear() < new Date().getFullYear()
+      || insertedDate.getFullYear() > new Date().getFullYear() + 2) {
         errors.push(insertedDate.getFullYear());
       }
     });

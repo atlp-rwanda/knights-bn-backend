@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     commenterId: DataTypes.INTEGER,
     comment: DataTypes.STRING,
     isVisible: DataTypes.BOOLEAN,
+    accommodationId: DataTypes.INTEGER,
   }, {});
   Comment.associate = (models) => {
     Comment.belongsTo(models.Request, {
@@ -16,6 +17,14 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'commenterId',
       as: 'author',
       timestamps: false,
+    });
+    Comment.belongsTo(models.Accommodation, {
+      onDelete: 'CASCADE',
+      foreignKey: {
+        fieldName: 'accommodationId',
+        allowNull: true,
+      },
+      targetKey: 'id',
     });
   };
   return Comment;
