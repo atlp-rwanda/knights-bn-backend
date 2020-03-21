@@ -1,6 +1,5 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
-// import socket from 'socket.io';
 import express from 'express';
 import ioClient from 'socket.io-client';
 import app from '../app';
