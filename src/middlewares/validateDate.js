@@ -42,15 +42,14 @@ export const multicity = (req, res, next) => {
         errors.push(error);
       }
     });
-
-    if (errors.length > 0) {
+    const errorLength = errors.length;
+    if (errorLength > 0) {
       return res.status(400).json({
         status: 400,
         error: 'Make sure that your to date is equal to return date and greater than from date',
       });
     }
   }
-
   next();
 };
 
@@ -65,8 +64,8 @@ export const checkIfRequestExists = async (req, res, next) => {
       pendingRequest.push(myRequest);
     }
   });
-
-  if (pendingRequest.length !== 0) {
+  const pendingRequestLength = pendingRequest.length;
+  if (pendingRequestLength !== 0) {
     return res.status(409).json({ satatus: 409, error: 'You still have pending request just wait for approval' });
   }
 };
@@ -95,7 +94,6 @@ export const accommodationValidataion = (req, res, next) => {
       error: error.details[0].message,
     });
   }
-
   next();
 };
 
@@ -161,7 +159,8 @@ export const validateCityDate = (req, res, next) => {
         errors.push(insertedDate.getFullYear());
       }
     });
-    if (errors.length > 0) {
+    const errLength = errors.length;
+    if (errLength > 0) {
       return res.status(400).json({
         status: 400,
         error: 'to and from have to be correct dates please',

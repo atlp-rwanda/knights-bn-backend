@@ -2,10 +2,12 @@ import { Router } from 'express';
 import accommodation from '../controllers/accommodation';
 import verifyToken from '../middlewares/checkAuth';
 import isAdmin from '../middlewares/isTravelAdmin';
-import { accommodationValidataion,
-   validateRooms, 
+import {
+  accommodationValidataion,
+  validateRooms,
   isExist, checkParams,
-  validateInputBody } from '../middlewares/validateDate';
+  validateInputBody,
+} from '../middlewares/validateDate';
 import imageMiddleware from '../middlewares/imageUpload';
 import rateAccommodation from '../controllers/rate.accommodation';
 import validateParams from '../middlewares/validateParamsRate';

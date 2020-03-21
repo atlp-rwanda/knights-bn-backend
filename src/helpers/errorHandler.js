@@ -9,6 +9,10 @@ const handleError = (res, error) => {
     { name: 'Sorry, the request was closed!', statusCode: 200 },
     { name: 'invalid input syntax for type integer', statusCode: 422 },
     { name: 'Empty request !', statusCode: 422 },
+    { name: 'Seems you do not have an account! Create it now', statusCode: 404 },
+    { name: 'Invalid credentials', statusCode: 401 },
+    { name: 'you currently have no lineManager, please go to update your profile', statusCode: 422 },
+    { name: 'can\'t create the request, retry please!', statusCode: 500 },
   ];
   const definedError = errors.find((err) => err.name === error);
   if (definedError) return res.status(definedError.statusCode).json({ error });

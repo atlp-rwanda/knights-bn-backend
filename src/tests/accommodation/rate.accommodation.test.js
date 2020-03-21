@@ -19,7 +19,7 @@ const rateAccomodation = () => {
         .send(nonExistingUser)
         .end((err, res) => {
           expect(res.statusCode).to.equal(404);
-          expect(res.body.message).to.equal('Seems you do not have an account! Create it now');
+          expect(res.body.error).to.equal('Seems you do not have an account! Create it now');
           done();
         });
     });

@@ -1,5 +1,12 @@
-export const travelToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJ0cmF2ZWxhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoidHJhdmVsYWRtaW4iLCJmaXJzdE5hbWUiOiJ0cmF2ZWxlciIsImxhc3ROYW1lIjoiSGltYmFyYSIsImlhdCI6MTU4NDI3MzU1NH0.pVRiR7VtUBGNSpx22lxwke2k_qYiz-DJhIDuXQWn8UU';
-export const supplierToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJibGFja2hvdGVsQGdtYWlsLmNvbSIsInJvbGUiOiJzdXBwbGllciIsImZpcnN0TmFtZSI6IkJsYWNrIiwibGFzdE5hbWUiOiJIb3RlbCIsImlhdCI6MTU4Mzg1MzgxOX0.Ez-g-Sn1XJQLDXcLWHwHp_1D2di9jx-MuDw1BzjpbYs';
+export const travelAdminInfo = {
+  email: 'traveladmin@gmail.com',
+  password: 'Niyonkuru@1',
+};
+
+export const supplierInfo = {
+  email: 'blackhotel@gmail.com',
+  password: 'Niyonkuru@1',
+};
 
 export const wrongUser = {
   email: 'multi-city@gmail.com',

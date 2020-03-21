@@ -3,15 +3,12 @@ import Sequelize from 'sequelize';
 import models from '../db/models';
 import requestFilter from '../helpers/filterRequest';
 
-const {
-  Op, where, cast, col,
-} = Sequelize;
-
+const { Op } = Sequelize;
 environment.config();
-
 export default class requestController {
   static async filterTrips(req, res) {
     try {
+      const { role, id } = req.user;
       let searchQuery;
       if (req.query.requestId) {
         const { requestId } = req.query;
@@ -36,48 +33,28 @@ export default class requestController {
         searchQuery = requestFilter('destination', destination);
       } else { return res.status(400).json({ error: 'please enter your target key' }); }
 
-      if (req.user.role === 'requester') {
-        const searchResults = await models.Request.findAll({
-          where: {
-            requesterId: req.user.id,
-            [Op.or]: searchQuery,
-          },
-
-        });
-        if (searchResults.length <= 0) {
-          return res.status(404).json({
-            status: 404,
-            message: 'no results found',
-          });
-        }
-        return res.status(200).json({
-          status: 200,
-          message: 'search results',
-          data: searchResults,
-        });
-      } if (req.user.role === 'manager') {
-        const searchResults = await models.Request.findAll({
-          where: {
-            managerId: req.user.id,
-            [Op.or]: searchQuery,
-          },
-        });
-        if (searchResults.length <= 0) {
-          return res.status(404).json({
-            status: 404,
-            message: 'no results found',
-          });
-        }
-        return res.status(200).json({
-          status: 200,
-          message: 'search results',
-          data: searchResults,
-        });
-      }
-    } catch (error) {
-      return res.status(500).json({
-        error: error.message,
+      let searchResults;
+      role === 'requester' ? searchResults = await models.Request.findAll({
+        where: {
+          requesterId: id, [Op.or]: searchQuery,
+        },
+      }) : searchResults = await models.Request.findAll({
+        where: {
+          managerId: req.user.id,
+          [Op.or]: searchQuery,
+        },
       });
+      const searchResultsLength = searchResults.length;
+      if (searchResultsLength <= 0) {
+        return res.status(404).json({ status: 404, message: 'no results found' });
+      }
+      return res.status(200).json({
+        status: 200,
+        message: 'search results',
+        data: searchResults,
+      });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
     }
   }
 }

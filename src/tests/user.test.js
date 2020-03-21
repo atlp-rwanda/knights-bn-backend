@@ -85,7 +85,7 @@ const userSignUp = () => {
         .send(mockData.incorectFirstName)
         .end((err, res) => {
           expect(res.statusCode).to.equal(422);
-          expect(res.body.error).to.equal('firstName should have a minimum of 3 characters, no symbols allowed and no space inbetween');
+          expect(res.body.error).to.equal('firstName and lastName should have a minimum of 3 characters, no symbols allowed and no space inbetween');
         });
       done();
     });
@@ -96,7 +96,7 @@ const userSignUp = () => {
         .send(mockData.incorectlastName)
         .end((err, res) => {
           expect(res.statusCode).to.equal(422);
-          expect(res.body.error).to.equal('lastName should have a minimum of 3 characters, no symbols allowed and no space inbetween');
+          expect(res.body.error).to.equal('firstName and lastName should have a minimum of 3 characters, no symbols allowed and no space inbetween');
         });
       done();
     });

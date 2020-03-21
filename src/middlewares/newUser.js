@@ -10,28 +10,14 @@ class userValidate {
       gender: req.body.gender,
       passportNumber: req.body.passportNumber,
     });
-
-    if (!result.error) {
-      next();
-    } else {
-      if (`${result.error.details[0].path[0]}` === 'firstName') {
+    if (!result.error) { next(); } else {
+      if (`${result.error.details[0].path[0]}` === 'firstName' || `${result.error.details[0].path[0]}` === 'lastName') {
         return res.status(422).json({
-          status: 422,
-          error: 'firstName should have a minimum of 3 characters, no symbols allowed and no space inbetween',
-        });
-      } if (`${result.error.details[0].path[0]}` === 'lastName') {
-        return res.status(422).json({
-          status: 422,
-          error: 'lastName should have a minimum of 3 characters, no symbols allowed and no space inbetween',
+          status: 422, error: 'firstName and lastName should have a minimum of 3 characters, no symbols allowed and no space inbetween',
         });
       }
-      const wrongInput = result.error.details[0].message
-        .replace('"', ' ')
-        .replace('"', '');
-      return res.status(422).json({
-        status: 422,
-        error: wrongInput,
-      });
+      const wrongInput = result.error.details[0].message.replace('"', ' ').replace('"', '');
+      return res.status(422).json({ status: 422, error: wrongInput });
     }
   }
 
