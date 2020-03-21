@@ -1,5 +1,4 @@
 import environment from 'dotenv';
-import sgMail from '@sendgrid/mail';
 import lodash from 'lodash';
 import emiter from 'events';
 import moment from 'moment';
@@ -25,18 +24,14 @@ export default class requestsController {
     try {
       const { id } = req.user;
       const requesterId = id;
-
       const {
         origin, destination, departureDate, reason, accommodation,
       } = req.body;
-
       const isManager = await TripHelper.searchManager();
       const managerId = isManager.id;
       const theRequest = await TripHelper.searchTripRequest(requesterId, Date.parse(departureDate), destination);
       if (theRequest.length !== 0) {
-        return res.status(409).json({
-          error: 'Sorry! This request already exists. Please double-check your departure date and destination.',
-        });
+        return res.status(409).json({ error: 'Sorry! This request already exists. Please double-check your departure date and destination.' });
       }
       const newTripRequest = await models.Request.create({
         managerId,
@@ -64,65 +59,22 @@ export default class requestsController {
       const {
         origin, destination, departureDate, returnDate, reason, accommodation,
       } = req.body;
-
-      const userData = await models.User.findOne({
-        where: { id: `${id}` },
-      });
-      if (userData.lineManager === null) {
-        return res.status(422).json({
-          status: res.statusCode,
-          error: 'you currently have no lineManager, please go to update your profile',
-        });
-      }
-      const manager = await models.User.findOne({
-        where: { email: `${userData.lineManager}` },
-      });
+      const userData = await models.User.findOne({ where: { id: `${id}` } });
+      if (userData.lineManager === null) throw 'you currently have no lineManager, please go to update your profile';
+      const manager = await models.User.findOne({ where: { email: `${userData.lineManager}` } });
       const managerId = manager.dataValues.id;
       const request = await models.Request.create({
-        managerId,
-        requesterId: userData.id,
-        origin,
-        destination,
-        status: 'pending',
-        type: 'two_way',
-        departureDate,
-        returnDate,
-        accommodation,
-        reason,
+        managerId, requesterId: userData.id, origin, destination, status: 'pending', type: 'two_way', departureDate, returnDate, accommodation, reason,
       });
-
       const isRequestEmpty = isObjectEmpty(request);
       const {
         id: requestId, requesterId, type, status,
       } = request;
       if (isRequestEmpty === false) {
-        sgMail.setApiKey(process.env.BN_API_KEY);
-        const msg = {
-          to: `${manager.dataValues.email}`,
-          from: 'no-reply@brftnomad.com',
-          subject: 'Barefoot Travel Request',
-          text: `${request.dataValues.reason}`,
-          html: `<p><strong>Dear ${manager.dataValues.firstName}<strong>
-              <br><br>
-              <p>This is to inform you that a new request was made by:<p>
-              <br>Name of the requester: ${userData.FirstName} ${userData.lastName}
-              <br>Reason: ${request.dataValues.reason}
-              <br>Request Type: ${request.dataValues.type}
-              <br>Destination: ${request.dataValues.destination}
-              <br>DepartureDate: ${request.dataValues.departureDate}
-              <br>ReturnDate: ${request.dataValues.returnDate}
-              <br>Barefoot Nomad Team<br>
-              <br>Thank you<br>
-              </p>`,
-        };
-        sgMail.send(msg);
+        const emailTitle = 'This is to inform you that a new request was made by:';
+        sendEmail(process.env.BN_EMAIL_NO_REPLY, manager.dataValues.email, request, 'New request was made', emailTitle);
         const newNotification = await models.Notification.create({
-          requesterId: id,
-          managerId,
-          status: 'non_read',
-          message: 'a new request was made',
-          type: 'new_request',
-          owner: 'manager',
+          requesterId: id, managerId, status: 'non_read', message: 'a new request was made', type: 'new_request', owner: 'manager',
         });
         echoNotification(req, newNotification, 'new_request', managerId);
         return res.status(201).json({
@@ -140,64 +92,32 @@ export default class requestsController {
             returnDate,
           },
         });
-      } return res.status(500).json({
-        error: "can't create the request, retry please!",
-      });
-    } catch (error) {
-      return res.status(500).json({
-        error: error.message,
-      });
-    }
+      } throw 'can\'t create the request, retry please!';
+    } catch (error) { handleError(res, error); }
   }
 
   static async findAllMyRequest(req, res) {
     try {
       const allMyRequest = await models.Request.findAll({
-        where: {
-          requesterId: req.user.id,
-        },
-        include: [
-          {
-            model: models.Comment,
-            attributes: ['id', 'comment', 'createdAt'],
-          },
-        ],
+        where: { requesterId: req.user.id },
+        include: [{ model: models.Comment, attributes: ['id', 'comment', 'createdAt'] }],
       });
-      if (allMyRequest.length !== 0) {
-        return res.status(200).json({ message: 'List of requests', allMyRequest });
-      }
+      if (allMyRequest) { return res.status(200).json({ message: 'List of requests', allMyRequest }); }
       return res.status(404).json({ message: 'No request found', allMyRequest });
-    } catch (error) {
-      return res.status(500).json({
-        status: 500,
-        error: error.message,
-      });
-    }
+    } catch (error) { return res.status(500).json({ status: 500, error: error.message }); }
   }
 
   static async pendingApproval(req, res) {
-    if (req.user.role !== 'manager') {
-      return res.status(403).json({ error: 'access denied' });
-    }
+    if (req.user.role !== 'manager') { return res.status(403).json({ error: 'access denied' }); }
     try {
       const pendingRequests = await models.Request.findAll({
-        where: {
-          managerId: req.user.id,
-          status: 'pending',
-        },
-        include: [{
-          model: models.Comment,
-        }],
+        where: { managerId: req.user.id, status: 'pending' },
+        include: [{ model: models.Comment }],
       });
-      if (pendingRequests.length !== 0) {
-        return res.status(200).json({ message: 'Pending requests', pendingRequests });
-      }
+      if (pendingRequests) { return res.status(200).json({ message: 'Pending requests', pendingRequests }); }
       return res.status(404).json({ message: 'No Pending request available' });
     } catch (error) {
-      return res.status(500).json({
-        status: 500,
-        error,
-      });
+      return res.status(500).json({ status: 500, error });
     }
   }
 
@@ -211,23 +131,15 @@ export default class requestsController {
       if (!request) throw 'Request not found!';
       const requestStatus = request.status;
       if (requestStatus === 'rejected') throw 'The request was rejected before!';
-      if (requestStatus === 'pending') {
-        return await Request.updateStatus(request, 'rejected');
-      }
+      if (requestStatus === 'pending') { return await Request.updateStatus(request, 'rejected'); }
       if (requestStatus === 'approved') {
         const { departureDate } = request;
         const todayDate = getTodayDate();
         const isTodayDateAfterTheTripStartDate = compareDates(todayDate, departureDate);
         if (isTodayDateAfterTheTripStartDate) throw "Sorry can't reject ! The user is now on trip.";
         return await Request.updateStatus(request, 'rejected');
-      }
-      return res.status(200).json({
-        message: 'The request successfully rejected',
-        requestId,
-      });
-    } catch (error) {
-      return handleError(res, error);
-    }
+      } return res.status(200).json({ message: 'The request successfully rejected', requestId });
+    } catch (error) { return handleError(error); }
   }
 
   static async createMultiCityRequest(req, res) {
@@ -252,11 +164,9 @@ export default class requestsController {
       const { requestId } = req.params;
       const requesterId = req.user.id;
       const request = await Request.isRequestBelongsToRequester(requestId, requesterId);
-
       if (!request) throw 'Request not found!';
       if (request.status !== 'pending') throw 'Sorry, the request was closed!';
       const updatedRequest = await Request.updateRequest(requestId, req.body);
-
       const FireEvent = new emiter.EventEmitter();
       FireEvent.on('editEvent', editEventHandler);
       FireEvent.emit('editEvent', {
@@ -265,14 +175,8 @@ export default class requestsController {
         id: requestId,
         user: req.user,
       });
-
-      return res.status(200).json({
-        message: 'successfully updated',
-        updatedRequest,
-      });
-    } catch (error) {
-      return handleError(res, error);
-    }
+      return res.status(200).json({ message: 'successfully updated', updatedRequest });
+    } catch (error) { return handleError(res, error); }
   }
 
   static async approveRequest(req, res) {
@@ -288,16 +192,12 @@ export default class requestsController {
       if (request.status === 'approved') throw 'The request was approved before!';
       await Request.updateStatus(request, 'approved');
       const requester = await User.getUser('id', request.requesterId);
-      sendEmail(process.env.BN_EMAIL_NO_REPLY, requester, request);
+      const emailTitle = 'This is to inform you that your trip request has been approved';
+      sendEmail(process.env.BN_EMAIL_NO_REPLY, requester, request, 'Request approved!', emailTitle);
       const newNotification = await addNotification(requester, 'approved_request');
       echoNotification(req, newNotification, 'approved_request', requester.id);
-      res.status(200).json({
-        message: 'The request successfully approved',
-        requestId,
-      });
-    } catch (error) {
-      handleError(res, error);
-    }
+      res.status(200).json({ message: 'The request successfully approved', requestId });
+    } catch (error) { handleError(res, error); }
   }
 
   static async getSpecificRequest(req, res) {

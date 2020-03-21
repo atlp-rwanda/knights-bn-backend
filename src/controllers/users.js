@@ -10,26 +10,22 @@ import generatePswd from '../helpers/randomPswd';
 import usePasswordHashToMakeToken from '../helpers/helpers';
 import { getPasswordResetURL, resetPasswordTemplate } from '../modules/email';
 import userQuery from '../helpers/userQueries';
+import handleError from '../helpers/errorHandler';
 
 const { Op } = sequelize;
-
 environment.config();
 
 export default class usersController {
   static async registerUser(req, res) {
     try {
       const {
-        firstName, lastName, gender, passportNumber, email, password, lineManager,
+        firstName, lastName, gender, passportNumber, email, password,
       } = req.body;
       const token = generateToken({
         firstName, lastName, gender, passportNumber, email, password,
       });
       let host;
-      if (process.env.NODE_ENV === 'development') {
-        host = process.env.LOCAL_HOST;
-      } else {
-        host = process.env.HOST_NAME;
-      }
+      process.env.NODE_ENV === 'development' ? host = process.env.LOCAL_HOST : host = process.env.HOST_NAME;
       const url = `${host}/api/v1/auth/signup/${token}`;
       sgMail.setApiKey(process.env.BN_API_KEY);
       const msg = {
@@ -56,69 +52,41 @@ export default class usersController {
       const hashedPassword = await bcrypt.hash(password, salt);
       const existingUser = await models.User.findOne({
         where: {
-          [Op.or]: [
-            { email },
-            { passport: passportNumber },
-          ],
+          [Op.or]: [{ email }, { passport: passportNumber }],
         },
       });
-      if (existingUser !== null) {
-        return res.status(409).json({ message: 'Email or Passport number already taken.' });
-      }
+      if (existingUser !== null) return res.status(409).json({ message: 'Email or Passport number already taken.' });
       const newUser = await models.User.create({
-        firstName,
-        lastName,
-        gender,
-        email,
-        password: hashedPassword,
-        passport: passportNumber,
+        firstName, lastName, gender, email, password: hashedPassword, passport: passportNumber,
       });
-      const { id } = newUser;
       const token = generateToken({
-        id, email, firstName, lastName,
+        id: newUser.id, email, firstName, lastName,
       });
       localStorage.setItem('token', token);
       return res.status(201).json({ message: 'Your account is successfully created.' });
-    } catch (error) {
-      return res.status(500).json({ Error: error.message });
-    }
+    } catch (error) { return res.status(500).json({ Error: error.message }); }
   }
 
   static async login(req, res) {
     try {
       const { email, password } = req;
       const existUser = await models.User.findOne({ where: { email } });
-      if (existUser === null) {
-        return res.status(404).json({
-          status: 404,
-          message: 'Seems you do not have an account! Create it now',
-        });
-      }
+      if (existUser === null) throw 'Seems you do not have an account! Create it now';
       const passwordMatch = await bcrypt.compare(password, existUser.password);
       if (!passwordMatch) {
-        return res
-          .status(401)
-          .json({ status: 401, message: 'Invalid credentials' });
+        return res.status(401).json({ status: 401, message: 'Invalid credentials' });
       }
       const {
         id, role, firstName, lastName,
       } = existUser;
       const token = generateToken(
         {
-          id,
-          email,
-          role,
-          firstName,
-          lastName,
+          id, email, role, firstName, lastName,
         },
       );
       localStorage.setItem('token', token);
-      return res
-        .status(200)
-        .json({ status: 200, message: 'Successfully login', token });
-    } catch (error) {
-      return res.status(500).json({ Error: error });
-    }
+      return res.status(200).json({ status: 200, message: 'Successfully login', token });
+    } catch (error) { return handleError(res, error); }
   }
 
   static async socialLogin(req, res) {
@@ -138,14 +106,7 @@ export default class usersController {
       await User.findOrCreate({
         where: { ...condition },
         defaults: {
-          firstName,
-          lastName,
-          gender,
-          email,
-          password: generatePswd(),
-          method,
-          clientId: id,
-          role: 'requester',
+          firstName, lastName, gender, email, password: generatePswd(), method, clientId: id, role: 'requester',
         },
         raw: true,
       }).spread((user, created) => {
@@ -172,9 +133,7 @@ export default class usersController {
         }
       });
     } catch (error) {
-      res.status(500).json({
-        error: error.message,
-      });
+      res.status(500).json({ error: error.message });
     }
   }
 
@@ -202,16 +161,12 @@ export default class usersController {
   static async resetPassword(req, res) {
     try {
       const { id, token } = req.params;
-      if (isNaN(id)) {
-        return res.status(401).json({ error: 'invalid token' });
-      }
+      if (isNaN(id)) { return res.status(401).json({ error: 'invalid token' }); }
       const { newPassword, confirmPassword } = req.body;
       models.User.findOne({ where: { id } }).then((user) => {
         const secret = `${user.password}`;
         const payload = jwt.decode(token, secret);
-        if (!payload) {
-          return res.status(401).json({ error: 'invalid token' });
-        }
+        if (!payload) { return res.status(401).json({ error: 'invalid token' }); }
         if (payload.id === user.id) {
           if (newPassword === confirmPassword) {
             bcrypt.genSalt(10, (err, salt) => {
@@ -219,20 +174,14 @@ export default class usersController {
               bcrypt.hash(newPassword, salt, (err, hash) => {
                 if (err) return;
                 models.User.update({ password: hash }, { where: { id } })
-                  .then(() => res
-                    .status(202)
-                    .json({ message: 'Password changed successfully ' }))
+                  .then(() => res.status(202).json({ message: 'Password changed successfully ' }))
                   .catch((err) => res.status(500).json(err));
               });
             });
-          } else {
-            return res.status(401).json({ error: 'password does not match' });
-          }
+          } else { return res.status(401).json({ error: 'password does not match' }); }
         }
       });
-    } catch (error) {
-      return res.status(401).json({ error: 'invalid token' });
-    }
+    } catch (error) { return res.status(401).json({ error: 'invalid token' }); }
   }
 
   static async updateUserRole(req, res) {
@@ -251,9 +200,6 @@ export default class usersController {
 
   static async logout(req, res) {
     localStorage.removeItem('token');
-    return res.status(200).json({
-      status: 200,
-      message: 'Logout successfully',
-    });
+    return res.status(200).json({ status: 200, message: 'Logout successfully' });
   }
 }

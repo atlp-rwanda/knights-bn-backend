@@ -2,20 +2,25 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import sinonChai from 'sinon-chai';
 import { mockReq, mockRes } from 'sinon-express-mock';
-import localStorage from 'localStorage';
 import sinon from 'sinon';
 import app from '../../app';
 import accommodationFacilities from '../../controllers/accommodation';
-import { travelToken } from './accommodationMockData';
+import { travelAdminInfo } from './accommodationMockData';
 
 chai.use(chaiHttp);
 chai.should();
 chai.use(sinonChai);
 const accommodationFeedBack = () => {
   describe('accommodation feedback ', () => {
-    before((done) => {
-      localStorage.setItem('token', travelToken);
-      done();
+    it('it should return 200 on successful signIn', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/login')
+        .send(travelAdminInfo)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          done();
+        });
     });
     it('it should return 200 when accommodation commented successfully ', () => {
       const accommodationFeedBackSpy = sinon.spy(accommodationFacilities, 'accommodationFeedBack');

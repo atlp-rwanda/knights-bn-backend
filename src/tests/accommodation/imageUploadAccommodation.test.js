@@ -1,17 +1,22 @@
 
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
-import localStorage from 'localStorage';
 import app from '../../app';
-import { travelToken } from './accommodationMockData';
+import { travelAdminInfo } from './accommodationMockData';
 
 chai.use(chaiHttp);
 chai.should();
 const uploadEmptyImage = () => {
-  describe('accommodation upload empty image ', () => {
-    before((done) => {
-      localStorage.setItem('token', travelToken);
-      done();
+  describe('accommodation uplod empty image ', () => {
+    it('it should return 200 on successful signIn', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/login')
+        .send(travelAdminInfo)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          done();
+        });
     });
 
     it('it should return 400 when no image uploaded ', (done) => {
