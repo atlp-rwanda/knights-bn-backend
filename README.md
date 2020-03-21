@@ -116,6 +116,8 @@ Open terminal from your computer
 
 `- GET /accommodation/comment/:id? - For commenting on accommodation.`
 
+`- GET /most/traveled - For viewing most travelled destinations.`
+
 ### Raising an issue
 Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create an issue about this app
 

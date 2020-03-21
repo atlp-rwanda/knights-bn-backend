@@ -1,6 +1,8 @@
 import { config } from 'dotenv';
 import _ from 'lodash';
-import { Accommodation, Bookings, Comment } from '../db/models';
+import {
+  Accommodation, Bookings, Comment, sequelize,
+} from '../db/models';
 import accomodation from '../helpers/queries';
 
 config();
@@ -137,6 +139,26 @@ export default class accomodationFacility {
           createdAt,
         });
       });
+    } catch (error) {
+      return res.status(500).json({ status: 500, errorMessage: error });
+    }
+  }
+
+  static async mostTraveled(req, res) {
+    try {
+      const traveledCentre = await Bookings.findAll({
+        include: [
+          {
+            model: Accommodation,
+            attributes: ['accommodationName', 'locationName'],
+          },
+        ],
+        attributes: ['accomodationId', [sequelize.fn('COUNT', sequelize.col('accomodationId')), 'numberofvisits']],
+        group: ['Bookings.accomodationId', 'Accommodation.id'],
+        raw: true,
+        order: sequelize.literal('numberofvisits DESC'),
+      });
+      return res.status(200).json({ status: 200, mostTraveled: traveledCentre });
     } catch (error) {
       return res.status(500).json({ status: 500, errorMessage: error });
     }

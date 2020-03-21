@@ -1,30 +1,31 @@
-
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import localStorage from 'localStorage';
+import sinonChai from 'sinon-chai';
 import app from '../../app';
 import { travelToken } from './accommodationMockData';
 
 chai.use(chaiHttp);
 chai.should();
-const uploadEmptyImage = () => {
-  describe('accommodation upload empty image ', () => {
+chai.use(sinonChai);
+
+const mostTravelledCities = () => {
+  describe('Most travelled destinations ', () => {
     before((done) => {
       localStorage.setItem('token', travelToken);
       done();
     });
-
-    it('it should return 400 when no image uploaded ', (done) => {
+    it('it should return 200 when most travelled destinations are shown ', (done) => {
       chai
         .request(app)
-        .patch(`/api/v1/upload/accommodation/${1}`)
-        .type('form')
+        .get('/api/v1/most/traveled')
         .end((err, res) => {
-          expect(res.statusCode).to.equal(400);
+          expect(res.statusCode).to.equal(200);
+          expect(res.body.mostTraveled).to.be.an('array');
         });
       done();
     });
   });
 };
 
-export default uploadEmptyImage;
+export default mostTravelledCities;

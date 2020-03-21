@@ -20,6 +20,7 @@ import approveRequest from './approveRequest.test';
 import viewSpecificRequest from './viewSpecificRequest.test';
 import rateAccomodation from './accommodation/rate.accommodation.test';
 import getStats from './getStats.test';
+import mostTravelled from './accommodation/mostTravelled.test';
 
 import {
   accommodationFacility, missingInfomation,
@@ -48,7 +49,8 @@ rejectRequest();
 rememberMe();
 editRequest();
 accommodationFacility();
-bookingTest(); 
+bookingTest();
+mostTravelled();
 uploadEmptyImage();
 missingRoomInformation();
 createThesame();

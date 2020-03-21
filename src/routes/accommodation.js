@@ -372,7 +372,7 @@ import findOne from '../middlewares/findAccommodation';
     }
  */
 
- /**
+/**
  * @swagger
  *  "/accommodation/comment/{id}": {
       "post": {
@@ -389,7 +389,6 @@ import findOne from '../middlewares/findAccommodation';
           "application/x-www-form-urlencoded"
         ],
         "parameters": [
-
           {
             "name": "id",
             "in": "path",
@@ -403,7 +402,6 @@ import findOne from '../middlewares/findAccommodation';
             "required": true,
             "type": "string",
           },
-
         ],
         "responses": {
           "201": {
@@ -417,6 +415,36 @@ import findOne from '../middlewares/findAccommodation';
     }
  */
 
+/**
+ * @swagger
+ *  "/most/traveled": {
+      "get": {
+        "description": "view most travelled destination",
+        "summary": "view most travelled destinations",
+        "tags": [
+          "Accommodations"
+        ],
+        "operationId": "view-travelled",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+
+        ],
+        "responses": {
+          "200": {
+            "description":"successfully",
+          },
+           "401": {
+            "description": "Unauthorized access"
+          }
+        }
+      }
+    }
+ */
 const accommodationRouter = Router();
 accommodationRouter.patch('/upload/accommodation/:id', verifyToken.auth, isAdmin, checkParams, imageMiddleware.single('imageOfBuilding'), findOne, accommodation.uploadBuildingImage);
 accommodationRouter.patch('/edit/accommodation/:id', verifyToken.auth, isAdmin, checkParams, validateInputBody, findOne, accommodation.editAccommodation);
@@ -427,5 +455,7 @@ accommodationRouter.patch('/edit/accommodation/rate/:id', verifyToken.auth, vali
 accommodationRouter.get('/rooms/accommodations/:id', verifyToken.auth, checkParams, accommodation.availableRooms);
 accommodationRouter.post('/book/accommodations', verifyToken.auth, validateBookings, accommodation.bookAccomodation);
 accommodationRouter.post('/accommodation/comment/:id', verifyToken.auth, commentValidate.comment, checkParams, accommodation.accommodationFeedBack);
+accommodationRouter.get('/most/traveled', verifyToken.auth, accommodation.mostTraveled);
 
 export default accommodationRouter;
+
