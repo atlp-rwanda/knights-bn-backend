@@ -74,7 +74,7 @@ const testRejectRequest = () => {
         .request(app)
         .delete('/api/v1/trips/comment?commentId=1')
         .end((err, res) => {
-          expect(res.status).to.equal(200);
+          expect(res.body.status).to.equal(200);
           expect(res.body).to.have.property('message').that.equals('Comment deleted successfully!');
           done();
         });
