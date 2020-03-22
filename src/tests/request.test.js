@@ -27,6 +27,10 @@ const userSignUp = () => {
       sendNotification(1, {}, { 1: ['jashgfe'] }, io, 'new_request');
     });
 
+    it('should send notification if all information are filled', () => {
+      sendNotification(1, {}, { 1: ['jashgfehj'] }, io, 'approved_request');
+    });
+
     it('should send a message', () => {
       events();
     });
@@ -59,8 +63,9 @@ const userSignUp = () => {
         .request(app)
         .get('/api/v1/trips/myRequest')
         .end((err, res) => {
-          expect(res.status).to.equal(200);
+          expect(res.body.status).to.equal(200);
           expect(res.body.message).to.equal('List of requests');
+          expect(res.body.allMyRequest).to.be.an('array');
           done();
         });
     });
@@ -260,6 +265,28 @@ const userSignUp = () => {
         .end((err, res) => {
           expect(res.statusCode).to.equal(404);
           expect(res.body.message).to.be.equal('no results found');
+          done();
+        });
+    });
+    it('it should return 200 on successful signIn for the manager', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/login')
+        .send(mockData.loginSuccessfully3)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body.message).to.be.equal('Successfully login');
+          done();
+        });
+    });
+    it('it should return 403 when not a manager', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/trips/pendingApproval')
+        .send()
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(403);
+          expect(res.body.error).to.be.equal('access denied');
           done();
         });
     });

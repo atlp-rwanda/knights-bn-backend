@@ -39,10 +39,10 @@ app.use((req, res, next) => {
   next();
 });
 
-io.on('connection', (socket) => {
+io.on('connect', (socket) => {
   global.connect = socket;
   console.log('a user connected');
-  socket.on('disconnect', () => {
+  io.on('disconnect', () => {
     console.log('user disconnected');
   });
 });
