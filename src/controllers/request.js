@@ -72,7 +72,7 @@ export default class requestsController {
       } = request;
       if (isRequestEmpty === false) {
         const emailTitle = 'This is to inform you that a new request was made by:';
-        sendEmail(process.env.BN_EMAIL_NO_REPLY, manager.dataValues.email, request, 'New request was made', emailTitle);
+        sendEmail(process.env.BN_EMAIL_NO_REPLY, manager, request, 'New request was made', emailTitle);
         const newNotification = await models.Notification.create({
           requesterId: id, managerId, status: 'non_read', message: 'a new request was made', type: 'new_request', owner: 'manager',
         });

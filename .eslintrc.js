@@ -27,6 +27,7 @@ module.exports = {
     'treatUndefinedAsUnspecified': 0,
     'import/extensions': ['off', 'never'],
     'no-unused-expressions': [2, { allowTernary: true }],
-    'no-underscore-dangle': 0
+    'no-underscore-dangle': 0,
+    'no-nested-ternary': 0
   }
 };

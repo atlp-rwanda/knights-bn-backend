@@ -1,17 +1,18 @@
-import models from '../db/models';
 import getTodayDate from '../helpers/getTodayDate';
 import {
   editRequestSchema,
   createTwoWayTripSchema,
 } from '../helpers/validationSchemas';
 import isObjectEmpty from '../helpers/isObjectEmpty';
+import getConflictingRequest from '../helpers/getConflictingRequest';
+import Request from '../helpers/Request';
+import getUrlAddress from '../helpers/getUrlAddress';
 
-let conflictingTripRequest;
+let conflictingRequest;
 
 export default async (req, res, next) => {
   try {
     let schema;
-    let address;
     const {
       origin,
       destination,
@@ -25,8 +26,7 @@ export default async (req, res, next) => {
     const reqReturnDate = new Date(returnDate);
 
     const urlSections = req.urlPathSections;
-    if (urlSections) address = urlSections[urlSections.length - 2] || null;
-
+    const address = getUrlAddress(urlSections);
     if (address === 'edit') {
       const isRequestEmpty = isObjectEmpty(req.body);
       if (isRequestEmpty === true) throw ('Empty request');
@@ -49,81 +49,52 @@ export default async (req, res, next) => {
     else if (reqReturnDate < reqDepartureDate) throw 'departureDate > returnDate';
     else if (reqDepartureDate < todayDate) throw 'past departure date';
     else if (departureDate || returnDate) {
-      const requests = await models.Request.findAll({
-        where: {
-          requesterId: req.user.id,
-        },
-        raw: true,
-      });
+      const requests = await Request.getAllRequests(req.user.id);
       requests.map((request) => {
         if (((request.departureDate <= reqDepartureDate)
         && (reqDepartureDate <= request.returnDate))
           || ((request.departureDate <= reqReturnDate) && (reqReturnDate <= request.returnDate))) {
-          if (request.type === 'one_way') {
-            const {
-              createdAt,
-              updatedAt,
-              returnDate,
-              cities,
-              ...otherTripInfo
-            } = request;
-            conflictingTripRequest = otherTripInfo;
-          } else if (request.type === 'two_way') {
-            const {
-              createdAt,
-              updatedAt,
-              cities,
-              ...otherTripInfo
-            } = request;
-            conflictingTripRequest = otherTripInfo;
-          } else if (request.type === 'multi_way') {
-            const {
-              createdAt,
-              updatedAt,
-              ...otherTripInfo
-            } = request;
-            conflictingTripRequest = otherTripInfo;
-          }
+          conflictingRequest = getConflictingRequest(request);
           throw 'conflicting trip';
         }
       });
     }
-    next();
+    return next();
   } catch (error) {
     if (error === 'Empty request') {
-      return res.status(200).json({
+      res.status(200).json({
         error: 'Empty request body.',
       });
     }
     if (error.name === 'ValidationError') {
-      return res.status(422).json({
+      res.status(422).json({
         status: res.statusCode,
         error: error.message,
       });
     }
     if (error === 'similar origin and destination') {
-      return res.status(422).json({
+      res.status(422).json({
         status: res.statusCode,
         error: 'Origin has to differ from destination.',
       });
     }
     if (error === 'departureDate > returnDate') {
-      return res.status(422).json({
+      res.status(422).json({
         status: res.statusCode,
         error: "Returning date has to be the day after your departure's date!",
       });
     }
     if (error === 'past departure date') {
-      return res.status(422).json({
+      res.status(422).json({
         status: res.statusCode,
         error: 'Please select travel date starting from today.',
       });
     }
     if (error === 'conflicting trip') {
-      res.status(422).json({
+      res.status(409).json({
         status: res.statusCode,
         error: 'conflicting trip request.',
-        conflictingTripRequest,
+        conflictingRequest,
       });
     }
     return res.status(500).json({

@@ -9,10 +9,8 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 const {
-  validRequest, requestDateSetInThePast,
-  requestWithDepartureDateSetAfterReturnDate, repeatedRequest,
+  requestDateSetInThePast, requestWithDepartureDateSetAfterReturnDate,
   requestWithMissedComponent, requestWithSimilarOriginAndDestination,
-  invalidTrip, sameDirection,
 } = returnTripMock;
 
 const testTwoWayTrip = () => {
@@ -86,8 +84,8 @@ const testTwoWayTrip = () => {
         .end((err, res) => {
           expect(res.status).to.equal(422);
           expect(res.body).to.have.property('error');
+          done();
         });
-      done();
     });
     it('should return 422 when similar origin and destination', (done) => {
       chai
@@ -97,8 +95,8 @@ const testTwoWayTrip = () => {
         .end((err, res) => {
           expect(res.status).to.equal(422);
           expect(res.body).to.have.property('error').that.equals('Origin has to differ from destination.');
+          done();
         });
-      done();
     });
     it('should return 422 if departure date > return date', (done) => {
       chai
@@ -108,8 +106,8 @@ const testTwoWayTrip = () => {
         .end((err, res) => {
           expect(res.status).to.equal(422);
           expect(res.body).to.have.property('error').that.equals("Returning date has to be the day after your departure's date!");
+          done();
         });
-      done();
     });
     it('should return 422 when departureDate is set in the past', (done) => {
       chai
@@ -119,10 +117,10 @@ const testTwoWayTrip = () => {
         .end((err, res) => {
           expect(res.status).to.equal(422);
           expect(res.body).to.have.property('error').that.equals('Please select travel date starting from today.');
+          done();
         });
-      done();
     });
-    it('should return 422 on a conflicting trip request', (done) => {
+    it('should return 409 on a conflicting trip request', () => {
       chai
         .request(app)
         .post('/api/v1/trips/returnTrip')
@@ -135,9 +133,8 @@ const testTwoWayTrip = () => {
           accommodation: 'Z campus',
         })
         .end((err, res) => {
-          expect(res.status).to.equal(422);
+          expect(res.status).to.equal(409);
           expect(res.body).to.have.property('error').that.equals('conflicting trip request.');
-          done();
         });
     });
     it('should return 401 if no token ', (done) => {
@@ -149,8 +146,8 @@ const testTwoWayTrip = () => {
         .end((err, res) => {
           expect(res.body).to.have.property('status').equals(401);
           expect(res.body).to.have.property('error').equals('you are not logged in');
+          done();
         });
-      done();
     });
   });
 };

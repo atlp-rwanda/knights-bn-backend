@@ -482,7 +482,7 @@
   */
 
 import express from 'express';
-import passport from 'passport';
+import passport from '../config/passport';
 import usersController from '../controllers/users';
 import userLoginValidation from '../middlewares/userLoginValidation';
 import userValidation from '../middlewares/newUser';
