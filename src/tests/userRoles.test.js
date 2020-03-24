@@ -46,12 +46,12 @@ const testUserRoles = () => {
             .patch(`/api/v1/users/setUserRole?email=${mockData.updatableUser.email}`)
             .send(mockData.newRole)
             .set('token', token)
-            .end((err, res) => {
-              expect(res.body).to.be.an('object');
-              expect(res.body.status).to.be.equal(200);
-              expect(res.body.message).to.be.equal('User successfully updated!');
+            .end((eror, resp) => {
+              expect(resp.body).to.be.an('object');
+              expect(resp.body.status).to.be.equal(200);
+              expect(resp.body.message).to.be.equal('User successfully updated!');
+              done();
             });
-          done();
         });
     });
 

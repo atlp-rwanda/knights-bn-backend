@@ -203,6 +203,24 @@ export const editAccommodations = () => {
           done();
         });
     });
+    it('Testing database violation', (done) => {
+      const editAccommodationSpy = sinon.spy(accommodationFacilities, 'editAccommodation');
+      const request = {
+        params: {
+          id: 'n',
+        },
+        body: editAccommodation,
+        user: {
+          id: 'n',
+        },
+      };
+      const req = mockReq(request);
+      const res = mockRes();
+      accommodationFacilities.editAccommodation(req, res);
+      expect(editAccommodationSpy).to.have.been.calledWith(req, res);
+      editAccommodationSpy.restore();
+      done();
+    });
   });
 };
 

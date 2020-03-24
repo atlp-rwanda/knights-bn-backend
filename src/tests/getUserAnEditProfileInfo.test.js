@@ -7,6 +7,7 @@ import sinon from 'sinon';
 import app from '../app';
 import mockData from './mockData';
 import profileImage from '../controllers/userProfile';
+import { requesterToken } from './accommodation/accommodationMockData';
 
 chai.use(chaiHttp);
 chai.should();
@@ -14,6 +15,10 @@ chai.use(sinonChai);
 
 const userProfile = () => {
   describe('UserProfile settings ', () => {
+    before((done) => {
+      localStorage.setItem('token', requesterToken);
+      done();
+    });
     it('it should return 200 and user object when user is authorized', (done) => {
       chai
         .request(app)
@@ -63,7 +68,6 @@ const userProfile = () => {
       const req = mockReq(request);
       const res = mockRes();
       profileImage.changeMyProfileInfo(req, res);
-      expect(changeMyProfileInfoStub).calledWith(req, res).to.be.ok;
       expect(changeMyProfileInfoStub).to.have.been.calledWith(req, res);
       changeMyProfileInfoStub.restore();
     });

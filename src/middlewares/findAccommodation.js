@@ -1,11 +1,11 @@
-import models from '../db/models';
+import { Accommodation } from '../db/models';
 import getOne from '../helpers/queries';
 
-const findAccommodation = async (req, res, next) => {
+export const findAccommodation = async (req, res, next) => {
   try {
     const whereQuery = { id: req.params.id, userId: req.user.id };
     const accommodation = await getOne
-      .verifyAccom(whereQuery, models.Accommodation);
+      .verifyAccom(whereQuery, Accommodation);
     if (accommodation === null) {
       return res.status(404)
         .json({ status: 404, errorMessage: 'Accommodation not found' });
@@ -17,4 +17,11 @@ const findAccommodation = async (req, res, next) => {
   }
 };
 
-export default findAccommodation;
+export const isFound = async (req, res, next) => {
+  const findAccomodation = await getOne.getAccommodation('id', req.params.id, Accommodation);
+  if (findAccomodation === null) {
+    return res.status(404).json({ status: 404, message: 'accomodation not found' });
+  }
+  return next();
+};
+
