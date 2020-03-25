@@ -38,9 +38,9 @@ import {
 } from './accommodation/createAccommodationFacility.test';
 import testUserRoles from './userRoles.test';
 
+routeExistance();
 signUpTest();
 userLoginTest();
-testUserRoles();
 twoWayTrip();
 muliltiRequest();
 allRequestTest();
@@ -74,6 +74,6 @@ userProfileInformation();
 accommodationFeedBack();
 notificationFormat();
 likeUnlikeAccommodation();
+testUserRoles();
 socialLogin();
-routeExistance();
 events();

@@ -22,16 +22,17 @@ dotenv.config();
 const connectedClients = {};
 io.use(async (socket, next) => {
   const { token } = socket.handshake.query;
-  if (token) {
-    const decoded = decodeToken(token, process.env.SECRETKEY);
-    const userData = decoded;
-    if (!userData.error) {
+  try {
+    if (token) {
+      const decoded = decodeToken(token, process.env.SECRETKEY);
+      const userData = decoded;
       const clientKey = Number.parseInt(userData.id, 10);
       connectedClients[clientKey] = connectedClients[clientKey] || [];
       connectedClients[clientKey].push(socket.id);
-    }
+    } next();
+  } catch (error) {
+    console.log('Invalid token provided');
   }
-  next();
 });
 app.use((req, res, next) => {
   req.io = io;
@@ -39,7 +40,7 @@ app.use((req, res, next) => {
   next();
 });
 
-io.on('connection', (socket) => {
+io.sockets.on('connect', (socket) => {
   global.connect = socket;
   console.log('a user connected');
   socket.on('disconnect', () => {

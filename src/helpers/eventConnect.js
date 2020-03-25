@@ -5,7 +5,7 @@ import io from './ioServerHelper';
 
 const { Chats } = models;
 export default () => {
-  io.on('connection', (socket) => {
+  io.on('connect', (socket) => {
     socket.on('send-chat-message', (message) => {
       const token = localStorage.getItem('token');
       if (token) {

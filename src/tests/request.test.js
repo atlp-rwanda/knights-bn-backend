@@ -263,6 +263,28 @@ const userSignUp = () => {
           done();
         });
     });
+    it('it should return 200 on successful signIn', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/login')
+        .send(mockData.managerLogin3)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body.message).to.be.equal('Successfully login');
+          done();
+        });
+    });
+    it('it should return 200 when Pending Request available', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/trips/pendingApproval')
+        .send()
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body.message).to.be.equal('Pending requests');
+          done();
+        });
+    });
   });
 };
 
