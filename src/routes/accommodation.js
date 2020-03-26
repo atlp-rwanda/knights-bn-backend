@@ -64,7 +64,7 @@ import { searchIndisLike, searchInLike } from '../middlewares/dislikeUser';
           "application/x-www-form-urlencoded"
         ],
         "consumes": [
-          "application/x-www-form-urlencoded"
+          "multipart/form-data"
         ],
         "parameters": [
                   {

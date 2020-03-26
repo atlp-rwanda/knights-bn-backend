@@ -6,7 +6,7 @@ export default class bookAccomodation {
     const { id } = req.user;
     try {
       const allBookings = await Accomodation.getAccommodation('getAll', id, Bookings);
-      if (!allBookings) {
+      if (allBookings) {
         return res.status(200).json({ message: ' My bookings', allBookings });
       }
       return res.status(404).json({ message: 'No Booking found' });

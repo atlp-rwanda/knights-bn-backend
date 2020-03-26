@@ -18,6 +18,10 @@ export default class Request {
     );
   }
 
+  static getAllRequests(requesterId) {
+    return models.Request.findAll({ where: { requesterId } });
+  }
+
   static isRequestBelongsToManager(requestId, managerId) {
     return models.Request.findOne(
       { where: { id: requestId, managerId } },

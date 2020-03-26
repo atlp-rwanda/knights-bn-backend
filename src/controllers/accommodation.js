@@ -53,7 +53,7 @@ export default class accomodationFacility {
         return res.status(400)
           .json({ status: 400, errorMessage: 'You forget to chose image' });
       }
-      req.body.imageOfBuilding = `${process.env.HOST_NAME}/${req.file.url}`;
+      req.body.imageOfBuilding = req.file.url;
       await accommodation.update(req.body, { id: req.params.id }, Accommodation);
       return res.status(200).json({ status: 200, message: 'image uploaded successfully' });
     } catch (error) {
@@ -63,8 +63,7 @@ export default class accomodationFacility {
 
   static async createAccomodation(req, res) {
     try {
-      req.body.imageOfBuilding = (typeof req.file === 'undefined') ? 'image'
-        : `${process.env.HOST_NAME}/${req.file.url}`;
+      req.body.imageOfBuilding = (typeof req.file === 'undefined') ? 'image' : req.file.url;
       req.body.userId = req.user.id;
       const newAccommodation = await Accommodation.create(req.body);
       return res.status(201).json({ status: 200, data: newAccommodation });
