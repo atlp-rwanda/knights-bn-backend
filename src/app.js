@@ -29,7 +29,8 @@ io.use(async (socket, next) => {
       const clientKey = Number.parseInt(userData.id, 10);
       connectedClients[clientKey] = connectedClients[clientKey] || [];
       connectedClients[clientKey].push(socket.id);
-    } next();
+    }
+    next();
   } catch (error) {
     console.log('Invalid token provided');
   }
@@ -54,19 +55,31 @@ const newSwaggerDef = {
 };
 
 const swaggerSpec = swaggerJsDoc(newSwaggerDef);
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.use(cookieParser());
-app.use(sessions({
-  secret: process.env.SECRETKEY,
-  resave: true,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 14 * 24 * 3600 * 1000,
-    sameSite: true,
-  },
-}));
+app.use(
+  sessions({
+    secret: process.env.SECRETKEY,
+    resave: true,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 14 * 24 * 3600 * 1000,
+      sameSite: true,
+    },
+  })
+);
 
 app.use(passport.initialize());
 
@@ -79,8 +92,10 @@ app.use('/api/v1', accommodationRouter);
 app.use('/api/v1', chats);
 app.use('/api/v1', bookings);
 
-app.use((req, res) => res.status(404).send({
-  status: 404,
-  error: 'Not Found!',
-}));
+app.use((req, res) =>
+  res.status(404).send({
+    status: 404,
+    error: 'Not Found!',
+  })
+);
 export default app;
