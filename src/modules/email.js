@@ -13,15 +13,8 @@ const template = new mailgen({
 });
 
 sgMail.setApiKey(process.env.BN_API_KEY);
-let host;
-if (process.env.NODE_ENV === 'development') {
-  host = process.env.LOCAL_HOST;
-} else {
-  host = process.env.HOST_NAME;
-}
-
-export const getPasswordResetURL = (user, token) => `${host}/api/v1/password/reset/${user.id}/${token}`;
-
+let host=process.env.UI_URL;
+export const getPasswordResetURL = (user, token) => `${host}/password/reset/${user.id}/${token}`;
 const generateEmail = (name, instructions, buttonTxt, link) => ({
   body: {
     name,
