@@ -119,17 +119,11 @@ export default class usersController {
             role: user.role,
           });
           localStorage.setItem('token', token);
-          const statusCode = created === true ? 201 : 200;
-          res.json({
-            status: statusCode,
-            message: 'successfully logged in !',
-            created,
-            method,
-            firstName,
-            lastName,
-            email,
+          const data = {
+            user,
             token,
-          });
+          };
+          res.redirect(`${process.env.FRONT_END_SUCCESS_REDIRECT}/?data=${JSON.stringify(data)}`);
         }
       });
     } catch (error) {
