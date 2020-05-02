@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import localStorage from 'localStorage';
-import environment from 'dotenv';
+import env from 'dotenv';
 import sgMail from '@sendgrid/mail';
 import sequelize from 'sequelize';
 import models from '../db/models';
@@ -11,20 +11,24 @@ import usePasswordHashToMakeToken from '../helpers/helpers';
 import { getPasswordResetURL, resetPasswordTemplate } from '../modules/email';
 import userQuery from '../helpers/userQueries';
 import handleError from '../helpers/errorHandler';
+import handleRedirects from '../helpers/handleRedirects';
 
 const { Op } = sequelize;
-environment.config();
+env.config();
 
 export default class usersController {
   static async registerUser(req, res) {
     try {
       const {
-        firstName, lastName, gender, passportNumber, email, password,
+        firstName, lastName, gender, email, password,
       } = req.body;
       const token = generateToken({
-        firstName, lastName, gender, passportNumber, email, password,
+        firstName, lastName, gender, email, password,
       });
       let host;
+      const userExists = await models.User.findOne({ where: { email } });
+      if (userExists) return res.status(409).json({ error: 'Email already exists.' });
+
       process.env.NODE_ENV === 'development' ? host = process.env.LOCAL_HOST : host = process.env.HOST_NAME;
       const url = `${host}/api/v1/auth/signup/${token}`;
       sgMail.setApiKey(process.env.BN_API_KEY);
@@ -46,25 +50,25 @@ export default class usersController {
       const { token: userToken } = req.params;
       const userInfo = jwt.decode(userToken, process.env.SECRETKEY);
       const {
-        firstName, lastName, gender, passportNumber, email, password,
+        firstName, lastName, gender, email, password,
       } = userInfo;
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
       const existingUser = await models.User.findOne({
-        where: {
-          [Op.or]: [{ email }, { passport: passportNumber }],
-        },
+        where: { [Op.or]: [{ email }] },
       });
-      if (existingUser !== null) return res.status(409).json({ message: 'Email or Passport number already taken.' });
+      if (existingUser !== null) return handleRedirects(res, process.env.EMAIL_VERIFICATION_REDIRECT_LINK, { message: 'Email already exists.' });
       const newUser = await models.User.create({
-        firstName, lastName, gender, email, password: hashedPassword, passport: passportNumber,
+        firstName, lastName, gender, email, password: hashedPassword,
       });
       const token = generateToken({
         id: newUser.id, email, firstName, lastName,
       });
       localStorage.setItem('token', token);
-      return res.status(201).json({ message: 'Your account is successfully created.' });
-    } catch (error) { return res.status(500).json({ Error: error.message }); }
+      return handleRedirects(res, process.env.EMAIL_VERIFICATION_REDIRECT_LINK, { token });
+    } catch (error) {
+      return handleRedirects(res, process.env.EMAIL_VERIFICATION_REDIRECT_LINK, { error });
+    }
   }
 
   static async login(req, res) {

@@ -8,7 +8,6 @@ class userValidate {
       email: req.body.email,
       password: req.body.password,
       gender: req.body.gender,
-      passportNumber: req.body.passportNumber,
     });
     if (!result.error) { next(); } else {
       if (`${result.error.details[0].path[0]}` === 'firstName' || `${result.error.details[0].path[0]}` === 'lastName') {
