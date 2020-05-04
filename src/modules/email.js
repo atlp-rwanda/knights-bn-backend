@@ -13,8 +13,8 @@ const template = new mailgen({
 });
 
 sgMail.setApiKey(process.env.BN_API_KEY);
-let host=process.env.UI_URL;
-export const getPasswordResetURL = (user, token) => `${host}/password/reset/${user.id}/${token}`;
+const host = process.env.UI_URL;
+export const getPasswordResetURL = (user, token) => `${host}/password/reset?id=${user.id}&&token=${token}`;
 const generateEmail = (name, instructions, buttonTxt, link) => ({
   body: {
     name,
