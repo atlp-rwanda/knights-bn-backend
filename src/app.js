@@ -16,6 +16,7 @@ import accommodationRouter from './routes/accommodation';
 import events from './helpers/eventConnect';
 import decodeToken from './helpers/decodeToken';
 import io, { app } from './helpers/ioServerHelper';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -55,12 +56,12 @@ const newSwaggerDef = {
 };
 
 const swaggerSpec = swaggerJsDoc(newSwaggerDef);
-
+app.use(cors());
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header(
     'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
+    'Origin, X-Requested-With, Content-Type, Accept',
   );
   next();
 });
