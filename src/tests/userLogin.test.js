@@ -14,7 +14,7 @@ const usersignIn = () => {
         .send(mockData.userX)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
-          expect(res.body.message).to.equal('Please go to your email address to verify your account.');
+          expect(res.body.message).to.equal('Check a verification link in your email .');
           done();
         });
     });

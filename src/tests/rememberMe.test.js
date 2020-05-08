@@ -21,8 +21,8 @@ const remembered = () => {
         .send(mockData.loginNewUser)
         .end((err, res) => {
           localStorage.setItem('token', res.body.token);
-          done();
         });
+        done();
     });
 
     it('it should return 200 when profile information strored in cookies successfull  ', async () => {

@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import sessions from 'express-session';
+import cors from 'cors';
 import swaggerDefinition from './docs/swaggerDefinition';
 import users from './routes/users';
 import trips from './routes/trips';
@@ -16,7 +17,6 @@ import accommodationRouter from './routes/accommodation';
 import events from './helpers/eventConnect';
 import decodeToken from './helpers/decodeToken';
 import io, { app } from './helpers/ioServerHelper';
-import cors from 'cors';
 
 dotenv.config();
 
@@ -79,7 +79,7 @@ app.use(
       maxAge: 14 * 24 * 3600 * 1000,
       sameSite: true,
     },
-  })
+  }),
 );
 
 app.use(passport.initialize());
@@ -93,10 +93,8 @@ app.use('/api/v1', accommodationRouter);
 app.use('/api/v1', chats);
 app.use('/api/v1', bookings);
 
-app.use((req, res) =>
-  res.status(404).send({
-    status: 404,
-    error: 'Not Found!',
-  })
-);
+app.use((req, res) => res.status(404).send({
+  status: 404,
+  error: 'Not Found!',
+}));
 export default app;

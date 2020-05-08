@@ -531,7 +531,7 @@ router.get('/user/profile', auth.auth, userProfile.getProfileInformation);
 router.patch('/edit/user/profile', auth.auth, imageMiddleware.single('profileImage'), userProfile.changeMyProfileInfo);
 router.get('/remembered', auth.auth, userProfile.rememberMe);
 router.post('/auth/signup', userValidation.signUp, registerUser);
-router.get('/auth/signup/:token', verifyAcccount);
+router.get('/auth/verify/signup/:token', verifyAcccount);
 router.post('/reset_pw/user', userValidation.sendEmail, forgetPassword);
 router.patch('/password/reset/:id/:token', userValidation.reset, resetPassword);
 router.patch('/auth/logout', auth.auth, logout);

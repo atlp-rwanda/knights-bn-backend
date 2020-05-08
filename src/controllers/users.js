@@ -1,20 +1,18 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import localStorage from 'localStorage';
-import env from 'dotenv';
-import sgMail from '@sendgrid/mail';
-import sequelize from 'sequelize';
+import environment from 'dotenv';
+import { verifyAccount, verifyPassword } from '../helpers/emailBody';
 import models from '../db/models';
 import generateToken from '../helpers/generateToken';
 import generatePswd from '../helpers/randomPswd';
 import usePasswordHashToMakeToken from '../helpers/helpers';
-import { getPasswordResetURL, resetPasswordTemplate } from '../modules/email';
+import { getPasswordResetURL, resetPasswordTemplate, getEmailVerifytURL } from '../modules/email';
 import userQuery from '../helpers/userQueries';
 import handleError from '../helpers/errorHandler';
 import handleRedirects from '../helpers/handleRedirects';
 
-const { Op } = sequelize;
-env.config();
+environment.config();
 
 export default class usersController {
   static async registerUser(req, res) {
@@ -22,26 +20,20 @@ export default class usersController {
       const {
         firstName, lastName, gender, email, password,
       } = req.body;
+      const existingUser = await models.User.findOne({ where: { email } });
+      if (existingUser !== null) return res.status(409).json({ error: 'Email has already taken.' });
       const token = generateToken({
         firstName, lastName, gender, email, password,
       });
-      let host;
-      const userExists = await models.User.findOne({ where: { email } });
-      if (userExists) return res.status(409).json({ error: 'Email already exists.' });
-
-      process.env.NODE_ENV === 'development' ? host = process.env.LOCAL_HOST : host = process.env.HOST_NAME;
-      const url = `${host}/api/v1/auth/signup/${token}`;
-      sgMail.setApiKey(process.env.BN_API_KEY);
-      const msg = {
-        to: email,
-        from: 'no-reply@barefootnomad.com',
-        subject: 'Account Verification',
-        html: `<strong> Dear ${firstName}, please open this <a href="${url}">link</a> to verify your account </strong>`,
+      const user = {
+        lastName,
+        email,
       };
-      sgMail.send(msg);
-      return res.status(200).json({ message: 'Please go to your email address to verify your account.' });
+      const url = getEmailVerifytURL(token);
+      resetPasswordTemplate(user, url, verifyAccount);
+      return res.status(200).json({ message: 'Check a verification link in your email .' });
     } catch (error) {
-      return res.status(500).json({ Error: error.message });
+      return res.status(500).json({ error: error.message });
     }
   }
 
@@ -52,12 +44,10 @@ export default class usersController {
       const {
         firstName, lastName, gender, email, password,
       } = userInfo;
+      const existingUser = await models.User.findOne({ where: { email } });
+      if (existingUser !== null) return res.status(409).json({ error: 'Email has already taken.' });
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
-      const existingUser = await models.User.findOne({
-        where: { [Op.or]: [{ email }] },
-      });
-      if (existingUser !== null) return handleRedirects(res, process.env.EMAIL_VERIFICATION_REDIRECT_LINK, { message: 'Email already exists.' });
       const newUser = await models.User.create({
         firstName, lastName, gender, email, password: hashedPassword,
       });
@@ -78,7 +68,7 @@ export default class usersController {
       if (existUser === null) throw 'Seems you do not have an account! Create it now';
       const passwordMatch = await bcrypt.compare(password, existUser.password);
       if (!passwordMatch) {
-        return res.status(401).json({ status: 401, message: 'Invalid credentials' });
+        return res.status(401).json({ status: 401, error: 'Invalid credentials' });
       }
       const {
         id, role, firstName, lastName,
@@ -140,15 +130,15 @@ export default class usersController {
     const user = await models.User.findOne({ where: { email } });
     if (!user) {
       res.status(404).json({
-        error: 'email is not registered! Please check the entered email',
+        error: 'email is not registered',
       });
     } else {
       const token = usePasswordHashToMakeToken(user);
       const url = getPasswordResetURL(user, token);
       try {
-        resetPasswordTemplate(user, url);
+        resetPasswordTemplate(user, url, verifyPassword);
         return res.status(200).json({
-          message: `verify throughout your email: ${user.email}before 1 hour`,
+          message: 'Check in your email a link for changing password',
         });
       } catch (error) {
         res.status(500).json({ error: 'error sending email' });
@@ -186,9 +176,9 @@ export default class usersController {
     const { email } = req.query;
     const { role } = req.body;
     try {
-      if (req.user.role !== 'superAdmin') return res.status(403).json({ status: 403, message: 'Sorry! Only super admin authorized!' });
+      if (req.user.role !== 'superAdmin') return res.status(403).json({ status: 403, error: 'Sorry! Only super admin authorized!' });
       const existingUser = await userQuery.getUserByEmail(email);
-      if (!existingUser) return res.status(404).json({ status: 404, message: `User  ${email} is not found!` });
+      if (!existingUser) return res.status(404).json({ status: 404, error: `User  ${email} is not found!` });
       await userQuery.updateUserRole(role, email);
       return res.status(200).json({ status: 200, message: 'User successfully updated!' });
     } catch (error) {

@@ -32,7 +32,7 @@ const userSignUp = () => {
         .send(mockData.user1)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
-          expect(res.body.message).to.equal('Please go to your email address to verify your account.');
+          expect(res.body.message).to.equal('Check a verification link in your email .');
           done();
         });
     });
@@ -40,7 +40,7 @@ const userSignUp = () => {
       const { token } = mockData.fakeToken;
       chai
         .request(app)
-        .get(`/api/v1/auth/signup/${token}`)
+        .get(`/api/v1/auth/verify/signup/${token}`)
         .send()
         .end((err, res) => {
           expect(res.statusCode).to.equal(302);
@@ -54,7 +54,7 @@ const userSignUp = () => {
         .send(mockData.user10)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
-          expect(res.body.message).to.equal('Please go to your email address to verify your account.');
+          expect(res.body.message).to.equal('Check a verification link in your email .');
           done();
         });
     });
@@ -65,7 +65,7 @@ const userSignUp = () => {
         .send(mockData.user5)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
-          expect(res.body.message).to.equal('Please go to your email address to verify your account.');
+          expect(res.body.message).to.equal('Check a verification link in your email .');
           done();
         });
     });
@@ -76,7 +76,7 @@ const userSignUp = () => {
         .send(mockData.user1)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
-          expect(res.body.message).to.equal('Please go to your email address to verify your account.');
+          expect(res.body.message).to.equal('Email has already taken.');
           done();
         });
     });
