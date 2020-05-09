@@ -122,6 +122,10 @@ Open terminal from your computer
 
 `- GET /accommodation/dislike/:id? - For disliking accommodation.`
 
+`- GET /api/v1/users - For superAdmin to get all Users on the system`
+
+`- /api/v1/users/:email - For superAdmin to get one User`
+
 ### Raising an issue
 Click [here](https://github.com/andela/knights-bn-backend/issues/new) to create an issue about this app
 

@@ -13,6 +13,8 @@ const handleError = (res, error) => {
     { name: 'Invalid credentials', statusCode: 401 },
     { name: 'you currently have no lineManager, please go to update your profile', statusCode: 422 },
     { name: 'can\'t create the request, retry please!', statusCode: 500 },
+    { name: 'no user found', statusCode: 404 },
+    { name: 'no user found matching that email', statusCode: 404 },
   ];
   const definedError = errors.find((err) => err.name === error);
   if (definedError) return res.status(definedError.statusCode).json({ error });
