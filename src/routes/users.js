@@ -491,11 +491,15 @@ import auth from '../middlewares/checkAuth';
 import userProfile from '../controllers/userProfile';
 import imageMiddleware from '../middlewares/imageUpload';
 import validateRole from '../middlewares/validateRole';
+import getAllUsers from '../controllers/admin';
+import isSuperAdmin from '../middlewares/isSuperAdmin';
 
 const router = express.Router();
 const {
   registerUser, verifyAcccount, resetPassword, forgetPassword, login, socialLogin, logout, updateUserRole,
 } = usersController;
+
+const { AllUsers, OneUser } = getAllUsers;
 
 router.get('/auth/login/socialLogin', (req, res) => {
   res.sendFile('socialLogin.html', { root: `${__dirname}/../templates/` });
@@ -532,5 +536,7 @@ router.post('/reset_pw/user', userValidation.sendEmail, forgetPassword);
 router.patch('/password/reset/:id/:token', userValidation.reset, resetPassword);
 router.patch('/auth/logout', auth.auth, logout);
 router.patch('/users/setUserRole', auth.auth, validateRole, updateUserRole);
+router.get('/users', auth.auth, isSuperAdmin, AllUsers);
+router.get('/users/:email', auth.auth, isSuperAdmin, OneUser);
 
 export default router;

@@ -23,6 +23,7 @@ import rateAccomodation from './accommodation/rate.accommodation.test';
 import getStats from './getStats.test';
 import mostTravelled from './accommodation/mostTravelled.test';
 import notification from './notifications.test';
+import superadmin from './superAdmin.test';
 import {
   accommodationFacility, missingInfomation,
   missingRoomInformation, createThesame, wrongUserAccess,
@@ -75,5 +76,6 @@ accommodationFeedBack();
 notificationFormat();
 likeUnlikeAccommodation();
 testUserRoles();
+superadmin();
 socialLogin();
 events();

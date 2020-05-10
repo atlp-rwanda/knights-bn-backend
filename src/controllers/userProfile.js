@@ -13,7 +13,7 @@ export default class changeUserProfile {
 
   static changeMyProfileInfo(request, response) {
     request.body.birthDay = validateDate(request.body.birthDay);
-    request.body.profileImage = (typeof request.file === 'undefined') ? null : `${process.env.HOST_NAME}/${request.file.url}`;
+    request.body.profileImage = (typeof request.file === 'undefined') ? null : `${request.file.url}`;
     return models.User.update(request.body, { where: { id: request.user.id } })
       .then(() => models.User.findOne({ where: { id: request.user.id } }))
       .then((user) => {
