@@ -45,6 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     profileImage: {
       allowNull: true,
       type: DataTypes.STRING,
+      defaultValue: process.env.ProfileImage,
     },
   }, {});
   User.associate = () => {
