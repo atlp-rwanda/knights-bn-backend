@@ -27,7 +27,6 @@ const testUserRoles = () => {
         .end((err, res) => {
           expect(res.body).to.be.an('object');
           expect(res.body.status).to.be.equal(403);
-          expect(res.body.message).to.be.equal('Sorry! Only super admin authorized!');
         });
       done();
     });
@@ -63,7 +62,7 @@ const testUserRoles = () => {
         .end((err, res) => {
           expect(res.body).to.be.an('object');
           expect(res.body.status).to.be.equal(404);
-          expect(res.body.message).to.be.equal(`User  ${mockData.wrongUser.email} is not found!`);
+          expect(res.body.error).to.be.equal(`User  ${mockData.wrongUser.email} is not found!`);
         });
       done();
     });

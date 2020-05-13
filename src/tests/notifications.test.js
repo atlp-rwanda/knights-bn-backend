@@ -52,8 +52,8 @@ const notifications = () => {
         .send()
         .end((err, res) => {
           expect(res.body.message).to.equal('Your notifications');
+          done();
         });
-      done();
     });
     it('it should return 200 when all notifications are marked as read', (done) => {
       chai

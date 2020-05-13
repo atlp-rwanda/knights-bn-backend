@@ -31,12 +31,16 @@ class userValidate {
     } else if (`${result.error.details[0].path[0]}` === 'newPassword') {
       return res.status(422).json({
         status: 422,
-        error: 'password should contain at least one uppercase letter,one small letter, one special character, one number and one  and should be at minimum 6characters',
+        error: `our password is not strong, include numbers,
+        uppercase letters,special 
+        characters and write 8 characters or above`,
       });
     } else if (`${result.error.details[0].path[0]}` === 'confirmPassword') {
       return res.status(422).json({
         status: 422,
-        error: 'password should contain at least one uppercase letter,one small letter, one special character, one number and one  and should be at minimum 6characters',
+        error: `our password is not strong, include numbers,
+        uppercase letters,special 
+        characters and write 8 characters or above`,
       });
     }
   }

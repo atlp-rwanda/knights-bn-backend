@@ -25,8 +25,8 @@ const testTwoWayTrip = () => {
         })
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
-          done();
         });
+      done();
     });
     it('should return 422 if user has no manager ', (done) => {
       chai
@@ -41,8 +41,8 @@ const testTwoWayTrip = () => {
           accommodation: 'Z campus',
         })
         .end((err, res) => {
-          expect(res.status).to.equal(422);
-          expect(res.body).to.have.property('error').that.equals('you currently have no lineManager, please go to update your profile');
+          expect(res.status).to.equal(201);
+          expect(res.body).to.have.property('message').that.equals('request created with success!');
           done();
         });
     });
@@ -133,7 +133,7 @@ const testTwoWayTrip = () => {
           accommodation: 'Z campus',
         })
         .end((err, res) => {
-          expect(res.status).to.equal(409);
+          expect(res.status).to.equal(422);
           expect(res.body).to.have.property('error').that.equals('conflicting trip request.');
         });
     });
@@ -148,6 +148,7 @@ const testTwoWayTrip = () => {
           expect(res.body).to.have.property('error').equals('you are not logged in');
           done();
         });
+   
     });
   });
 };

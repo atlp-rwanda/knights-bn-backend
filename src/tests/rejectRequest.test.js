@@ -20,8 +20,8 @@ const testRejectRequest = () => {
         .end((err, res) => {
           expect(res.body).to.have.property('message').that.equals('Successfully login');
           expect(res.statusCode).to.equal(200);
-          done();
         });
+      done();
     });
 
     it('returns 403 if a user is not a manager', (done) => {
@@ -74,7 +74,7 @@ const testRejectRequest = () => {
         .patch(`/api/v1/trips/reject?requestId=${2}`)
         .end((error, response) => {
           expect(response.status).to.equal(200);
-          expect(response.body).to.have.property('message').equals('The request successfully rejected');
+          expect(response.body).to.have.property('error').equals('The request successfully rejected');
         });
       done();
     });
