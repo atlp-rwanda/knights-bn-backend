@@ -15,47 +15,50 @@ chai.use(sinonChai);
 
 const userProfile = () => {
   describe('UserProfile settings ', () => {
-    before((done) => {
-      localStorage.setItem('token', requesterToken);
-      done();
-    });
+    const Token = requesterToken;
     it('it should return 200 and user object when user is authorized', (done) => {
       chai
         .request(app)
         .get('/api/v1/user/profile')
+        .set('user-token', Token)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           expect(res.body.user).to.be.an('object');
+          done();
         });
-      done();
     });
 
     it('it should return 200 and object of user object for updated successfully ', (done) => {
       chai
         .request(app)
         .patch('/api/v1/edit/user/profile')
+        .set('user-token', Token)
         .send(mockData.updateProfile)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           expect(res.body.user).to.be.an('object');
+          done();
         });
-      done();
     });
 
     it('it should return 200 and object of user object for updated successfully ', (done) => {
       chai
         .request(app)
         .patch('/api/v1/edit/user/profile')
+        .set('user-token', Token)
         .send(mockData.updateProfile)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           expect(res.body.user).to.be.an('object');
+          done();
         });
-      done();
     });
 
     it('it should return 200 when successfully profile image uploaded ', async () => {
-      const changeMyProfileInfoStub = sinon.spy(profileImage, 'changeMyProfileInfo');
+      const changeMyProfileInfoStub = sinon.spy(
+        profileImage,
+        'changeMyProfileInfo'
+      );
       const request = {
         file: {
           url: 'https://via.placeholder.com/300.png/09f/fff',
@@ -73,26 +76,28 @@ const userProfile = () => {
     });
 
     it('it should return 500 when is not a right person to update profile ', (done) => {
-      localStorage.setItem('token', mockData.wrongPerson);
+      const wrongToken = mockData.wrongPerson;
       chai
         .request(app)
         .patch('/api/v1/edit/user/profile')
+        .set('user-token', wrongToken)
         .send(mockData.updateProfile)
         .end((err, res) => {
           expect(res.statusCode).to.equal(500);
+          done();
         });
-      done();
     });
 
     it('it should return 500 when is not a right person to view profile information ', (done) => {
-      localStorage.setItem('token', mockData.wrongPerson);
+      const wrongToken = mockData.wrongPerson;
       chai
         .request(app)
         .get('/api/v1/user/profile')
+        .set('user-token', wrongToken)
         .end((err, res) => {
           expect(res.statusCode).to.equal(500);
+          done();
         });
-      done();
     });
   });
 };

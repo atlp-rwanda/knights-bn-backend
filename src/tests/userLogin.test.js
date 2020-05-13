@@ -18,17 +18,6 @@ const usersignIn = () => {
           done();
         });
     });
-    it('it should return 200 on successful signIn', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/auth/login')
-        .send(mockData.loginX)
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
-          expect(res.body).to.be.an('object');
-          done();
-        });
-    });
     it('it should return 404 if email is not registered', (done) => {
       chai
         .request(app)
@@ -68,28 +57,6 @@ const usersignIn = () => {
         .send(mockData.login1)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
-        });
-      done();
-    });
-    it('it should return 200 on successful logout', (done) => {
-      chai
-        .request(app)
-        .patch('/api/v1/auth/logout')
-        .send()
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
-          expect(res.body.message).to.equal('Logout successfully');
-          done();
-        });
-    });
-    it('it should return 401 on trying to logout when you are not logged in', (done) => {
-      chai
-        .request(app)
-        .patch('/api/v1/auth/logout')
-        .send()
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(401);
-          expect(res.body.error).to.equal('you are not logged in');
           done();
         });
     });

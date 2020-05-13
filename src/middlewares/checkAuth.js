@@ -1,8 +1,7 @@
-import localStorage from 'localStorage';
 import decodeToken from '../helpers/decodeToken';
 
 const auth = (req, res, next) => {
-  const token = localStorage.getItem('token');
+  const token = req.header('user-token');
   if (!token) {
     return res.status(401).json({
       status: 401,
