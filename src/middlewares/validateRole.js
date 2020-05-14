@@ -11,6 +11,7 @@ export default async (req, res, next) => {
           'travelTeamMember',
           'manager',
           'requester',
+          'supplier',
         ),
     }).messages({
       'string.base': 'Role should be a type of text',

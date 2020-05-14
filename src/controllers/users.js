@@ -180,7 +180,10 @@ export default class usersController {
       const existingUser = await userQuery.getUserByEmail(email);
       if (!existingUser) return res.status(404).json({ status: 404, error: `User  ${email} is not found!` });
       await userQuery.updateUserRole(role, email);
-      return res.status(200).json({ status: 200, message: 'User successfully updated!' });
+      const Users = await models.User.findAll({
+        attributes: ['id', 'email', 'firstName', 'lastName', 'gender', 'email', 'passport', 'method', 'lineManager', 'birthDay', 'language', 'role', 'department', 'profileImage'],
+      });
+      return res.status(200).json({ status: 200, message: 'User successfully updated!', Users });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
