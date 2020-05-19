@@ -25,8 +25,11 @@ import mostTravelled from './accommodation/mostTravelled.test';
 import notification from './notifications.test';
 import superadmin from './superAdmin.test';
 import {
-  accommodationFacility, missingInfomation,
-  missingRoomInformation, createThesame, wrongUserAccess,
+  accommodationFacility,
+  missingInfomation,
+  missingRoomInformation,
+  createThesame,
+  wrongUserAccess,
   getAllAccommodations,
   getSingleAccommodation,
   editAccommodations,
@@ -38,12 +41,14 @@ import {
   violatingDb,
 } from './accommodation/createAccommodationFacility.test';
 import testUserRoles from './userRoles.test';
+import searchRequests from './searchRequests.test';
 
 routeExistance();
 signUpTest();
 userLoginTest();
 muliltiRequest();
 allRequestTest();
+searchRequests();
 notification();
 twoWayTrip();
 commentTest();
@@ -77,5 +82,5 @@ notificationFormat();
 likeUnlikeAccommodation();
 testUserRoles();
 superadmin();
-socialLogin();
 events();
+socialLogin();

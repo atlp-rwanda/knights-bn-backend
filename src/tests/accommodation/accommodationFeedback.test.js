@@ -3,6 +3,7 @@ import chaiHttp from 'chai-http';
 import sinonChai from 'sinon-chai';
 import { mockReq, mockRes } from 'sinon-express-mock';
 import sinon from 'sinon';
+import jwt from 'jsonwebtoken';
 import app from '../../app';
 import accommodationFacilities from '../../controllers/accommodation';
 import { travelAdminInfo } from './accommodationMockData';
@@ -12,18 +13,15 @@ chai.should();
 chai.use(sinonChai);
 const accommodationFeedBack = () => {
   describe('accommodation feedback ', () => {
-    it('it should return 200 on successful signIn', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/auth/login')
-        .send(travelAdminInfo)
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
-          done();
-        });
+    const Signed = travelAdminInfo;
+    const Token = jwt.sign(Signed, process.env.SECRETKEY, {
+      expiresIn: '24h',
     });
     it('it should return 200 when accommodation commented successfully ', () => {
-      const accommodationFeedBackSpy = sinon.spy(accommodationFacilities, 'accommodationFeedBack');
+      const accommodationFeedBackSpy = sinon.spy(
+        accommodationFacilities,
+        'accommodationFeedBack'
+      );
       const request = {
         params: {
           id: 1,
@@ -45,6 +43,7 @@ const accommodationFeedBack = () => {
       chai
         .request(app)
         .post('/api/v1/accommodation/comment/1')
+        .set('user-token', Token)
         .send({ comment: 'Bad service' })
         .end((err, res) => {
           expect(res.body).to.have.property('comment');
@@ -58,6 +57,7 @@ const accommodationFeedBack = () => {
       chai
         .request(app)
         .post('/api/v1/accommodation/comment/n')
+        .set('user-token', Token)
         .send({ comment: 'Bad service' })
         .end((err, res) => {
           expect(res.statusCode).to.equal(400);
@@ -68,4 +68,3 @@ const accommodationFeedBack = () => {
 };
 
 export default accommodationFeedBack;
-

@@ -132,7 +132,7 @@ export default class requestsController {
       if (!request) throw 'Request not found!';
       const requestStatus = request.status;
       if (requestStatus === 'rejected') throw 'The request was rejected before!';
-      if (requestStatus === 'pending') { return await Request.updateStatus(request, 'rejected'); }
+      if (requestStatus === 'pending') { await Request.updateStatus(request, 'rejected'); }
       if (requestStatus === 'approved') {
         const { departureDate } = request;
         const todayDate = getTodayDate();

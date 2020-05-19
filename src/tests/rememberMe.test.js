@@ -13,16 +13,16 @@ chai.should();
 chai.use(sinonChai);
 
 const remembered = () => {
-  describe('UserProfile settings ', () => {
+  describe('Remember me ', () => {
     before((done) => {
       chai
         .request(app)
         .post('/api/v1/auth/login')
-        .send(mockData.loginNewUser)
+        .send(mockData.loginUser)
         .end((err, res) => {
           localStorage.setItem('token', res.body.token);
         });
-        done();
+      done();
     });
 
     it('it should return 200 when profile information strored in cookies successfull  ', async () => {

@@ -13,8 +13,16 @@ const mockData = {
     password: 'Niyonkuru@1',
   },
   loginUserWithLineManager2: {
+    id: 7,
+    firstName: 'murenzi',
+    lastName: 'james',
+    gender: 'male',
+    passport: 'dear78bh',
     email: 'murenzijames@gmail.com',
-    password: 'Niyonkuru@1',
+    role: 'requester',
+    method: 'standard',
+    clientId: null,
+    lineManager: 'william.ishimwe@andela.com',
   },
   userX: {
     firstName: 'nameless',
@@ -25,12 +33,34 @@ const mockData = {
     password: 'Password@1',
   },
   loginNewUser: {
+    id: 5,
+    firstName: 'david',
+    lastName: 'Himbara',
+    gender: 'male',
     email: 'multi-city@gmail.com',
-    password: 'Niyonkuru@1',
+    passport: 'ml846531',
+    role: 'requester',
+    method: 'standard',
+    lineManager: 'eugene.munyampundu@gmail.com',
   },
   loginX: {
+    id: 12,
+    firstName: 'Barefoot',
+    lastName: 'Nomade',
+    gender: 'male',
+    passportNumber: '78byvttt',
     email: 'brftnomad@gmail.com',
-    password: 'Niyonkuru@1',
+  },
+  reguralUser: {
+    id: 11,
+    firstName: 'William',
+    lastName: 'Ishimwe',
+    role: 'requester',
+    gender: 'male',
+    email: 'ishimwewil005@gmail.com',
+    lineManager: 'william.ishimwe@andela.com',
+    method: 'standard',
+    clientId: '1234566',
   },
   user1: {
     firstName: 'Niyonsenga',
@@ -56,7 +86,7 @@ const mockData = {
     firstName: 'Moise',
     lastName: 'Rwibutso',
     gender: 'male',
-    passportNumber: '78bh675t',
+    passportNumber: '78bh675p',
     email: 'moiserwi@gmail.com',
     password: 'Niyonkuru@1',
   },
@@ -69,12 +99,12 @@ const mockData = {
     password: 'Niyonkuru@1',
   },
   validOneWayTrip: {
-    origin: 'Moroco',
-    destination: 'Kigali',
-    departureDate: '2020-09-09',
-    accommodation: 'YFB campus',
-    reason: 'Attend a meeting',
-    passportNumber: '12345',
+    origin: 'Kigali',
+    destination: "'Kampala",
+    departureDate: '2080-01-11',
+    returnDate: '2081-01-15',
+    reason: 'meet Egyptians',
+    accommodation: 'Egyptian Hotel',
   },
   incorectFirstName: {
     firstName: 'Niyonsenga@',
@@ -126,24 +156,23 @@ const mockData = {
     email: 'manyNumber@gmail.com',
     password: 'Niyonkuru@1',
   },
-  newPassword:
-  {
+  newPassword: {
     newPassword: 'Niyonkuru@1',
     confirmPassword: 'Niyonkuru@1',
   },
   token: {
-    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTgyNjQ4ODg4LCJleHAiOjE1ODI2NTI0ODh9.7AMsqKFdwWA08O3jGjjJTLAKR_ShWc7edjuKC9jbBiY',
+    token:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTgyNjQ4ODg4LCJleHAiOjE1ODI2NTI0ODh9.7AMsqKFdwWA08O3jGjjJTLAKR_ShWc7edjuKC9jbBiY',
   },
   fakeToken: {
-    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJOaXlvbnNlbmdhIiwibGFzdE5hbWUiOiJFcmljIiwiZ2VuZGVyIjoibWFsZSIsInBhc3Nwb3J0TnVtYmVyIjoiNzhieXZ0dHQiLCJlbWFpbCI6ImJyZnRub21hZEBnbWFpbC5jb20iLCJwYXNzd29yZCI6Ik5peW9ua3VydUAxIiwiaWF0IjoxNTgyNjU5NDU5fQ.I05YSeXG45B4XED9A64oUv5XkQyPrvKJnbJjWKkwe4w',
+    token:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJOaXlvbnNlbmdhIiwibGFzdE5hbWUiOiJFcmljIiwiZ2VuZGVyIjoibWFsZSIsInBhc3Nwb3J0TnVtYmVyIjoiNzhieXZ0dHQiLCJlbWFpbCI6ImJyZnRub21hZEBnbWFpbC5jb20iLCJwYXNzd29yZCI6Ik5peW9ua3VydUAxIiwiaWF0IjoxNTgyNjU5NDU5fQ.I05YSeXG45B4XED9A64oUv5XkQyPrvKJnbJjWKkwe4w',
   },
-  invalidNewPassword1:
-  {
+  invalidNewPassword1: {
     newPassword: 'Budha@1914324235345d',
     confirmPassword: '',
   },
-  email:
-  {
+  email: {
     email: 'brftnomad@gmail.com',
   },
   user2: {
@@ -151,16 +180,35 @@ const mockData = {
     password: '12345Six@',
   },
   loginSuccessfully: {
+    id: 4,
+    firstName: 'William',
+    lastName: 'Ishimwe',
+    gender: 'male',
     email: 'willishimw@gmail.com',
-    password: 'Niyonkuru@1',
+    passport: 'nkhydf65',
+    role: 'requester',
+    method: 'standard',
+    clientId: null,
   },
   loginSuccessfully2: {
+    id: 13,
+    firstName: 'Moise',
+    lastName: 'Rwibutso',
+    gender: 'male',
+    passportNumber: '78bh675t',
     email: 'moiserwi@gmail.com',
-    password: 'Niyonkuru@1',
   },
   loginSuccessfully3: {
+    id: 1,
+    firstName: 'Alain',
+    lastName: 'Maxim',
+    gender: 'male',
     email: 'alain.maxime@gmail.com',
-    password: 'Niyonkuru@1',
+    passport: '12345ohc',
+    role: 'requester',
+    method: 'standard',
+    clientId: null,
+    lineManager: 'william.ishimwe@andela.com',
   },
   existingUser: {
     email: 'manzipatr@gmail.com',
@@ -219,16 +267,36 @@ const mockData = {
     token: 'invalid',
   },
   managerLogin: {
+    id: 2,
+    firstName: 'Eugene',
+    lastName: 'Munyampundu',
+    gender: 'male',
     email: 'eugene.munyampundu@gmail.com',
-    password: 'Niyonkuru@1',
+    passport: '12349876',
+    role: 'manager',
+    method: 'standard',
+    clientId: null,
   },
   managerLogin3: {
+    id: 10,
+    firstName: 'William',
+    lastName: 'Ishimwe',
+    gender: 'male',
     email: 'william.ishimwe@andela.com',
-    password: 'Password@1',
+    passport: '123498re',
+    role: 'manager',
+    clientId: null,
   },
   managerLogin2: {
+    id: 3,
+    firstName: 'Code',
+    lastName: 'Knights',
+    gender: 'male',
     email: 'knights@gmail.com',
-    password: 'Niyonkuru@1',
+    passport: '97846531',
+    role: 'manager',
+    method: 'standard',
+    clientId: null,
   },
   updateProfile: {
     language: 'English',
@@ -237,9 +305,11 @@ const mockData = {
     homeTown: 'kigali',
     department: 'IT',
     lineManager: 'Reporter',
-    biography: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
+    biography:
+      'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
   },
-  wrongPerson: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImVtYWlsIjoiZXVnZW5lbXUyMjNAZ21haWwuY29tIiwiZmlyc3ROYW1lIjoiTml5b25zZW5nYSIsImxhc3ROYW1lIjoiRXJpYyIsImlhdCI6MTU4MjQwNTk0N30.xzc9O9rKH13j4kuqjLALmBeDNWtF1zlQAnpoRLD9FG4',
+  wrongPerson:
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImVtYWlsIjoiZXVnZW5lbXUyMjNAZ21haWwuY29tIiwiZmlyc3ROYW1lIjoiTml5b25zZW5nYSIsImxhc3ROYW1lIjoiRXJpYyIsImlhdCI6MTU4MjQwNTk0N30.xzc9O9rKH13j4kuqjLALmBeDNWtF1zlQAnpoRLD9FG4',
   multiCityRequest: {
     origin: 'New york',
     destination: 'East Africa',
@@ -390,8 +460,15 @@ const mockData = {
     checkoutDate: '2020-06-24',
   },
   superAdminLogin: {
+    id: 9,
+    firstName: 'Mose',
+    lastName: 'Rwibutso',
+    gender: 'male',
     email: 'superadmin@barefootnomad.com',
-    password: 'Niyonkuru@1',
+    passport: 'ws846522',
+    role: 'superAdmin',
+    method: 'standard',
+    clientId: null,
   },
   regularStaffLogin: {
     email: 'alain.maxime@gmail.com',
@@ -405,6 +482,18 @@ const mockData = {
   },
   newRole: {
     role: 'requester',
+  },
+  loginUser: {
+    email: 'alain.maxime@gmail.com',
+    password: 'Niyonkuru@1',
+  },
+  returnTripRequest: {
+    origin: 'Kigali',
+    destination: 'Kampala',
+    departureDate: '2080-01-11',
+    returnDate: '2081-01-15',
+    reason: 'meet Egyptians',
+    accommodation: 'Egyptian Hotel',
   },
 };
 export default mockData;

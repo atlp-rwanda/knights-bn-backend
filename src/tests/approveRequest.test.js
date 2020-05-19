@@ -1,7 +1,8 @@
-
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import jwt from 'jsonwebtoken';
 import app from '../app';
+import mockData from './mockData';
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -9,25 +10,15 @@ let requestIdToEdit;
 
 const testApproveRequest = () => {
   describe('Manager can approve the request', () => {
-    it('should return 200 when a regular user logs in', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/auth/login')
-        .send({
-          email: 'ishimwewil005@gmail.com',
-          password: 'Password@1',
-        })
-        .end((err, res) => {
-          expect(res.body).to.have.property('status').that.equals(200);
-          expect(res.body).to.have.property('message').that.equals('Successfully login');
-          expect(res.body).to.have.property('token');
-          done();
-        });
-    });
     it('should return 201 on successful created request ', (done) => {
+      const Signed = mockData.reguralUser;
+      const Token = jwt.sign(Signed, process.env.SECRETKEY, {
+        expiresIn: '24h',
+      });
       chai
         .request(app)
         .post('/api/v1/trips/returnTrip')
+        .set('user-token', Token)
         .send({
           origin: 'Kigali',
           destination: 'Kampala',
@@ -38,82 +29,103 @@ const testApproveRequest = () => {
         })
         .end((err, res) => {
           expect(res.status).to.equal(201);
-          expect(res.body).to.have.property('message').that.equals('request created with success!');
-          expect(res.body.data).to.have.property('status').that.equals('pending');
+          expect(res.body)
+            .to.have.property('message')
+            .that.equals('request created with success!');
+          expect(res.body.data)
+            .to.have.property('status')
+            .that.equals('pending');
           done();
         });
     });
     it('it should return 200 if requests exists', (done) => {
+      const Signed = mockData.reguralUser;
+      const Token = jwt.sign(Signed, process.env.SECRETKEY, {
+        expiresIn: '24h',
+      });
       chai
         .request(app)
         .get('/api/v1/trips/myRequest')
+        .set('user-token', Token)
         .end((err, res) => {
           requestIdToEdit = res.body.allMyRequest[0].id;
           expect(res.statusCode).to.equal(200);
           expect(res.body.message).to.equal('List of requests');
-
           done();
         });
     });
     it('should return 403 if a user is not a manager', (done) => {
+      const Signed = mockData.reguralUser;
+      const Token = jwt.sign(Signed, process.env.SECRETKEY, {
+        expiresIn: '24h',
+      });
       const randomId = 5;
       const path = `/api/v1/trips/approve/${randomId}`;
       chai
         .request(app)
         .patch(path)
+        .set('user-token', Token)
         .end((err, res) => {
           expect(res.statusCode).to.equal(403);
-          expect(res.body).to.have.property('error').that.equals('Unauthorized access!');
+          expect(res.body)
+            .to.have.property('error')
+            .that.equals('Unauthorized access!');
 
           done();
         });
     });
-    it('should return 200 when manager logs in', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/auth/login')
-        .send({
-          email: 'william.ishimwe@andela.com',
-          password: 'Password@1',
-        })
-        .end((err, res) => {
-          expect(res.body).to.have.property('status').that.equals(200);
-          expect(res.body).to.have.property('message').that.equals('Successfully login');
-          expect(res.body).to.have.property('token');
-          done();
-        });
-    });
     it('should return 404 if a request not found', (done) => {
+      const Signed = mockData.managerLogin3;
+      const Token = jwt.sign(Signed, process.env.SECRETKEY, {
+        expiresIn: '24h',
+      });
       const randomId = 555;
       const path = `/api/v1/trips/approve/${randomId}`;
       chai
         .request(app)
         .patch(path)
+        .set('user-token', Token)
         .end((err, res) => {
           expect(res.statusCode).to.equal(404);
-          expect(res.body).to.have.property('error').that.equals('Request not found!');
+          expect(res.body)
+            .to.have.property('error')
+            .that.equals('Request not found!');
           done();
         });
     });
     it('should return 200 when a request is approved', (done) => {
+      const Signed = mockData.managerLogin3;
+      const Token = jwt.sign(Signed, process.env.SECRETKEY, {
+        expiresIn: '24h',
+      });
       const path = `/api/v1/trips/approve/${requestIdToEdit}`;
       chai
         .request(app)
         .patch(path)
+        .set('user-token', Token)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
-          expect(res.body).to.have.property('message').that.equals('The request successfully approved');
+          expect(res.body)
+            .to.have.property('message')
+            .that.equals('The request successfully approved');
           done();
         });
     });
     it('should return 200 when the request was approved before', (done) => {
+      const Signed = mockData.managerLogin3;
+      const Token = jwt.sign(Signed, process.env.SECRETKEY, {
+        expiresIn: '24h',
+      });
       const path = `/api/v1/trips/approve/${requestIdToEdit}`;
       chai
         .request(app)
         .patch(path)
+        .set('user-token', Token)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
-          expect(res.body).to.have.property('error').that.equals('The request was approved before!');
+          expect(res.body)
+            .to.have.property('error')
+            .that.equals('The request was approved before!');
           done();
         });
     });

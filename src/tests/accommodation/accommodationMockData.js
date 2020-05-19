@@ -3,8 +3,15 @@ export const supplierToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZ
 export const requesterToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJtdWx0aS1jaXR5QGdtYWlsLmNvbSIsInJvbGUiOiJyZXF1ZXN0ZXIiLCJmaXJzdE5hbWUiOiJkYXZpZCIsImxhc3ROYW1lIjoiSGltYmFyYSIsImlhdCI6MTU4NTAyODE4MH0.padWdwnIymfz3yxtMKqHmrbSEcCs8DkKh5cTuBMophg';
 
 export const travelAdminInfo = {
+  id: 6,
+  firstName: 'traveler',
+  lastName: 'Himbara',
+  gender: 'male',
   email: 'traveladmin@gmail.com',
-  password: 'Niyonkuru@1',
+  passport: 'ws846531',
+  role: 'traveladmin',
+  method: 'standard',
+  clientId: null,
 };
 
 export const supplierInfo = {
@@ -13,8 +20,15 @@ export const supplierInfo = {
 };
 
 export const wrongUser = {
+  id: 5,
+  firstName: 'david',
+  lastName: 'Himbara',
+  gender: 'male',
   email: 'multi-city@gmail.com',
-  password: 'Niyonkuru@1',
+  passport: 'ml846531',
+  role: 'requester',
+  method: 'standard',
+  lineManager: 'eugene.munyampundu@gmail.com',
 };
 
 export const nonExistingUser = {
@@ -31,8 +45,16 @@ export const invalidRate = {
 };
 
 export const ExistingUser = {
+  id: 1,
+  firstName: 'Alain',
+  lastName: 'Maxim',
+  gender: 'male',
   email: 'alain.maxime@gmail.com',
-  password: 'Niyonkuru@1',
+  passport: '12345ohc',
+  role: 'requester',
+  method: 'standard',
+  clientId: null,
+  lineManager: 'william.ishimwe@andela.com',
 };
 
 export const facility = {
@@ -47,28 +69,24 @@ export const facility = {
       roomType: 'king',
       price: '$50/night',
       available: 'true',
-
     },
     {
       roomName: 'Room 2',
       roomType: 'qween',
       price: '$53/night',
       available: 'true',
-
     },
     {
       roomName: 'Room 3',
       roomType: 'qween',
       price: '$54/night',
       available: 'true',
-
     },
     {
       roomName: 'Room 4',
       roomType: 'qween',
       price: '$55/night',
       available: 'true',
-
     },
   ],
 };
@@ -85,28 +103,24 @@ export const facility2 = {
       roomType: 'king',
       price: '$50/night',
       available: 'true',
-
     },
     {
       roomName: 'Room 2',
       roomType: 'qween',
       price: '$53/night',
       available: 'true',
-
     },
     {
       roomName: 'Room 3',
       roomType: 'qween',
       price: '$54/night',
       available: 'true',
-
     },
     {
       roomName: 'Room 4',
       roomType: 'qween',
       price: '$55/night',
       available: 'true',
-
     },
   ],
 };
@@ -123,28 +137,24 @@ export const existingFacility = {
       roomType: 'king',
       price: '$50/night',
       available: 'true',
-
     },
     {
       roomName: 'Room 2',
       roomType: 'qween',
       price: '$53/night',
       available: 'true',
-
     },
     {
       roomName: 'Room 3',
       roomType: 'qween',
       price: '$54/night',
       available: 'true',
-
     },
     {
       roomName: 'Room 4',
       roomType: 'qween',
       price: '$55/night',
       available: 'true',
-
     },
   ],
 };
@@ -158,14 +168,12 @@ export const missingInformation = {
       roomName: 'double room',
       price: '$50/night',
       available: 'true',
-
     },
     {
       roomName: 'Room 1',
       roomType: 'qween',
       price: '$53/night',
       available: 'true',
-
     },
     {
       roomName: 'Room 2',
@@ -199,7 +207,6 @@ export const missingRoomInfo = {
       roomType: 'qween',
       price: '$53/night',
       available: 'true',
-
     },
     {
       roomName: 'Room 3',

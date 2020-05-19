@@ -1,4 +1,4 @@
-import chai, { expect } from 'chai';
+import chai from 'chai';
 import chaiHttp from 'chai-http';
 import sinonChai from 'sinon-chai';
 import sinon from 'sinon';

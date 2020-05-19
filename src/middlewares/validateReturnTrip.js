@@ -54,7 +54,7 @@ export default async (req, res, next) => {
         if (((request.departureDate <= reqDepartureDate)
         && (reqDepartureDate <= request.returnDate))
           || ((request.departureDate <= reqReturnDate) && (reqReturnDate <= request.returnDate))) {
-          conflictingRequest = getConflictingRequest(request);
+          conflictingRequest = getConflictingRequest(request.dataValues);
           throw 'conflicting trip';
         }
       });
@@ -97,8 +97,5 @@ export default async (req, res, next) => {
         conflictingRequest,
       });
     }
-    return res.status(500).json({
-      error: error.message,
-    });
   }
 };
