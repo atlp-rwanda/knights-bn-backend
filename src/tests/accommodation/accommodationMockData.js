@@ -63,6 +63,7 @@ export const facility = {
   streetNumber: '104st',
   numberOfRooms: 4,
   description: 'it has wifi and big secreen TV',
+  imageOfBuilding: 'image',
   availableRooms: [
     {
       roomName: 'Room 1',
@@ -97,6 +98,7 @@ export const facility2 = {
   streetNumber: 'KGL25',
   numberOfRooms: 200,
   description: 'it has wifi and big secreen TV',
+  imageOfBuilding: 'image',
   availableRooms: [
     {
       roomName: 'Room 1',
@@ -131,6 +133,7 @@ export const existingFacility = {
   streetNumber: '104st',
   numberOfRooms: 4,
   description: 'it has wifi and big secreen TV',
+  imageOfBuilding: 'image',
   availableRooms: [
     {
       roomName: 'Room 1',

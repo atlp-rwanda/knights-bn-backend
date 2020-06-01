@@ -63,7 +63,6 @@ export default class accomodationFacility {
 
   static async createAccomodation(req, res) {
     try {
-      req.body.imageOfBuilding = (typeof req.file === 'undefined') ? 'image' : req.file.url;
       req.body.userId = req.user.id;
       const newAccommodation = await Accommodation.create(req.body);
       return res.status(201).json({ status: 200, data: newAccommodation });
