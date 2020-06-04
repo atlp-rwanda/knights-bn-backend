@@ -86,6 +86,7 @@ export const accommodationValidataion = (req, res, next) => {
     numberOfRooms: Joi.number().required(),
     availableRooms: Joi.required(),
     description: Joi.string().required(),
+    imageOfBuilding: Joi.string().required(),
   });
   const { error } = Joi.validate(req.body, accommodationShema);
   if (error) {
