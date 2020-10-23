@@ -6,6 +6,12 @@ import mockData from './mockData';
 
 chai.use(chaiHttp);
 chai.should();
+
+const superAdminInfo = {
+  email: 'superadmin@barefootnomad.com',
+  password: 'Niyonkuru@1',
+};
+
 const testUserRoles = () => {
   describe('USER ROLE SETTINGS | FAULTY REQUESTS', () => {
     it("should throw 403 if it's not super admin ", (done) => {
@@ -48,7 +54,17 @@ const testUserRoles = () => {
           done();
         });
     });
-
+    it('should return 200 for successful signIn', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/login')
+        .send(superAdminInfo)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.have.property('token');
+          done();
+        });
+    });
     it('should throw 404 if email is wrong', (done) => {
       chai
         .request(app)
